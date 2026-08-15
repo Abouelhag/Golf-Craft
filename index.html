@@ -352,6 +352,73 @@
             color: var(--green);
         }
 
+        /* ===== عرض جميع الأقسام في السلة - الشريط الجانبي ===== */
+        .cart-sections-summary {
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            padding: 10px 16px;
+            border-bottom: 2px solid var(--green);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            min-height: 44px;
+            box-shadow: 0 2px 8px rgba(76, 175, 80, 0.15);
+        }
+        .cart-sections-summary .summary-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: var(--green-dark);
+            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cart-sections-summary .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            padding: 4px 14px 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--green-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+        }
+        .cart-sections-summary .section-tag .count {
+            background: var(--green);
+            color: #fff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+            font-weight: 700;
+        }
+        .cart-sections-summary .empty-cart {
+            color: #888;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .cart-sections-summary .view-all-btn {
+            margin-right: auto;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            padding: 4px 14px;
+            border-radius: 16px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .cart-sections-summary .view-all-btn:hover {
+            background: var(--green-dark);
+        }
+
         /* ===== شاشة الأقسام ===== */
         #categoriesScreen {
             padding: 16px;
@@ -719,6 +786,26 @@
             outline: none;
             border-color: var(--green);
         }
+        .form-group .location-btn {
+            background: var(--green);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+        }
+        .form-group .location-btn:hover {
+            background: var(--green-dark);
+        }
+        .form-group .location-status {
+            font-size: 0.75rem;
+            color: #888;
+            margin-top: 4px;
+        }
 
         .btn-group {
             display: flex;
@@ -824,6 +911,38 @@
             border-radius: 10px;
             margin-top: 5px;
             margin-bottom: 10px;
+        }
+
+        /* ===== File upload ===== */
+        .file-upload-wrapper {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            background: #fafafa;
+        }
+        .file-upload-wrapper:hover {
+            border-color: var(--green);
+        }
+        .file-upload-wrapper .file-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .file-upload-wrapper .file-text {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .file-upload-wrapper .file-name {
+            font-size: 0.8rem;
+            color: var(--green-dark);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .file-upload-wrapper input[type="file"] {
+            display: none;
         }
 
         /* ===== User Menu Modal ===== */
@@ -990,43 +1109,6 @@
             color: #888;
         }
 
-        /* ===== All Sections Cart Sidebar ===== */
-        .cart-sections-summary {
-            background: #fff;
-            padding: 8px 16px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            align-items: center;
-        }
-        .cart-sections-summary .section-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: #e8f5e9;
-            padding: 3px 10px;
-            border-radius: 16px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--green-dark);
-        }
-        .cart-sections-summary .section-tag .count {
-            background: var(--green);
-            color: #fff;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.6rem;
-        }
-        .cart-sections-summary .empty-cart {
-            color: #888;
-            font-size: 0.8rem;
-        }
-
         @media (max-width: 400px) {
             #splashScreen h1 { font-size: 2.8rem; }
             .categories-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1041,6 +1123,8 @@
             .back-bar .back-btn { font-size: 1.5rem; width: 38px; height: 38px; }
             .back-bar .shop-name { font-size: 1rem; }
             #pdfInvoice .invoice-details { flex-direction: column; }
+            .cart-sections-summary .section-tag { font-size: 0.65rem; padding: 3px 10px 3px 8px; }
+            .cart-sections-summary .section-tag .count { width: 16px; height: 16px; font-size: 0.5rem; }
         }
     </style>
 </head>
@@ -1130,11 +1214,12 @@
             <span style="margin-right:auto;">تغيير</span>
         </div>
 
-        <!-- ===== عرض جميع الأقسام في السلة ===== -->
+        <!-- ===== عرض جميع الأقسام في السلة - الشريط الجانبي ===== -->
         <div class="cart-sections-summary" id="cartSectionsSummary">
-            <span style="font-weight:600;font-size:0.8rem;color:#666;">🛒 السلة:</span>
+            <span class="summary-label">🛒 الأقسام في السلة:</span>
             <span class="empty-cart" id="emptyCartMsg">فارغة</span>
             <div id="sectionTagsContainer" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+            <button class="view-all-btn" onclick="document.getElementById('cartModal').classList.add('open')">عرض الكل</button>
         </div>
 
         <!-- ===== شاشة الأقسام ===== -->
@@ -1213,10 +1298,17 @@
                     <textarea id="custAddress" rows="2" placeholder="أدخل عنوانك التفصيلي"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>💳 طريقة الدفع</label>
-                    <select id="paymentMethod">
+                    <label>📍 موقعك على الخريطة (اختياري)</label>
+                    <button type="button" class="location-btn" onclick="getLocation()">📍 الحصول على الموقع</button>
+                    <div class="location-status" id="locationStatus">لم يتم تحديد الموقع</div>
+                    <input type="hidden" id="custLat" value="">
+                    <input type="hidden" id="custLng" value="">
+                    <input type="hidden" id="custLocation" value="">
+                </div>
+                <div class="form-group">
+                    <label>💳 طريقة الدفع *</label>
+                    <select id="paymentMethod" required>
                         <option value="">-- اختر طريقة الدفع --</option>
-                        <option value="cash">💵 نقداً عند الاستلام</option>
                         <option value="vodafone">📱 فودافون كاش</option>
                         <option value="instapay">🟣 إنستاباي</option>
                     </select>
@@ -1228,6 +1320,15 @@
                 <div id="instapayDetails">
                     <strong>🟣 حول إلى إنستاباي:</strong><br>
                     رقم إنستاباي: <b>01555089905</b>
+                </div>
+                <div class="form-group">
+                    <label>🖼️ صورة التحويل (اختياري)</label>
+                    <div class="file-upload-wrapper" onclick="document.getElementById('transferImage').click()">
+                        <span class="file-icon">📎</span>
+                        <div class="file-text">اضغط لرفع صورة التحويل</div>
+                        <div class="file-name" id="fileName">لا يوجد ملف</div>
+                        <input type="file" id="transferImage" accept="image/*" capture="environment">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>📝 ملاحظات</label>
@@ -1269,6 +1370,7 @@
             <div><strong>👤 العميل:</strong> <span id="pdfName"></span></div>
             <div><strong>📞 الهاتف:</strong> <span id="pdfPhone"></span></div>
             <div><strong>📍 العنوان:</strong> <span id="pdfAddress"></span></div>
+            <div><strong>📍 الموقع:</strong> <span id="pdfLocation"></span></div>
             <div><strong>💳 طريقة الدفع:</strong> <span id="pdfPayment"></span></div>
         </div>
         <table>
@@ -1448,6 +1550,7 @@
         let orderHistory = JSON.parse(localStorage.getItem('golfcraft_orders') || '[]');
         let orderCounter = orderHistory.length + 1;
         let currentPdfData = null;
+        let selectedFile = null;
 
         // ============================================================
         // الدوال الأساسية
@@ -1550,6 +1653,47 @@
             clearTimeout(t._timeout);
             t._timeout = setTimeout(() => t.classList.remove('show'), 3000);
         }
+
+        // ============================================================
+        // دوال الموقع
+        // ============================================================
+        function getLocation() {
+            if (!navigator.geolocation) {
+                document.getElementById('locationStatus').textContent = '❌ متصفحك لا يدعم تحديد الموقع';
+                return;
+            }
+            document.getElementById('locationStatus').textContent = '⏳ جاري تحديد الموقع...';
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    document.getElementById('custLat').value = lat;
+                    document.getElementById('custLng').value = lng;
+                    document.getElementById('custLocation').value = lat + ',' + lng;
+                    document.getElementById('locationStatus').textContent = '✅ تم تحديد الموقع: ' + lat.toFixed(6) + ', ' + lng.toFixed(6);
+                    showToast('✅ تم تحديد موقعك بنجاح');
+                },
+                function(error) {
+                    document.getElementById('locationStatus').textContent = '❌ فشل تحديد الموقع: ' + error.message;
+                    showToast('❌ فشل تحديد الموقع');
+                }
+            );
+        }
+
+        // ============================================================
+        // دوال رفع الصورة
+        // ============================================================
+        document.getElementById('transferImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('fileName').textContent = '📷 ' + file.name;
+                showToast('✅ تم رفع الصورة: ' + file.name);
+            } else {
+                selectedFile = null;
+                document.getElementById('fileName').textContent = 'لا يوجد ملف';
+            }
+        });
 
         // ============================================================
         // دوال المستخدم
@@ -1690,11 +1834,12 @@
                                 <div style="font-weight:600;">#${index + 1} - ${order.date || 'تاريخ غير محدد'}</div>
                                 <div style="font-size:0.8rem;color:#888;margin:4px 0;">${order.items || 'لا توجد منتجات'}</div>
                                 <div style="font-size:0.75rem;color:var(--green);font-weight:600;">📂 ${order.category || 'قسم غير محدد'}</div>
+                                ${order.location ? `<div style="font-size:0.7rem;color:#666;">📍 ${order.location}</div>` : ''}
                             </div>
                             <div style="font-weight:700;color:var(--green-dark);font-size:1.1rem;">${order.total || '0.00 ج.م'}</div>
                         </div>
                         <div style="font-size:0.7rem;color:#999;margin-top:4px;">${order.status || 'تم التسليم'}</div>
-                        <div style="font-size:0.7rem;color:var(--green);margin-top:2px;cursor:pointer;" onclick="viewPDFFromHistory('${index}')">📄 عرض الفاتورة</div>
+                        ${order.pdfData ? `<div style="font-size:0.7rem;color:var(--green);margin-top:2px;cursor:pointer;" onclick="viewPDFFromHistory(${index})">📄 عرض الفاتورة</div>` : ''}
                     </div>
                 `).join('');
             }
@@ -1869,12 +2014,16 @@
             }
             
             emptyMsg.style.display = 'none';
-            container.innerHTML = sectionKeys.map(section => `
-                <span class="section-tag">
-                    ${section}
-                    <span class="count">${sections[section]}</span>
-                </span>
-            `).join('');
+            container.innerHTML = sectionKeys.map(section => {
+                const cat = categories.find(c => c.name === section);
+                const emoji = cat ? cat.emoji : '📦';
+                return `
+                    <span class="section-tag">
+                        ${emoji} ${section}
+                        <span class="count">${sections[section]}</span>
+                    </span>
+                `;
+            }).join('');
         }
 
         // ============================================================
@@ -2009,6 +2158,7 @@
             document.getElementById('pdfName').textContent = orderData.name;
             document.getElementById('pdfPhone').textContent = orderData.phone;
             document.getElementById('pdfAddress').textContent = orderData.address;
+            document.getElementById('pdfLocation').textContent = orderData.location || 'لم يتم تحديده';
             document.getElementById('pdfPayment').textContent = orderData.payment;
             document.getElementById('pdfSubtotal').textContent = fPrice(orderData.subtotal);
             document.getElementById('pdfAdminFee').textContent = fPrice(orderData.adminFee);
@@ -2088,6 +2238,10 @@
 
         function closeCheckout() {
             document.getElementById('checkoutModal').classList.remove('open');
+            // Reset file input
+            document.getElementById('transferImage').value = '';
+            document.getElementById('fileName').textContent = 'لا يوجد ملف';
+            selectedFile = null;
             showCategories();
             cart = {};
             saveCart();
@@ -2110,6 +2264,14 @@
             const address = document.getElementById('custAddress').value.trim() || (userData ? userData.address : '') || 'غير محدد';
             const payment = document.getElementById('paymentMethod').value;
             const notes = document.getElementById('custNotes').value.trim();
+            const location = document.getElementById('custLocation').value || '';
+            const lat = document.getElementById('custLat').value || '';
+            const lng = document.getElementById('custLng').value || '';
+
+            if (!payment) {
+                showToast('⚠️ من فضلك اختر طريقة الدفع');
+                return;
+            }
 
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
@@ -2128,7 +2290,6 @@
             const total = subtotal + totalDelivery + adminFee;
 
             const paymentLabels = {
-                cash: '💵 كاش',
                 vodafone: '📱 فودافون كاش (01002811810)',
                 instapay: '🟣 إنستاباي (01555089905)'
             };
@@ -2149,14 +2310,28 @@
             const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
             const orderNumber = String(orderCounter).padStart(4, '0');
             
+            // Prepare location text
+            let locationText = '';
+            if (location) {
+                locationText = `📍 الموقع: https://www.google.com/maps?q=${lat},${lng}\n`;
+            }
+            
+            // Image upload info
+            let imageText = '';
+            if (selectedFile) {
+                imageText = `🖼️ صورة التحويل: ${selectedFile.name}\n`;
+            }
+            
             const msg = `📦 *طلب جديد من جولف كرافت*\n` +
                 `🧾 رقم الطلب: #${orderNumber}\n` +
                 `👤 ${name}\n` +
                 `📞 ${phone}\n` +
                 `📍 ${area} - ${address}\n` +
+                `${locationText}` +
                 `📂 القسم: ${categoryName}\n` +
-                `💳 ${payLabel}\n\n` +
-                `*المنتجات:*\n${itemsText}\n` +
+                `💳 ${payLabel}\n` +
+                `${imageText}` +
+                `\n*المنتجات:*\n${itemsText}\n` +
                 `${feesText}` +
                 `المجموع الفرعي: ${fPrice(subtotal)}\n` +
                 `💰 مصاريف إدارية (1%): ${fPrice(adminFee)}\n` +
@@ -2172,7 +2347,8 @@
                 category: categoryName,
                 name: name,
                 phone: phone,
-                address: address,
+                address: address + ' - ' + area,
+                location: location ? `https://www.google.com/maps?q=${lat},${lng}` : 'لم يتم تحديده',
                 payment: payLabel,
                 subtotal: subtotal,
                 adminFee: adminFee,
@@ -2195,6 +2371,7 @@
                 items: items.map(i => `${i.product} (${i.quantity})`).join(', '),
                 total: fPrice(total),
                 status: 'تم التسليم',
+                location: location ? `https://www.google.com/maps?q=${lat},${lng}` : '',
                 pdfData: pdfData
             };
             orderHistory.unshift(orderEntry);
@@ -2209,6 +2386,9 @@
                 phone: phone,
                 area: area,
                 address: address,
+                location: location,
+                lat: lat,
+                lng: lng,
                 payment: payLabel,
                 notes: `القسم: ${categoryName} | ${notes}`,
                 items: items.map(i => `${i.product} (${i.quantity})`).join(', '),
@@ -2216,8 +2396,7 @@
                 delivery_fee: totalDelivery,
                 admin_fee: adminFee,
                 total: total,
-                lat: '',
-                lng: '',
+                transfer_image: selectedFile ? selectedFile.name : '',
                 driverPhone: ''
             };
 
@@ -2234,6 +2413,11 @@
 
             // Show PDF
             generatePDF(pdfData);
+
+            // Reset file input
+            document.getElementById('transferImage').value = '';
+            document.getElementById('fileName').textContent = 'لا يوجد ملف';
+            selectedFile = null;
 
             cart = {};
             saveCart();
