@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#4CAF50">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>جولف كرافت</title>
     <link rel="manifest" href="manifest.json">
@@ -63,8 +64,8 @@
 </head>
 <body>
     <!-- شاشة اختيار المنطقة -->
-    <div id="areaSelectionModal" class="modal-overlay" style="display:flex; align-items:center; justify-content:center;">
-        <div class="modal-sheet" style="max-width:400px; max-height:70vh;">
+    <div id="areaSelectionModal" class="modal-overlay" style="display:flex; align-items:center; justify-content:center; opacity:1; pointer-events:all;">
+        <div class="modal-sheet" style="max-width:400px; max-height:70vh; transform:none;">
             <h3 style="text-align:center; margin-bottom:16px;">📍 اختر منطقتك</h3>
             <div style="display:grid; gap:8px;">
                 <button class="submit-btn" onclick="selectArea('الحي السابع')">الحي السابع</button>
@@ -310,7 +311,10 @@
         }
 
         function showAreaSelection() {
-            document.getElementById('areaSelectionModal').style.display = 'flex';
+            const modal = document.getElementById('areaSelectionModal');
+            modal.style.display = 'flex';
+            modal.style.opacity = '1';
+            modal.style.pointerEvents = 'all';
         }
 
         function populateAreaSelect() {
@@ -383,6 +387,8 @@
             updateUI();
         } else {
             document.getElementById('areaSelectionModal').style.display = 'flex';
+            document.getElementById('areaSelectionModal').style.opacity = '1';
+            document.getElementById('areaSelectionModal').style.pointerEvents = 'all';
         }
 
         // ربط الأحداث
