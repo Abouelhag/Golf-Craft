@@ -357,10 +357,10 @@
             min-height: calc(100vh - 130px);
         }
         #categoriesScreen .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
+            font-size: 1.8rem;
+            font-weight: 800;
             color: var(--green-dark);
-            margin-bottom: 16px;
+            margin-bottom: 20px;
             text-align: center;
         }
         .categories-grid {
@@ -369,10 +369,10 @@
             gap: 14px;
         }
         .category-card {
-            background: rgba(255,255,255,0.95);
+            background: rgba(255,255,255,0.92);
             backdrop-filter: blur(10px);
             border-radius: 16px;
-            padding: 24px 12px;
+            padding: 20px 12px;
             text-align: center;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
             cursor: pointer;
@@ -380,33 +380,66 @@
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
-            min-height: 110px;
+            min-height: 130px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
         }
+        .category-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .category-card:hover::after {
+            opacity: 1;
+        }
         .category-card:hover {
             transform: translateY(-3px);
-            box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 24px rgba(0,0,0,0.2);
         }
         .category-card:active {
             transform: scale(0.95);
             border-color: var(--green);
         }
+        .category-card .cat-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+        }
         .category-card .cat-emoji {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             position: relative;
             z-index: 1;
         }
         .category-card .cat-name {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #333;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: #fff;
             position: relative;
             z-index: 1;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.4);
+            padding: 4px 16px;
+            border-radius: 8px;
+            backdrop-filter: blur(4px);
+        }
+        .category-card.no-bg .cat-name {
+            color: #333;
+            text-shadow: none;
+            background: none;
+            backdrop-filter: none;
+        }
+        .category-card.no-bg .cat-emoji {
+            filter: none;
         }
 
         /* ===== شاشة المنتجات ===== */
@@ -422,7 +455,7 @@
             content: "";
             position: fixed;
             inset: 0;
-            background: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.88);
             z-index: 0;
             pointer-events: none;
         }
@@ -466,7 +499,7 @@
         }
         .back-bar .shop-name {
             font-weight: 700;
-            font-size: 1.1rem;
+            font-size: 1.3rem;
             color: var(--green-dark);
             flex: 1;
         }
@@ -741,12 +774,27 @@
             justify-content: space-between;
             padding: 4px 0;
         }
+        .fee-summary .fee-row {
+            padding: 4px 8px;
+            margin: 2px 0;
+            border-radius: 6px;
+        }
+        .fee-summary .fee-row .fee-section {
+            font-weight: 600;
+            color: var(--green-dark);
+        }
         .fee-summary .total-row {
             border-top: 2px solid #ddd;
             padding-top: 8px;
             margin-top: 4px;
             font-weight: bold;
             font-size: 1rem;
+        }
+        .fee-summary .delivery-total {
+            border-top: 1px dashed #ddd;
+            padding-top: 6px;
+            margin-top: 4px;
+            font-weight: 600;
         }
 
         .cart-item {
@@ -850,30 +898,19 @@
             opacity: 1;
         }
 
-        /* ===== شارة القسم في السلة ===== */
-        .cart-section-badge {
-            display: inline-block;
-            background: var(--green);
-            color: #fff;
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-
         @media (max-width: 400px) {
             #splashScreen h1 { font-size: 2.8rem; }
             .categories-grid { grid-template-columns: repeat(2, 1fr); }
-            .category-card { min-height: 90px; padding: 16px 10px; }
-            .category-card .cat-emoji { font-size: 2.5rem; }
-            .category-card .cat-name { font-size: 0.85rem; }
+            .category-card { min-height: 110px; padding: 16px 10px; }
+            .category-card .cat-emoji { font-size: 2.8rem; }
+            .category-card .cat-name { font-size: 1rem; }
             .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 10px; }
             .product-card { padding: 12px 8px; }
             .product-card .emoji { font-size: 2.2rem; }
             .product-card .p-name { font-size: 0.8rem; }
             .product-card .p-price { font-size: 0.85rem; }
             .back-bar .back-btn { font-size: 1.5rem; width: 38px; height: 38px; }
+            .back-bar .shop-name { font-size: 1rem; }
         }
     </style>
 </head>
@@ -1003,8 +1040,10 @@
             <div id="cartItemsContainer"></div>
             <div class="fee-summary" id="feeSummary">
                 <div><span>المجموع الفرعي</span><span id="subtotalAmount">0.00</span> ج.م</div>
-                <div><span>رسوم توصيل</span><span id="deliveryFeeAmount">20.00</span> ج.م</div>
-                <div><span>رسوم إدارية</span><span id="adminFeeAmount">0.00</span> ج.م</div>
+                <div id="deliveryFeesContainer"></div>
+                <div id="adminFeesContainer"></div>
+                <div class="delivery-total"><span>📦 إجمالي رسوم التوصيل</span><span id="totalDeliveryFee">0.00</span> ج.م</div>
+                <div><span>💰 رسوم إدارية (1%)</span><span id="totalAdminFee">0.00</span> ج.م</div>
                 <div class="total-row"><span>الإجمالي</span><span id="cartModalTotal">0.00 ج.م</span></div>
             </div>
             <button class="submit-btn" id="checkoutBtn" disabled onclick="openCheckout()">💳 إتمام الطلب</button>
@@ -1206,7 +1245,7 @@
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
         const DELIVERY_FEE = 20;
-        const ADMIN_FEE_PERCENT = 1;
+        const ADMIN_FEE_PERCENT = 0.01; // 1%
 
         // ============================================================
         // المتغيرات العامة
@@ -1233,8 +1272,7 @@
         }
 
         function getAdminFee(subtotal) {
-            if (subtotal <= 100) return 3;
-            return 3 + (subtotal - 100) * ADMIN_FEE_PERCENT / 100;
+            return Math.round(subtotal * ADMIN_FEE_PERCENT * 100) / 100;
         }
 
         function getSubtotal() {
@@ -1515,7 +1553,7 @@
         function renderCategories() {
             const grid = document.getElementById('categoriesGrid');
             grid.innerHTML = categories.map(cat => `
-                <div class="category-card" onclick="selectCategory('${cat.id}')" style="${cat.bgImage ? `background-image: url('${cat.bgImage}'); background-size: cover; background-position: center;` : ''}">
+                <div class="category-card ${cat.bgImage ? '' : 'no-bg'}" onclick="selectCategory('${cat.id}')" style="${cat.bgImage ? `background-image: url('${cat.bgImage}'); background-size: cover; background-position: center;` : ''}">
                     <span class="cat-emoji">${cat.emoji}</span>
                     <div class="cat-name">${cat.name}</div>
                 </div>
@@ -1623,11 +1661,58 @@
             document.getElementById('checkoutBtn').disabled = cnt === 0;
 
             document.getElementById('subtotalAmount').textContent = subtotal.toFixed(2);
-            document.getElementById('adminFeeAmount').textContent = adminFee.toFixed(2);
-            document.getElementById('deliveryFeeAmount').textContent = DELIVERY_FEE.toFixed(2);
             document.getElementById('cartModalTotal').textContent = fPrice(total);
+            document.getElementById('totalDeliveryFee').textContent = DELIVERY_FEE.toFixed(2);
+            document.getElementById('totalAdminFee').textContent = adminFee.toFixed(2);
+
+            // عرض رسوم التوصيل لكل قسم
+            updateDeliveryFeesPerSection();
 
             renderCartItems();
+        }
+
+        function updateDeliveryFeesPerSection() {
+            const container = document.getElementById('deliveryFeesContainer');
+            const items = getCartItems();
+            
+            // تجميع المنتجات حسب القسم
+            const sections = {};
+            items.forEach(item => {
+                if (!sections[item.category]) {
+                    sections[item.category] = { items: [], subtotal: 0 };
+                }
+                sections[item.category].items.push(item);
+                sections[item.category].subtotal += item.lineTotal;
+            });
+
+            const sectionKeys = Object.keys(sections);
+            if (sectionKeys.length === 0) {
+                container.innerHTML = `<div><span>📦 رسوم توصيل</span><span>${DELIVERY_FEE.toFixed(2)}</span> ج.م</div>`;
+                return;
+            }
+
+            let html = '';
+            let totalDelivery = 0;
+            sectionKeys.forEach((section, index) => {
+                const fee = DELIVERY_FEE;
+                totalDelivery += fee;
+                html += `
+                    <div class="fee-row" style="background: ${index % 2 === 0 ? '#f1f8e9' : '#fff'};">
+                        <span class="fee-section">📦 ${section}</span>
+                        <span>${fee.toFixed(2)} ج.م</span>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div style="border-top:1px dashed #ddd;padding-top:4px;margin-top:4px;font-weight:600;display:flex;justify-content:space-between;">
+                    <span>📦 إجمالي رسوم التوصيل</span>
+                    <span>${totalDelivery.toFixed(2)} ج.م</span>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            document.getElementById('totalDeliveryFee').textContent = totalDelivery.toFixed(2);
         }
 
         function renderCartItems() {
@@ -1655,7 +1740,7 @@
         }
 
         // ============================================================
-        // الدفع - كل قسم بشكل منفصل
+        // الدفع - كل قسم بشكل منفصل مع رسوم توصيل منفصلة
         // ============================================================
         function openCheckout() {
             if (getCartCount() === 0) return;
@@ -1704,18 +1789,37 @@
 
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
-            const total = getTotalWithFees();
+            
+            // حساب رسوم التوصيل لكل قسم
+            const items = getCartItems();
+            const sections = {};
+            items.forEach(item => {
+                if (!sections[item.category]) {
+                    sections[item.category] = { items: [], subtotal: 0 };
+                }
+                sections[item.category].items.push(item);
+                sections[item.category].subtotal += item.lineTotal;
+            });
+            
+            const totalDelivery = Object.keys(sections).length * DELIVERY_FEE;
+            const total = subtotal + totalDelivery + adminFee;
+
             const paymentLabels = {
                 cash: '💵 كاش',
                 vodafone: '📱 فودافون كاش (01002811810)',
                 instapay: '🟣 إنستاباي (01555089905)'
             };
             const payLabel = paymentLabels[payment] || 'لم يحدد';
-            const items = getCartItems();
 
             let itemsText = '';
             items.forEach(i => {
                 itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)} (${i.category})\n`;
+            });
+
+            // تفاصيل الرسوم لكل قسم
+            let feesText = '';
+            Object.keys(sections).forEach(section => {
+                feesText += `📦 رسوم توصيل ${section}: ${DELIVERY_FEE.toFixed(2)} ج.م\n`;
             });
 
             const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
@@ -1727,9 +1831,10 @@
                 `📂 القسم: ${categoryName}\n` +
                 `💳 ${payLabel}\n\n` +
                 `*المنتجات:*\n${itemsText}\n` +
+                `${feesText}` +
                 `المجموع الفرعي: ${fPrice(subtotal)}\n` +
-                `رسوم توصيل: ${fPrice(DELIVERY_FEE)}\n` +
-                `رسوم إدارية: ${fPrice(adminFee)}\n` +
+                `💰 رسوم إدارية (1%): ${fPrice(adminFee)}\n` +
+                `📦 إجمالي رسوم التوصيل: ${fPrice(totalDelivery)}\n` +
                 `💰 *الإجمالي:* ${fPrice(total)}`;
 
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -1755,6 +1860,9 @@
                 payment: payLabel,
                 notes: `القسم: ${categoryName} | ${notes}`,
                 items: items.map(i => `${i.product} (${i.quantity})`).join(', '),
+                subtotal: subtotal,
+                delivery_fee: totalDelivery,
+                admin_fee: adminFee,
                 total: total,
                 lat: '',
                 lng: '',
