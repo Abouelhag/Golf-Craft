@@ -9,6 +9,18 @@
     <title>جولف كرافت</title>
     <link rel="manifest" href="manifest.json">
     <script src="products.js"></script>
+    .nav {
+    z-index: 9999 !important;
+    position: relative;
+    pointer-events: auto;
+}
+.product-grid {
+    position: relative;
+    z-index: 1;
+}
+#mainApp::before {
+    pointer-events: none !important;
+}
     <style>
         :root { --green: #4CAF50; --green-dark: #388E3C; --orange: #FF9800; --red: #f44336; --card: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
