@@ -398,4 +398,43 @@
             const items = getCartItems();
             let itemsText = '';
             items.forEach(i => itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`);
-            const msg = `📦 *طلب جديد من جولف كرافت
+            const msg = `📦 *طلب جديد من جولف كرافت*\n👤 ${name} | 📞 ${phone}\n📍 ${area} - ${address}\n💳 ${payLabel}\n\n*المنتجات:*\n${itemsText}\nالمجموع الفرعي: ${fPrice(subtotal)}\nرسوم توصيل: ${fPrice(DELIVERY_FEE)}\nرسوم إدارية: ${fPrice(adminFee)}\n💰 *الإجمالي:* ${fPrice(total)}`;
+            window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+            const orderForSheet = {
+                date: new Date().toLocaleDateString('ar-EG'),
+                time: new Date().toLocaleTimeString('ar-EG'),
+                name, phone, area, address,
+                payment: payLabel,
+                notes: `الطلبات من متجر: ${shops[currentShop]?.name} | ${notes}`,
+                items: items.map(i=>`${i.product} (${i.quantity})`).join(', '),
+                total: total,
+                lat: '', lng: '',
+                driverPhone: ''
+            };
+            try { await fetch(GOOGLE_SHEET_WEBHOOK, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderForSheet) }); } catch(e) {}
+            cart = {}; saveCart(); updateUI();
+            document.getElementById('checkoutModal').classList.remove('open');
+            showToast('✅ تم إرسال الطلب');
+        }
+        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
+
+        // التهيئة
+        loadCart();
+        if (selectedArea) {
+            document.getElementById('areaScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('selectedAreaLabel').textContent = selectedArea;
+            populateAreaSelect();
+            switchShop('grocery');
+            updateUI();
+        }
+
+        // ربط الأحداث
+        document.getElementById('checkoutForm').addEventListener('submit', submitOrder);
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            document.getElementById('vodafoneDetails').style.display = this.value==='vodafone' ? 'block':'none';
+            document.getElementById('instapayDetails').style.display = this.value==='instapay' ? 'block':'none';
+        });
+    </script>
+</body>
+</html>
