@@ -9,6 +9,7 @@
     <title>جولف كرافت</title>
     <link rel="manifest" href="manifest.json">
     <style>
+        /* نفس الأنماط السابقة بدون تغيير */
         :root { --green: #4CAF50; --green-dark: #388E3C; --orange: #FF9800; --red: #f44336; --card: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #f8f9fa; font-family: 'Segoe UI', Arial, sans-serif; color: #212121; min-height: 100vh; padding-bottom: 70px; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -280,26 +281,10 @@
 
         function buildShopNav() {
             const nav = document.getElementById('shopNav');
-            nav.innerHTML = '';
-            shops.forEach(shop => {
-                const item = document.createElement('div');
-                item.className = 'nav-item' + (shop.id === currentShop ? ' active' : '');
-                item.textContent = shop.emoji + ' ' + shop.name;
-                item.dataset.shopId = shop.id;
-                item.addEventListener('click', function() {
-                    switchShop(this.dataset.shopId);
-                });
-                nav.appendChild(item);
-            });
+            nav.innerHTML = shops.map(shop => `
+                <div class="nav-item ${shop.id === currentShop ? 'active' : ''}" onclick="switchShop('${shop.id}'); event.stopPropagation();">${shop.emoji} ${shop.name}</div>
+            `).join('');
         }
-
-        // تفويض الأحداث كخطوة إضافية لضمان العمل
-        document.getElementById('shopNav').addEventListener('click', function(e) {
-            const item = e.target.closest('.nav-item');
-            if (item && item.dataset.shopId) {
-                switchShop(item.dataset.shopId);
-            }
-        });
 
         function switchShop(shopId) {
             currentShop = shopId;
