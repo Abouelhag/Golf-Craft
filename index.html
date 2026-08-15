@@ -1244,7 +1244,7 @@
         // ============================================================
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
-        const DELIVERY_FEE = 20;
+        const DELIVERY_FEE = 23; // Changed from 20 to 23
         const ADMIN_FEE_PERCENT = 0.01; // 1%
 
         // ============================================================
@@ -1291,7 +1291,17 @@
 
         function getTotalWithFees() {
             const subtotal = getSubtotal();
-            return subtotal + DELIVERY_FEE + getAdminFee(subtotal);
+            const items = getCartItems();
+            const sections = {};
+            items.forEach(item => {
+                if (!sections[item.category]) {
+                    sections[item.category] = { items: [], subtotal: 0 };
+                }
+                sections[item.category].items.push(item);
+                sections[item.category].subtotal += item.lineTotal;
+            });
+            const totalDelivery = Object.keys(sections).length * DELIVERY_FEE;
+            return subtotal + totalDelivery + getAdminFee(subtotal);
         }
 
         function loadCart() {
@@ -1651,7 +1661,19 @@
             const cnt = getCartCount();
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
-            const total = getTotalWithFees();
+            
+            // حساب رسوم التوصيل لكل قسم
+            const items = getCartItems();
+            const sections = {};
+            items.forEach(item => {
+                if (!sections[item.category]) {
+                    sections[item.category] = { items: [], subtotal: 0 };
+                }
+                sections[item.category].items.push(item);
+                sections[item.category].subtotal += item.lineTotal;
+            });
+            const totalDelivery = Object.keys(sections).length * DELIVERY_FEE;
+            const total = subtotal + totalDelivery + adminFee;
 
             const badge = document.getElementById('cartCountBadge');
             badge.textContent = cnt;
@@ -1662,7 +1684,7 @@
 
             document.getElementById('subtotalAmount').textContent = subtotal.toFixed(2);
             document.getElementById('cartModalTotal').textContent = fPrice(total);
-            document.getElementById('totalDeliveryFee').textContent = DELIVERY_FEE.toFixed(2);
+            document.getElementById('totalDeliveryFee').textContent = totalDelivery.toFixed(2);
             document.getElementById('totalAdminFee').textContent = adminFee.toFixed(2);
 
             // عرض رسوم التوصيل لكل قسم
