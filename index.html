@@ -219,7 +219,7 @@
             { id: 120, name: 'فول مدمس', emoji: '🥣', weight: 'طبق', price: 15.00, cat: 'restaurant' },
             { id: 121, name: 'فلافل', emoji: '🧆', weight: 'سندوتش', price: 8.00, cat: 'restaurant' },
             { id: 170, name: 'عيش بلدي', emoji: '🍞', weight: '5 أرغفة', price: 20.00, cat: 'bakery' },
-            { id: 171, name: 'كرواسون', emoji: '🥐', weight: '4 قطع', price: 64.00, cat: 'bakery' },
+            { id: 171, name: 'كرواسون', emoji: '🥐', weight: '4 قطع', price: 64.00, cat: 'bakery' }
         ];
 
         products.forEach(p => { p.price = Math.round(p.price * 1.05 * 100) / 100; });
@@ -280,10 +280,27 @@
 
         function buildShopNav() {
             const nav = document.getElementById('shopNav');
-            nav.innerHTML = shops.map(shop => `
-                <div class="nav-item ${shop.id === currentShop ? 'active' : ''}" onclick="switchShop('${shop.id}')">${shop.emoji} ${shop.name}</div>
-            `).join('');
+            nav.innerHTML = '';
+            shops.forEach(shop => {
+                const item = document.createElement('div');
+                item.className = 'nav-item' + (shop.id === currentShop ? ' active' : '');
+                item.textContent = shop.emoji + ' ' + shop.name;
+                item.dataset.shopId = shop.id;
+                item.addEventListener('click', function() {
+                    switchShop(this.dataset.shopId);
+                });
+                nav.appendChild(item);
+            });
         }
+
+        // تفويض الأحداث كخطوة إضافية لضمان العمل
+        document.getElementById('shopNav').addEventListener('click', function(e) {
+            const item = e.target.closest('.nav-item');
+            if (item && item.dataset.shopId) {
+                switchShop(item.dataset.shopId);
+            }
+        });
+
         function switchShop(shopId) {
             currentShop = shopId;
             const shop = shops.find(s => s.id === shopId);
@@ -424,6 +441,7 @@
         function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
 
         // التهيئة
+        loadCart();
         if (selectedArea) {
             document.getElementById('areaScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
@@ -437,7 +455,7 @@
             document.getElementById('mainApp').style.display = 'none';
         }
 
-        // ربط الأحداث
+        // ربط الأحداث العامة
         document.getElementById('viewCartBtn').addEventListener('click', ()=> document.getElementById('cartModal').classList.add('open'));
         document.getElementById('closeCartModal').addEventListener('click', ()=> document.getElementById('cartModal').classList.remove('open'));
         document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
