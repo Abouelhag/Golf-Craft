@@ -1,8 +1,7 @@
 // ============================================================
-// 🛒 جولف كرافت – الملف الشامل للمحلات والمنتجات
+// 🛒 جولف كرافت – المحلات والمنتجات
 // ============================================================
 
-// أصناف المحلات (كل محل له صورة خلفية وتصنيفات منتجاته)
 const shops = [
     { id: 'grocery',    name: 'بقالة',         emoji: '🛒', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
     { id: 'vegetables', name: 'خضار وفاكهة',   emoji: '🥬', categories: ['fruits', 'vegetables'], image: 'https://i.ibb.co/rGYk6S2p/1.jpg' },
@@ -15,7 +14,6 @@ const shops = [
     { id: 'bakery',     name: 'مخبوزات',       emoji: '🥖', categories: ['bakery'], image: 'https://i.ibb.co/zhW7TY71/1.jpg' },
 ];
 
-// المنتجات
 const products = [
     // بقالة: ألبان وبيض
     { id: 14, name: 'بيض بلدي', emoji: '🥚', weight: '12 بيضة', price: 130.00, cat: 'dairy' },
@@ -128,12 +126,10 @@ const products = [
     { id: 172, name: 'خبز توست', emoji: '🍞', weight: 'رغيف', price: 30.00, cat: 'bakery' },
 ];
 
-// إضافة 5% على جميع الأسعار
 products.forEach(p => {
     p.price = Math.round(p.price * 1.05 * 100) / 100;
 });
 
-// الباقات الشهرية (بنفس التعريف السابق)
 const packages = [
     {
         id: 'pkg1', name: 'الباقة الأساسية', emoji: '📦',
@@ -163,4 +159,56 @@ const packages = [
         items: [
             { productId: 27, quantity: 6 }, { productId: 28, quantity: 6 }, { productId: 29, quantity: 2 },
             { productId: 74, quantity: 10 }, { productId: 14, quantity: 3 }, { productId: 70, quantity: 3 },
-            { productId: 30
+            { productId: 30, quantity: 2 }, { productId: 31, quantity: 2 }, { productId: 32, quantity: 1 },
+            { productId: 52, quantity: 6 }, { productId: 87, quantity: 3 }, { productId: 79, quantity: 3 }
+        ]
+    }
+];
+
+function getPackageRealPrice(pkg) {
+    let total = 0;
+    pkg.items.forEach(item => {
+        const product = products.find(p => p.id === item.productId);
+        if (product) total += product.price * item.quantity;
+    });
+    return Math.round(total * 100) / 100;
+}
+
+function getPackageContents(pkg) {
+    return pkg.items.map(item => {
+        const product = products.find(p => p.id === item.productId);
+        return product ? `${item.quantity} × ${product.name} (${product.weight})` : '';
+    }).filter(Boolean).join(' | ');
+}
+
+packages.forEach(pkg => {
+    pkg.originalPrice = getPackageRealPrice(pkg);
+    pkg.price = pkg.originalPrice;
+    pkg.contents = getPackageContents(pkg);
+});
+
+let customPackage = null;
+
+function setCustomPackage(name, items) {
+    customPackage = {
+        id: 'custom_' + Date.now(),
+        name: 'باقة ' + name,
+        emoji: '✨',
+        desc: 'باقة مصممة خصيصاً – (التوصيل مجاني)',
+        freeDelivery: true,
+        priceFixed: 'ثبات السعر لمدة 3 أشهر',
+        discountPercent: 0,
+        items: items,
+        isCustom: true
+    };
+    customPackage.originalPrice = getPackageRealPrice(customPackage);
+    customPackage.price = customPackage.originalPrice;
+    customPackage.contents = getPackageContents(customPackage);
+    return customPackage;
+}
+
+function getAllPackages() {
+    const all = [...packages];
+    if (customPackage) all.push(customPackage);
+    return all;
+}
