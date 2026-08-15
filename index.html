@@ -902,7 +902,6 @@
 
         /* ===== PDF Invoice Styles ===== */
         #pdfInvoice {
-            display: none;
             direction: rtl;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
@@ -932,6 +931,8 @@
             padding: 12px 16px;
             border-radius: 8px;
             margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         #pdfInvoice .invoice-details div {
             font-size: 0.85rem;
@@ -988,13 +989,42 @@
             font-size: 0.8rem;
             color: #888;
         }
-        #pdfInvoice .section-badge {
-            display: inline-block;
+
+        /* ===== All Sections Cart Sidebar ===== */
+        .cart-sections-summary {
+            background: #fff;
+            padding: 8px 16px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+        .cart-sections-summary .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #e8f5e9;
+            padding: 3px 10px;
+            border-radius: 16px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--green-dark);
+        }
+        .cart-sections-summary .section-tag .count {
             background: var(--green);
             color: #fff;
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 0.7rem;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.6rem;
+        }
+        .cart-sections-summary .empty-cart {
+            color: #888;
+            font-size: 0.8rem;
         }
 
         @media (max-width: 400px) {
@@ -1010,6 +1040,7 @@
             .product-card .p-price { font-size: 0.85rem; }
             .back-bar .back-btn { font-size: 1.5rem; width: 38px; height: 38px; }
             .back-bar .shop-name { font-size: 1rem; }
+            #pdfInvoice .invoice-details { flex-direction: column; }
         }
     </style>
 </head>
@@ -1099,6 +1130,13 @@
             <span style="margin-right:auto;">تغيير</span>
         </div>
 
+        <!-- ===== عرض جميع الأقسام في السلة ===== -->
+        <div class="cart-sections-summary" id="cartSectionsSummary">
+            <span style="font-weight:600;font-size:0.8rem;color:#666;">🛒 السلة:</span>
+            <span class="empty-cart" id="emptyCartMsg">فارغة</span>
+            <div id="sectionTagsContainer" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+        </div>
+
         <!-- ===== شاشة الأقسام ===== -->
         <div id="categoriesScreen">
             <div class="section-title">📦 اختر القسم</div>
@@ -1142,7 +1180,7 @@
                 <div id="deliveryFeesContainer"></div>
                 <div id="adminFeesContainer"></div>
                 <div class="delivery-total"><span>📦 إجمالي رسوم التوصيل</span><span id="totalDeliveryFee">0.00</span> ج.م</div>
-                <div><span>💰 رسوم إدارية (1%)</span><span id="totalAdminFee">0.00</span> ج.م</div>
+                <div><span>💰 مصاريف إدارية (1%)</span><span id="totalAdminFee">0.00</span> ج.م</div>
                 <div class="total-row"><span>الإجمالي</span><span id="cartModalTotal">0.00 ج.م</span></div>
             </div>
             <button class="submit-btn" id="checkoutBtn" disabled onclick="openCheckout()">💳 إتمام الطلب</button>
@@ -1203,8 +1241,21 @@
         </div>
     </div>
 
-    <!-- ===== PDF Invoice (Hidden) ===== -->
-    <div id="pdfInvoice">
+    <!-- ===== مودال عرض الفاتورة ===== -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-sheet" style="max-height:90vh;">
+            <button class="close-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✕</button>
+            <h3>📄 فاتورة الطلب</h3>
+            <div id="pdfPreview" style="background:#fff; border-radius:12px; padding:16px; max-height:55vh; overflow-y:auto;"></div>
+            <div class="btn-group" style="margin-top:12px;">
+                <button class="submit-btn" onclick="downloadPDF()">📥 تحميل PDF</button>
+                <button class="cancel-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✖ إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PDF Invoice (Hidden - used for generation) ===== -->
+    <div id="pdfInvoice" style="display:none;">
         <div class="invoice-header">
             <h1>🧾 جولف كرافت</h1>
             <div class="sub">فاتورة طلب رقم #<span id="pdfOrderNumber">0000</span></div>
@@ -1235,7 +1286,7 @@
         <div class="totals">
             <div><span>المجموع الفرعي</span><span id="pdfSubtotal">0.00 ج.م</span></div>
             <div id="pdfDeliveryFees"></div>
-            <div><span>💰 رسوم إدارية (1%)</span><span id="pdfAdminFee">0.00 ج.م</span></div>
+            <div><span>💰 مصاريف إدارية (1%)</span><span id="pdfAdminFee">0.00 ج.م</span></div>
             <div class="grand-total"><span>💰 الإجمالي</span><span id="pdfTotal">0.00 ج.م</span></div>
         </div>
         <div class="footer">
@@ -1319,19 +1370,6 @@
                 <div style="text-align:center;padding:30px;color:#888;">
                     📭 لا توجد طلبات سابقة
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== مودال PDF ===== -->
-    <div class="modal-overlay" id="pdfModal">
-        <div class="modal-sheet" style="max-height:90vh;">
-            <button class="close-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✕</button>
-            <h3>📄 فاتورة الطلب</h3>
-            <div id="pdfPreview" style="background:#fff; border-radius:12px; padding:16px; max-height:60vh; overflow-y:auto;"></div>
-            <div class="btn-group" style="margin-top:12px;">
-                <button class="submit-btn" onclick="downloadPDF()">📥 تحميل PDF</button>
-                <button class="cancel-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✖ إغلاق</button>
             </div>
         </div>
     </div>
@@ -1656,11 +1694,20 @@
                             <div style="font-weight:700;color:var(--green-dark);font-size:1.1rem;">${order.total || '0.00 ج.م'}</div>
                         </div>
                         <div style="font-size:0.7rem;color:#999;margin-top:4px;">${order.status || 'تم التسليم'}</div>
-                        ${order.pdfUrl ? `<div style="font-size:0.7rem;color:var(--green);margin-top:2px;cursor:pointer;" onclick="viewPDFFromHistory('${order.pdfUrl}')">📄 عرض الفاتورة</div>` : ''}
+                        <div style="font-size:0.7rem;color:var(--green);margin-top:2px;cursor:pointer;" onclick="viewPDFFromHistory('${index}')">📄 عرض الفاتورة</div>
                     </div>
                 `).join('');
             }
             document.getElementById('historyModal').classList.add('open');
+        }
+
+        function viewPDFFromHistory(index) {
+            const order = orderHistory[index];
+            if (order && order.pdfData) {
+                generatePDF(order.pdfData);
+            } else {
+                showToast('❌ لا توجد فاتورة لهذا الطلب');
+            }
         }
 
         function logoutUser() {
@@ -1714,6 +1761,7 @@
             document.getElementById('productsScreen').style.display = 'none';
             document.getElementById('productsScreen').style.backgroundImage = '';
             renderCategories();
+            updateCartSectionsSummary();
         }
 
         function renderCategories() {
@@ -1797,6 +1845,39 @@
         }
 
         // ============================================================
+        // عرض جميع الأقسام في السلة
+        // ============================================================
+        function updateCartSectionsSummary() {
+            const container = document.getElementById('sectionTagsContainer');
+            const emptyMsg = document.getElementById('emptyCartMsg');
+            const items = getCartItems();
+            
+            const sections = {};
+            items.forEach(item => {
+                if (!sections[item.category]) {
+                    sections[item.category] = 0;
+                }
+                sections[item.category] += item.quantity;
+            });
+
+            const sectionKeys = Object.keys(sections);
+            
+            if (sectionKeys.length === 0) {
+                emptyMsg.style.display = 'inline';
+                container.innerHTML = '';
+                return;
+            }
+            
+            emptyMsg.style.display = 'none';
+            container.innerHTML = sectionKeys.map(section => `
+                <span class="section-tag">
+                    ${section}
+                    <span class="count">${sections[section]}</span>
+                </span>
+            `).join('');
+        }
+
+        // ============================================================
         // دوال السلة
         // ============================================================
         function addToCart(key) {
@@ -1808,6 +1889,7 @@
             saveCart();
             updateUI();
             updateCartStatus();
+            updateCartSectionsSummary();
             if (currentCategoryId) {
                 renderProductsForCategory(currentCategoryId);
             }
@@ -1844,6 +1926,7 @@
 
             updateDeliveryFeesPerSection();
             renderCartItems();
+            updateCartSectionsSummary();
         }
 
         function updateDeliveryFeesPerSection() {
@@ -1919,7 +2002,6 @@
         function generatePDF(orderData) {
             currentPdfData = orderData;
             
-            // Fill PDF template
             document.getElementById('pdfOrderNumber').textContent = orderData.orderNumber;
             document.getElementById('pdfDate').textContent = orderData.date;
             document.getElementById('pdfTime').textContent = orderData.time;
@@ -1932,7 +2014,6 @@
             document.getElementById('pdfAdminFee').textContent = fPrice(orderData.adminFee);
             document.getElementById('pdfTotal').textContent = fPrice(orderData.total);
 
-            // Items
             const tbody = document.getElementById('pdfItemsBody');
             tbody.innerHTML = orderData.items.map((item, index) => `
                 <tr>
@@ -1944,7 +2025,6 @@
                 </tr>
             `).join('');
 
-            // Delivery fees
             const feesContainer = document.getElementById('pdfDeliveryFees');
             if (orderData.deliveryFees && orderData.deliveryFees.length > 0) {
                 feesContainer.innerHTML = orderData.deliveryFees.map(f => `
@@ -1960,7 +2040,6 @@
                 </div>`;
             }
 
-            // Show preview
             const preview = document.getElementById('pdfPreview');
             const pdfElement = document.getElementById('pdfInvoice');
             preview.innerHTML = pdfElement.innerHTML;
@@ -1985,7 +2064,7 @@
         }
 
         // ============================================================
-        // الدفع - كل قسم بشكل منفصل
+        // الدفع
         // ============================================================
         function openCheckout() {
             if (getCartCount() === 0) return;
@@ -2080,13 +2159,12 @@
                 `*المنتجات:*\n${itemsText}\n` +
                 `${feesText}` +
                 `المجموع الفرعي: ${fPrice(subtotal)}\n` +
-                `💰 رسوم إدارية (1%): ${fPrice(adminFee)}\n` +
+                `💰 مصاريف إدارية (1%): ${fPrice(adminFee)}\n` +
                 `📦 إجمالي رسوم التوصيل: ${fPrice(totalDelivery)}\n` +
                 `💰 *الإجمالي:* ${fPrice(total)}`;
 
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 
-            // Generate PDF
             const pdfData = {
                 orderNumber: orderNumber,
                 date: new Date().toLocaleDateString('ar-EG'),
