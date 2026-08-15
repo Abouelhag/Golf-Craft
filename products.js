@@ -17,11 +17,11 @@ const shops = [
 
 // المنتجات
 const products = [
-    // ===== بقالة: ألبان وبيض =====
-    { id: 14, name: 'بيض بلدي',       emoji: '🥚', weight: '12 بيضة',  price: 130.00, cat: 'dairy' },
-    { id: 15, name: 'جبنة رومي',      emoji: '🧀', weight: '1000 جم',   price: 299.99, cat: 'dairy' },
-    { id: 17, name: 'زبدة',           emoji: '🧈', weight: '250 جم',   price: 140.00, cat: 'dairy' },
-    { id: 66, name: 'جبنة طعمة مثلثات', emoji: '🧀', weight: '8 قطع',  price: 39.99, cat: 'dairy' },
+    // بقالة: ألبان وبيض
+    { id: 14, name: 'بيض بلدي', emoji: '🥚', weight: '12 بيضة', price: 130.00, cat: 'dairy' },
+    { id: 15, name: 'جبنة رومي', emoji: '🧀', weight: '1000 جم', price: 299.99, cat: 'dairy' },
+    { id: 17, name: 'زبدة', emoji: '🧈', weight: '250 جم', price: 140.00, cat: 'dairy' },
+    { id: 66, name: 'جبنة طعمة مثلثات', emoji: '🧀', weight: '8 قطع', price: 39.99, cat: 'dairy' },
     { id: 74, name: 'بخيره لبن كامل الدسم', emoji: '🥛', weight: '1000 مللي', price: 40.00, cat: 'dairy' },
     { id: 81, name: 'عبور لاند جبنة فيتا تتراباك', emoji: '🧀', weight: '500 جم', price: 54.99, cat: 'dairy' },
     { id: 82, name: 'المراعي جبنة فيتا شيدر تتراباك', emoji: '🧀', weight: '500 جم', price: 54.99, cat: 'dairy' },
@@ -29,7 +29,7 @@ const products = [
     { id: 92, name: 'المراعي جبنة فيتا زيتون تتراباك', emoji: '🧀', weight: '500 جم', price: 54.99, cat: 'dairy' },
     { id: 93, name: 'جبنة دومتي فيتا تتراباك', emoji: '🧀', weight: '500 جم', price: 39.00, cat: 'dairy' },
 
-    // ===== بقالة: مواد جافة =====
+    // بقالة: مواد جافة
     { id: 27, name: 'أرز مصري فاخر', emoji: '🍚', weight: '1 كجم', price: 29.99, cat: 'pantry' },
     { id: 28, name: 'مكرونه روجينة بانواعها', emoji: '🍝', weight: '500 جم', price: 29.00, cat: 'pantry' },
     { id: 29, name: 'حلوه زيت خليط', emoji: '🫗', weight: '4.5 لتر', price: 344.99, cat: 'pantry' },
@@ -68,14 +68,14 @@ const products = [
     { id: 94, name: 'شاي ناعم ليبتون', emoji: '☕', weight: '100 جم', price: 29.99, cat: 'pantry' },
     { id: 95, name: 'مربى فراوله حلواني', emoji: '🍓', weight: '750 جم', price: 70.00, cat: 'pantry' },
 
-    // ===== بقالة: مشروبات =====
+    // بقالة: مشروبات
     { id: 21, name: 'عصير برتقال', emoji: '🧃', weight: '1 لتر', price: 70.00, cat: 'beverages' },
     { id: 22, name: 'مياه معدنية', emoji: '💧', weight: '6×1.5 لتر', price: 60.00, cat: 'beverages' },
     { id: 23, name: 'بيبسي كولا', emoji: '🥤', weight: '2 لتر', price: 44.00, cat: 'beverages' },
     { id: 67, name: 'جهينه عصير كوكتيل', emoji: '🧃', weight: '225 مللي', price: 9.25, cat: 'beverages' },
     { id: 98, name: 'بخيره عصير مانجو', emoji: '🥭', weight: '225 مللي', price: 9.25, cat: 'beverages' },
 
-    // ===== بقالة: منظفات =====
+    // بقالة: منظفات
     { id: 30, name: 'صابون سائل', emoji: '🧴', weight: '500 مل', price: 64.00, cat: 'cleaning' },
     { id: 31, name: 'منظف أرضيات', emoji: '🧹', weight: '1 لتر', price: 72.00, cat: 'cleaning' },
     { id: 32, name: 'منظف زجاج', emoji: '🪟', weight: '500 مل', price: 56.00, cat: 'cleaning' },
@@ -86,7 +86,7 @@ const products = [
     { id: 97, name: 'مسحوق غسيل اوتوماتيك اوكسي', emoji: '🧺', weight: '2.5 كجم', price: 195.00, cat: 'cleaning' },
     { id: 99, name: 'اكياس قمامة سليد رول ٩٠×٧٠', emoji: '🗑️', weight: '1 رول', price: 135.00, cat: 'cleaning' },
 
-    // ===== خضار وفاكهة =====
+    // خضار وفاكهة
     { id: 101, name: 'طماطم', emoji: '🍅', weight: '1 كجم', price: 12.00, cat: 'vegetables' },
     { id: 102, name: 'بطاطس', emoji: '🥔', weight: '2 كجم', price: 18.00, cat: 'vegetables' },
     { id: 103, name: 'بصل', emoji: '🧅', weight: '1 كجم', price: 11.00, cat: 'vegetables' },
@@ -95,53 +95,72 @@ const products = [
     { id: 106, name: 'تفاح أحمر', emoji: '🍎', weight: '1 كجم', price: 38.00, cat: 'fruits' },
     { id: 107, name: 'برتقال', emoji: '🍊', weight: '1 كجم', price: 16.00, cat: 'fruits' },
 
-    // ===== لحوم =====
+    // لحوم
     { id: 130, name: 'لحمة مفرومة', emoji: '🥩', weight: '1 كجم', price: 260.00, cat: 'meat' },
     { id: 131, name: 'كبدة بلدي', emoji: '🍖', weight: '1 كجم', price: 180.00, cat: 'meat' },
     { id: 132, name: 'لحمة ضاني', emoji: '🥩', weight: '1 كجم', price: 320.00, cat: 'meat' },
 
-    // ===== دواجن =====
+    // دواجن
     { id: 110, name: 'فراخ بيضاء', emoji: '🐔', weight: '1 كجم', price: 106.00, cat: 'poultry' },
     { id: 111, name: 'اوراك', emoji: '🍗', weight: '1 كجم', price: 115.00, cat: 'poultry' },
     { id: 112, name: 'صدور فراخ', emoji: '🍗', weight: '1 كجم', price: 130.00, cat: 'poultry' },
 
-    // ===== بن =====
+    // بن
     { id: 140, name: 'بن فاتح', emoji: '☕', weight: '250 جم', price: 45.00, cat: 'coffee' },
     { id: 141, name: 'بن غامق', emoji: '☕', weight: '250 جم', price: 50.00, cat: 'coffee' },
 
-    // ===== محمصات =====
+    // محمصات
     { id: 150, name: 'لب سوري', emoji: '🥜', weight: '250 جم', price: 35.00, cat: 'snacks' },
     { id: 151, name: 'فول سوداني', emoji: '🥜', weight: '250 جم', price: 30.00, cat: 'snacks' },
 
-    // ===== عطارة =====
+    // عطارة
     { id: 160, name: 'كمون', emoji: '🌿', weight: '100 جم', price: 15.00, cat: 'spices' },
     { id: 161, name: 'كزبرة', emoji: '🌿', weight: '100 جم', price: 12.00, cat: 'spices' },
 
-    // ===== سندويتشات =====
+    // سندويتشات
     { id: 120, name: 'فول مدمس', emoji: '🥣', weight: 'طبق', price: 15.00, cat: 'restaurant' },
     { id: 121, name: 'فلافل', emoji: '🧆', weight: 'سندوتش', price: 8.00, cat: 'restaurant' },
     { id: 122, name: 'بيض بالبسطرمة', emoji: '🍳', weight: 'طبق', price: 25.00, cat: 'restaurant' },
 
-    // ===== مخبوزات =====
+    // مخبوزات
     { id: 170, name: 'عيش بلدي', emoji: '🍞', weight: '5 أرغفة', price: 20.00, cat: 'bakery' },
     { id: 171, name: 'كرواسون', emoji: '🥐', weight: '4 قطع', price: 64.00, cat: 'bakery' },
     { id: 172, name: 'خبز توست', emoji: '🍞', weight: 'رغيف', price: 30.00, cat: 'bakery' },
 ];
 
-// إضافة 5% على جميع الأسعار (طلب سابق)
+// إضافة 5% على جميع الأسعار
 products.forEach(p => {
     p.price = Math.round(p.price * 1.05 * 100) / 100;
 });
 
-// --- الباقات الشهرية (بدون تغيير) ---
+// الباقات الشهرية (بنفس التعريف السابق)
 const packages = [
-    // ... نفس تعريف الباقات السابقة بدون تغيير ...
-];
-
-function getPackageRealPrice(pkg) { /* ... */ }
-function getPackageContents(pkg) { /* ... */ }
-packages.forEach(pkg => { /* ... */ });
-let customPackage = null;
-function createCustomPackage(name, items) { /* ... */ }
-function setCustomPackage(name, items) { /* ... */ }
-function getAllPackages() { /* ... */ }
+    {
+        id: 'pkg1', name: 'الباقة الأساسية', emoji: '📦',
+        desc: 'لشخص بالغ واحد – شهرياً', discountPercent: 0, freeDelivery: true,
+        priceFixed: 'ثبات السعر لمدة 3 أشهر مع الاشتراك',
+        items: [
+            { productId: 27, quantity: 2 }, { productId: 28, quantity: 2 }, { productId: 74, quantity: 3 },
+            { productId: 14, quantity: 1 }, { productId: 70, quantity: 1 }, { productId: 30, quantity: 1 },
+            { productId: 52, quantity: 2 }, { productId: 87, quantity: 1 }
+        ]
+    },
+    {
+        id: 'pkg2', name: 'الباقة العائلية', emoji: '👨‍👩‍👧‍👦',
+        desc: 'أسرة (بالغَين + طفلَين) – شهرياً', discountPercent: 0, freeDelivery: true,
+        priceFixed: 'ثبات السعر لمدة 3 أشهر مع الاشتراك',
+        items: [
+            { productId: 27, quantity: 4 }, { productId: 28, quantity: 4 }, { productId: 29, quantity: 1 },
+            { productId: 74, quantity: 6 }, { productId: 14, quantity: 2 }, { productId: 70, quantity: 2 },
+            { productId: 30, quantity: 1 }, { productId: 31, quantity: 1 }, { productId: 52, quantity: 4 },
+            { productId: 87, quantity: 2 }, { productId: 79, quantity: 2 }
+        ]
+    },
+    {
+        id: 'pkg3', name: 'الباقة المميزة', emoji: '✨',
+        desc: 'أسرة حتى 4 بالغين – شهرياً', discountPercent: 0, freeDelivery: true,
+        priceFixed: 'ثبات السعر لمدة 3 أشهر مع الاشتراك',
+        items: [
+            { productId: 27, quantity: 6 }, { productId: 28, quantity: 6 }, { productId: 29, quantity: 2 },
+            { productId: 74, quantity: 10 }, { productId: 14, quantity: 3 }, { productId: 70, quantity: 3 },
+            { productId: 30
