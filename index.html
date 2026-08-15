@@ -76,9 +76,6 @@
         .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: #fff; padding: 10px 24px; border-radius: 28px; z-index: 500; opacity: 0; transition: opacity 0.3s; }
         .toast.show { opacity: 1; }
         #vodafoneDetails, #instapayDetails { display: none; background: #f1f8e9; padding: 10px; border-radius: 10px; margin-top: 5px; }
-        .custom-product-list { max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 8px; }
-        .custom-item-row { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee; }
-        .custom-item-row input { width: 60px; text-align: center; }
         .fee-summary { background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px; font-size: 0.85rem; }
     </style>
 </head>
@@ -130,7 +127,7 @@
         </div>
     </div>
 
-    <!-- مودالات السلة والدفع والباقة -->
+    <!-- مودال السلة -->
     <div class="modal-overlay" id="cartModal">
         <div class="modal-sheet">
             <button class="close-btn" id="closeCartModal">✕</button>
@@ -146,6 +143,7 @@
         </div>
     </div>
 
+    <!-- مودال تأكيد الطلب -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-sheet">
             <button class="close-btn" id="closeCheckoutModal">✕</button>
@@ -155,16 +153,6 @@
                 <div class="form-group"><label>رقم الهاتف *</label><input type="tel" id="custPhone" required></div>
                 <div class="form-group"><label>المنطقة *</label><select id="custArea" required></select></div>
                 <div class="form-group"><label>تفاصيل العنوان (شارع، عمارة، شقة) *</label><textarea id="custAddress" rows="2" required></textarea></div>
-                <div class="form-group"><label>موعد التوصيل المناسب *</label>
-                    <select id="deliveryTime" required>
-                        <option value="">-- اختر الفترة --</option>
-                        <option value="10 ص - 12 م">10 صباحاً - 12 ظهراً</option>
-                        <option value="12 م - 2 م">12 ظهراً - 2 مساءً</option>
-                        <option value="2 م - 4 م">2 مساءً - 4 مساءً</option>
-                        <option value="4 م - 6 م">4 مساءً - 6 مساءً</option>
-                        <option value="6 م - 8 م">6 مساءً - 8 مساءً</option>
-                    </select>
-                </div>
                 <div class="form-group"><label>طريقة الدفع *</label>
                     <select id="paymentMethod" required>
                         <option value="">-- اختر طريقة الدفع --</option>
@@ -181,20 +169,10 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="customPackageModal">
-        <div class="modal-sheet">
-            <button class="close-btn" onclick="closeCustomPackageModal()">✕</button>
-            <h3>✨ صمم باقتك الشهرية</h3>
-            <div class="form-group"><label>اسم لباقتك</label><input type="text" id="customPackageName"></div>
-            <div class="form-group"><label>اختر المنتجات والكميات</label><div class="custom-product-list" id="customProductList"></div></div>
-            <button class="submit-btn" onclick="addCustomPackageToCart()">📦 أضف الباقة للسلة</button>
-        </div>
-    </div>
-
     <div class="toast" id="toast"></div>
 
     <script>
-        // ========== البيانات (كانت في products.js) ==========
+        // ========== البيانات ==========
         const shops = [
             { id: 'grocery',    name: 'بقالة',         emoji: '🛒', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
             { id: 'vegetables', name: 'خضار وفاكهة',   emoji: '🥬', categories: ['fruits', 'vegetables'], image: 'https://i.ibb.co/rGYk6S2p/1.jpg' },
@@ -204,8 +182,7 @@
             { id: 'roastery',   name: 'محمصات',        emoji: '🥜', categories: ['snacks'], image: 'https://i.ibb.co/Qj3zfG96/1.jpg' },
             { id: 'spices',     name: 'عطارة',         emoji: '🌿', categories: ['spices'], image: 'https://i.ibb.co/GfxfwGp3/1.jpg' },
             { id: 'sandwiches', name: 'سندويتشات',     emoji: '🥪', categories: ['restaurant'], image: 'https://i.ibb.co/DDwqJCZ4/1.jpg' },
-            { id: 'bakery',     name: 'مخبوزات',       emoji: '🥖', categories: ['bakery'], image: 'https://i.ibb.co/zhW7TY71/1.jpg' },
-            { id: 'packages',   name: 'باقات شهرية',   emoji: '📦', categories: ['packages'], image: '' }
+            { id: 'bakery',     name: 'مخبوزات',       emoji: '🥖', categories: ['bakery'], image: 'https://i.ibb.co/zhW7TY71/1.jpg' }
         ];
 
         const products = [
@@ -247,21 +224,6 @@
 
         products.forEach(p => { p.price = Math.round(p.price * 1.05 * 100) / 100; });
 
-        const packages = [
-            { id: 'pkg1', name: 'الباقة الأساسية', emoji: '📦', desc: 'لشخص بالغ واحد – شهرياً', discountPercent: 0, freeDelivery: true, priceFixed: 'ثبات السعر لمدة 3 أشهر مع الاشتراك', items: [ { productId: 27, quantity: 2 }, { productId: 28, quantity: 2 }, { productId: 74, quantity: 3 }, { productId: 14, quantity: 1 }, { productId: 70, quantity: 1 }, { productId: 30, quantity: 1 }, { productId: 52, quantity: 2 }, { productId: 87, quantity: 1 } ] },
-            { id: 'pkg2', name: 'الباقة العائلية', emoji: '👨‍👩‍👧‍👦', desc: 'أسرة (بالغَين + طفلَين) – شهرياً', discountPercent: 0, freeDelivery: true, priceFixed: 'ثبات السعر لمدة 3 أشهر مع الاشتراك', items: [ { productId: 27, quantity: 4 }, { productId: 28, quantity: 4 }, { productId: 29, quantity: 1 }, { productId: 74, quantity: 6 }, { productId: 14, quantity: 2 }, { productId: 70, quantity: 2 }, { productId: 30, quantity: 1 }, { productId: 31, quantity: 1 }, { productId: 52, quantity: 4 }, { productId: 87, quantity: 2 }, { productId: 79, quantity: 2 } ] },
-            { id: 'pkg3', name: 'الباقة المميزة', emoji: '✨', desc: 'أسرة حتى 4 بالغين – شهرياً', discountPercent: 0, freeDelivery: true, priceFixed: 'ثبات السعر لمدة 3 أشهر مع الاشتراك', items: [ { productId: 27, quantity: 6 }, { productId: 28, quantity: 6 }, { productId: 29, quantity: 2 }, { productId: 74, quantity: 10 }, { productId: 14, quantity: 3 }, { productId: 70, quantity: 3 }, { productId: 30, quantity: 2 }, { productId: 31, quantity: 2 }, { productId: 32, quantity: 1 }, { productId: 52, quantity: 6 }, { productId: 87, quantity: 3 }, { productId: 79, quantity: 3 } ] }
-        ];
-
-        function getPackageRealPrice(pkg) { let total = 0; pkg.items.forEach(item => { const product = products.find(p => p.id === item.productId); if (product) total += product.price * item.quantity; }); return Math.round(total * 100) / 100; }
-        function getPackageContents(pkg) { return pkg.items.map(item => { const product = products.find(p => p.id === item.productId); return product ? `${item.quantity} × ${product.name} (${product.weight})` : ''; }).filter(Boolean).join(' | '); }
-        packages.forEach(pkg => { pkg.originalPrice = getPackageRealPrice(pkg); pkg.price = pkg.originalPrice; pkg.contents = getPackageContents(pkg); });
-        let customPackage = null;
-        function createCustomPackage(name, items) { return { id: 'custom_' + Date.now(), name: 'باقة ' + name, emoji: '✨', desc: 'باقة مصممة خصيصاً – (التوصيل مجاني)', freeDelivery: true, priceFixed: 'ثبات السعر لمدة 3 أشهر', discountPercent: 0, items: items, isCustom: true }; }
-        function setCustomPackage(name, items) { customPackage = createCustomPackage(name, items); customPackage.originalPrice = getPackageRealPrice(customPackage); customPackage.price = customPackage.originalPrice; customPackage.contents = getPackageContents(customPackage); return customPackage; }
-        function getAllPackages() { const all = [...packages]; if (customPackage) all.push(customPackage); return all; }
-
-        // ========== منطق التطبيق ==========
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
         const LOGO_URL = "https://i.ibb.co/cXSf6txM/icon-512.png";
@@ -287,12 +249,18 @@
             for (let key in cart) {
                 let q = cart[key];
                 if(q <= 0) continue;
-                if(key.startsWith('prod_')) { let id = parseInt(key.split('_')[1]); let p = products.find(pr => pr.id === id); if(p) t += p.price * q; }
-                else if(key.startsWith('pkg_')) { let pkgId = key.substring(4); let allPkgs = getAllPackages(); let pkg = allPkgs.find(p => p.id === pkgId); if(pkg) t += pkg.price * q; }
+                if(key.startsWith('prod_')) {
+                    let id = parseInt(key.split('_')[1]);
+                    let p = products.find(pr => pr.id === id);
+                    if(p) t += p.price * q;
+                }
             }
             return t;
         }
-        function getTotalWithFees() { const subtotal = getSubtotal(); return subtotal + DELIVERY_FEE + getAdminFee(subtotal); }
+        function getTotalWithFees() {
+            const subtotal = getSubtotal();
+            return subtotal + DELIVERY_FEE + getAdminFee(subtotal);
+        }
         function loadCart() { try { cart = JSON.parse(localStorage.getItem('gcart')||'{}'); } catch(e){ cart={}; } }
         function saveCart() { localStorage.setItem('gcart', JSON.stringify(cart)); }
         function fPrice(n) { return n.toFixed(2) + ' ج.م'; }
@@ -300,8 +268,11 @@
             const items = [];
             for (let [key, qty] of Object.entries(cart)) {
                 if(qty <= 0) continue;
-                if(key.startsWith('prod_')) { let id = parseInt(key.split('_')[1]); let p = products.find(pr => pr.id === id); if(p) items.push({ product: p.name, quantity: qty, unitPrice: p.price, lineTotal: p.price * qty }); }
-                else if(key.startsWith('pkg_')) { let pkgId = key.substring(4); let allPkgs = getAllPackages(); let pkg = allPkgs.find(p => p.id === pkgId); if(pkg) items.push({ product: pkg.name + ' (باقة)', quantity: qty, unitPrice: pkg.price, lineTotal: pkg.price * qty }); }
+                if(key.startsWith('prod_')) {
+                    let id = parseInt(key.split('_')[1]);
+                    let p = products.find(pr => pr.id === id);
+                    if(p) items.push({ product: p.name, quantity: qty, unitPrice: p.price, lineTotal: p.price * qty });
+                }
             }
             return items;
         }
@@ -326,37 +297,20 @@
             const shop = shops.find(s => s.id === currentShop);
             label.textContent = shop ? shop.name : 'المنتجات';
 
-            if (currentShop === 'packages') {
-                const allPkgs = getAllPackages();
-                grid.innerHTML = allPkgs.map(pkg => {
-                    const q = cart['pkg_' + pkg.id] || 0;
-                    return `<div class="product-card ${q?'has-qty':''}" data-package-id="${pkg.id}">
-                        <span class="qty-badge">${q||''}</span>
-                        <div class="emoji">${pkg.emoji}</div>
-                        <div class="name">${pkg.name}</div>
-                        <div class="weight">${pkg.desc} | التوصيل مجاني</div>
-                        <div class="price">${fPrice(pkg.price)}</div>
-                        <div class="weight" style="font-size:0.65rem;">${pkg.contents||''}</div>
-                        <button class="add-btn ${q?'in-cart':''}">${q?'✓ في السلة':'+ أضف'}</button>
-                    </div>`;
-                }).join('');
-                grid.querySelectorAll('[data-package-id]').forEach(card => card.addEventListener('click', () => addToCart('pkg_' + card.dataset.packageId)));
-            } else {
-                const allowedCats = shop.categories;
-                const filtered = products.filter(p => allowedCats.includes(p.cat));
-                grid.innerHTML = filtered.map(p => {
-                    const q = cart['prod_' + p.id] || 0;
-                    return `<div class="product-card ${q?'has-qty':''}" data-product-id="${p.id}">
-                        <span class="qty-badge">${q||''}</span>
-                        <div class="emoji">${p.emoji}</div>
-                        <div class="name">${p.name}</div>
-                        <div class="weight">${p.weight}</div>
-                        <div class="price">${fPrice(p.price)}</div>
-                        <button class="add-btn ${q?'in-cart':''}">${q?'✓ في السلة':'+ أضف'}</button>
-                    </div>`;
-                }).join('');
-                grid.querySelectorAll('[data-product-id]').forEach(card => card.addEventListener('click', () => addToCart('prod_' + parseInt(card.dataset.productId))));
-            }
+            const allowedCats = shop.categories;
+            const filtered = products.filter(p => allowedCats.includes(p.cat));
+            grid.innerHTML = filtered.map(p => {
+                const q = cart['prod_' + p.id] || 0;
+                return `<div class="product-card ${q?'has-qty':''}" data-product-id="${p.id}">
+                    <span class="qty-badge">${q||''}</span>
+                    <div class="emoji">${p.emoji}</div>
+                    <div class="name">${p.name}</div>
+                    <div class="weight">${p.weight}</div>
+                    <div class="price">${fPrice(p.price)}</div>
+                    <button class="add-btn ${q?'in-cart':''}">${q?'✓ في السلة':'+ أضف'}</button>
+                </div>`;
+            }).join('');
+            grid.querySelectorAll('[data-product-id]').forEach(card => card.addEventListener('click', () => addToCart('prod_' + parseInt(card.dataset.productId))));
         }
         function addToCart(key) {
             if (!isOpenNow()) {
@@ -435,10 +389,9 @@
             const phone = document.getElementById('custPhone').value.trim();
             const area = document.getElementById('custArea').value;
             const address = document.getElementById('custAddress').value.trim();
-            const deliveryTime = document.getElementById('deliveryTime').value;
             const payment = document.getElementById('paymentMethod').value;
             const notes = document.getElementById('custNotes').value.trim();
-            if (!name || !phone || !area || !address || !deliveryTime || !payment) {
+            if (!name || !phone || !area || !address || !payment) {
                 alert('من فضلك أكمل جميع البيانات المطلوبة');
                 return;
             }
@@ -450,14 +403,14 @@
             const items = getCartItems();
             let itemsText = '';
             items.forEach(i => itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`);
-            const msg = `📦 *طلب جديد من جولف كرافت*\n👤 ${name} | 📞 ${phone}\n📍 ${area} - ${address}\n🕒 موعد التوصيل: ${deliveryTime}\n💳 ${payLabel}\n\n*المنتجات:*\n${itemsText}\nالمجموع الفرعي: ${fPrice(subtotal)}\nرسوم توصيل: ${fPrice(DELIVERY_FEE)}\nرسوم إدارية: ${fPrice(adminFee)}\n💰 *الإجمالي:* ${fPrice(total)}`;
+            const msg = `📦 *طلب جديد من جولف كرافت*\n👤 ${name} | 📞 ${phone}\n📍 ${area} - ${address}\n💳 ${payLabel}\n\n*المنتجات:*\n${itemsText}\nالمجموع الفرعي: ${fPrice(subtotal)}\nرسوم توصيل: ${fPrice(DELIVERY_FEE)}\nرسوم إدارية: ${fPrice(adminFee)}\n💰 *الإجمالي:* ${fPrice(total)}`;
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
             const orderForSheet = {
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
                 name, phone, area, address,
                 payment: payLabel,
-                notes: `الطلبات من متجر: ${shops.find(s=>s.id===currentShop)?.name} | موعد التوصيل: ${deliveryTime} | ${notes}`,
+                notes: `الطلبات من متجر: ${shops.find(s=>s.id===currentShop)?.name} | ${notes}`,
                 items: items.map(i=>`${i.product} (${i.quantity})`).join(', '),
                 total: total,
                 lat: '', lng: '',
