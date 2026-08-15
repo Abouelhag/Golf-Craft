@@ -8,6 +8,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>جولف كرافت</title>
     <link rel="manifest" href="manifest.json">
+    <!-- Include html2pdf library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         :root {
             --green: #4CAF50;
@@ -898,6 +900,103 @@
             opacity: 1;
         }
 
+        /* ===== PDF Invoice Styles ===== */
+        #pdfInvoice {
+            display: none;
+            direction: rtl;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        #pdfInvoice .invoice-header {
+            text-align: center;
+            border-bottom: 3px solid var(--green);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        #pdfInvoice .invoice-header h1 {
+            color: var(--green-dark);
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+        #pdfInvoice .invoice-header .sub {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        #pdfInvoice .invoice-details {
+            display: flex;
+            justify-content: space-between;
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        #pdfInvoice .invoice-details div {
+            font-size: 0.85rem;
+        }
+        #pdfInvoice .invoice-details strong {
+            color: var(--green-dark);
+        }
+        #pdfInvoice table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+        }
+        #pdfInvoice table th {
+            background: var(--green);
+            color: #fff;
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        #pdfInvoice table td {
+            padding: 8px 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 0.85rem;
+        }
+        #pdfInvoice table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        #pdfInvoice .totals {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        #pdfInvoice .totals div {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            font-size: 0.9rem;
+        }
+        #pdfInvoice .totals .grand-total {
+            border-top: 2px solid var(--green);
+            padding-top: 8px;
+            margin-top: 4px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--green-dark);
+        }
+        #pdfInvoice .footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid #ddd;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        #pdfInvoice .section-badge {
+            display: inline-block;
+            background: var(--green);
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+        }
+
         @media (max-width: 400px) {
             #splashScreen h1 { font-size: 2.8rem; }
             .categories-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1104,6 +1203,47 @@
         </div>
     </div>
 
+    <!-- ===== PDF Invoice (Hidden) ===== -->
+    <div id="pdfInvoice">
+        <div class="invoice-header">
+            <h1>🧾 جولف كرافت</h1>
+            <div class="sub">فاتورة طلب رقم #<span id="pdfOrderNumber">0000</span></div>
+        </div>
+        <div class="invoice-details">
+            <div><strong>📅 التاريخ:</strong> <span id="pdfDate"></span></div>
+            <div><strong>🕐 الوقت:</strong> <span id="pdfTime"></span></div>
+            <div><strong>📂 القسم:</strong> <span id="pdfCategory"></span></div>
+        </div>
+        <div style="background:#f1f8e9; padding:10px 14px; border-radius:8px; margin-bottom:14px; border-right:3px solid var(--green);">
+            <div><strong>👤 العميل:</strong> <span id="pdfName"></span></div>
+            <div><strong>📞 الهاتف:</strong> <span id="pdfPhone"></span></div>
+            <div><strong>📍 العنوان:</strong> <span id="pdfAddress"></span></div>
+            <div><strong>💳 طريقة الدفع:</strong> <span id="pdfPayment"></span></div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>المنتج</th>
+                    <th>الكمية</th>
+                    <th>السعر</th>
+                    <th>الإجمالي</th>
+                </tr>
+            </thead>
+            <tbody id="pdfItemsBody"></tbody>
+        </table>
+        <div class="totals">
+            <div><span>المجموع الفرعي</span><span id="pdfSubtotal">0.00 ج.م</span></div>
+            <div id="pdfDeliveryFees"></div>
+            <div><span>💰 رسوم إدارية (1%)</span><span id="pdfAdminFee">0.00 ج.م</span></div>
+            <div class="grand-total"><span>💰 الإجمالي</span><span id="pdfTotal">0.00 ج.م</span></div>
+        </div>
+        <div class="footer">
+            📍 التوصيل داخل مدينة العبور فقط | 🕓 من 7 صباحاً حتى 11 مساءً<br>
+            شكراً لتسوقكم مع جولف كرافت ❤️
+        </div>
+    </div>
+
     <!-- ===== مودال قائمة المستخدم ===== -->
     <div class="modal-overlay" id="userMenuModal">
         <div class="modal-sheet">
@@ -1183,6 +1323,19 @@
         </div>
     </div>
 
+    <!-- ===== مودال PDF ===== -->
+    <div class="modal-overlay" id="pdfModal">
+        <div class="modal-sheet" style="max-height:90vh;">
+            <button class="close-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✕</button>
+            <h3>📄 فاتورة الطلب</h3>
+            <div id="pdfPreview" style="background:#fff; border-radius:12px; padding:16px; max-height:60vh; overflow-y:auto;"></div>
+            <div class="btn-group" style="margin-top:12px;">
+                <button class="submit-btn" onclick="downloadPDF()">📥 تحميل PDF</button>
+                <button class="cancel-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✖ إغلاق</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ===== Toast ===== -->
     <div class="toast" id="toast"></div>
 
@@ -1244,7 +1397,7 @@
         // ============================================================
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
-        const DELIVERY_FEE = 23; // Changed from 20 to 23
+        const DELIVERY_FEE = 23;
         const ADMIN_FEE_PERCENT = 0.01; // 1%
 
         // ============================================================
@@ -1255,6 +1408,8 @@
         let cart = {};
         let userData = JSON.parse(localStorage.getItem('golfcraft_user') || 'null');
         let orderHistory = JSON.parse(localStorage.getItem('golfcraft_orders') || '[]');
+        let orderCounter = orderHistory.length + 1;
+        let currentPdfData = null;
 
         // ============================================================
         // الدوال الأساسية
@@ -1501,6 +1656,7 @@
                             <div style="font-weight:700;color:var(--green-dark);font-size:1.1rem;">${order.total || '0.00 ج.م'}</div>
                         </div>
                         <div style="font-size:0.7rem;color:#999;margin-top:4px;">${order.status || 'تم التسليم'}</div>
+                        ${order.pdfUrl ? `<div style="font-size:0.7rem;color:var(--green);margin-top:2px;cursor:pointer;" onclick="viewPDFFromHistory('${order.pdfUrl}')">📄 عرض الفاتورة</div>` : ''}
                     </div>
                 `).join('');
             }
@@ -1662,7 +1818,6 @@
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
             
-            // حساب رسوم التوصيل لكل قسم
             const items = getCartItems();
             const sections = {};
             items.forEach(item => {
@@ -1687,9 +1842,7 @@
             document.getElementById('totalDeliveryFee').textContent = totalDelivery.toFixed(2);
             document.getElementById('totalAdminFee').textContent = adminFee.toFixed(2);
 
-            // عرض رسوم التوصيل لكل قسم
             updateDeliveryFeesPerSection();
-
             renderCartItems();
         }
 
@@ -1697,7 +1850,6 @@
             const container = document.getElementById('deliveryFeesContainer');
             const items = getCartItems();
             
-            // تجميع المنتجات حسب القسم
             const sections = {};
             items.forEach(item => {
                 if (!sections[item.category]) {
@@ -1762,7 +1914,78 @@
         }
 
         // ============================================================
-        // الدفع - كل قسم بشكل منفصل مع رسوم توصيل منفصلة
+        // دوال PDF
+        // ============================================================
+        function generatePDF(orderData) {
+            currentPdfData = orderData;
+            
+            // Fill PDF template
+            document.getElementById('pdfOrderNumber').textContent = orderData.orderNumber;
+            document.getElementById('pdfDate').textContent = orderData.date;
+            document.getElementById('pdfTime').textContent = orderData.time;
+            document.getElementById('pdfCategory').textContent = orderData.category;
+            document.getElementById('pdfName').textContent = orderData.name;
+            document.getElementById('pdfPhone').textContent = orderData.phone;
+            document.getElementById('pdfAddress').textContent = orderData.address;
+            document.getElementById('pdfPayment').textContent = orderData.payment;
+            document.getElementById('pdfSubtotal').textContent = fPrice(orderData.subtotal);
+            document.getElementById('pdfAdminFee').textContent = fPrice(orderData.adminFee);
+            document.getElementById('pdfTotal').textContent = fPrice(orderData.total);
+
+            // Items
+            const tbody = document.getElementById('pdfItemsBody');
+            tbody.innerHTML = orderData.items.map((item, index) => `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.product}</td>
+                    <td>${item.quantity}</td>
+                    <td>${fPrice(item.unitPrice)}</td>
+                    <td>${fPrice(item.lineTotal)}</td>
+                </tr>
+            `).join('');
+
+            // Delivery fees
+            const feesContainer = document.getElementById('pdfDeliveryFees');
+            if (orderData.deliveryFees && orderData.deliveryFees.length > 0) {
+                feesContainer.innerHTML = orderData.deliveryFees.map(f => `
+                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                        <span>📦 ${f.section}</span>
+                        <span>${fPrice(f.fee)}</span>
+                    </div>
+                `).join('');
+            } else {
+                feesContainer.innerHTML = `<div style="display:flex;justify-content:space-between;padding:2px 0;">
+                    <span>📦 رسوم توصيل</span>
+                    <span>${fPrice(orderData.totalDelivery)}</span>
+                </div>`;
+            }
+
+            // Show preview
+            const preview = document.getElementById('pdfPreview');
+            const pdfElement = document.getElementById('pdfInvoice');
+            preview.innerHTML = pdfElement.innerHTML;
+            document.getElementById('pdfModal').classList.add('open');
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('pdfInvoice');
+            const opt = {
+                margin: 10,
+                filename: `فاتورة_جولف_كرافت_${currentPdfData.orderNumber}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save().then(() => {
+                showToast('✅ تم تحميل الفاتورة');
+            }).catch(err => {
+                console.error('PDF Error:', err);
+                showToast('❌ حدث خطأ في تحميل الفاتورة');
+            });
+        }
+
+        // ============================================================
+        // الدفع - كل قسم بشكل منفصل
         // ============================================================
         function openCheckout() {
             if (getCartCount() === 0) return;
@@ -1812,7 +2035,6 @@
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
             
-            // حساب رسوم التوصيل لكل قسم
             const items = getCartItems();
             const sections = {};
             items.forEach(item => {
@@ -1838,15 +2060,18 @@
                 itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)} (${i.category})\n`;
             });
 
-            // تفاصيل الرسوم لكل قسم
             let feesText = '';
+            const deliveryFeesList = [];
             Object.keys(sections).forEach(section => {
                 feesText += `📦 رسوم توصيل ${section}: ${DELIVERY_FEE.toFixed(2)} ج.م\n`;
+                deliveryFeesList.push({ section: section, fee: DELIVERY_FEE });
             });
 
             const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
+            const orderNumber = String(orderCounter).padStart(4, '0');
             
             const msg = `📦 *طلب جديد من جولف كرافت*\n` +
+                `🧾 رقم الطلب: #${orderNumber}\n` +
                 `👤 ${name}\n` +
                 `📞 ${phone}\n` +
                 `📍 ${area} - ${address}\n` +
@@ -1861,18 +2086,45 @@
 
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 
+            // Generate PDF
+            const pdfData = {
+                orderNumber: orderNumber,
+                date: new Date().toLocaleDateString('ar-EG'),
+                time: new Date().toLocaleTimeString('ar-EG'),
+                category: categoryName,
+                name: name,
+                phone: phone,
+                address: address,
+                payment: payLabel,
+                subtotal: subtotal,
+                adminFee: adminFee,
+                totalDelivery: totalDelivery,
+                total: total,
+                items: items.map(i => ({
+                    product: i.product,
+                    quantity: i.quantity,
+                    unitPrice: i.unitPrice,
+                    lineTotal: i.lineTotal
+                })),
+                deliveryFees: deliveryFeesList
+            };
+
             const orderEntry = {
+                orderNumber: orderNumber,
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
                 category: categoryName,
                 items: items.map(i => `${i.product} (${i.quantity})`).join(', '),
                 total: fPrice(total),
-                status: 'تم التسليم'
+                status: 'تم التسليم',
+                pdfData: pdfData
             };
             orderHistory.unshift(orderEntry);
             localStorage.setItem('golfcraft_orders', JSON.stringify(orderHistory));
+            orderCounter++;
 
             const orderForSheet = {
+                orderNumber: orderNumber,
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
                 name: name,
@@ -1902,13 +2154,15 @@
                 console.log('Sheet send error:', e);
             }
 
+            // Show PDF
+            generatePDF(pdfData);
+
             cart = {};
             saveCart();
             updateUI();
             updateCartStatus();
             document.getElementById('checkoutModal').classList.remove('open');
-            showToast('✅ تم إرسال طلب قسم ' + categoryName + ' بنجاح');
-            showCategories();
+            showToast('✅ تم إرسال الطلب #' + orderNumber);
         });
 
         document.getElementById('paymentMethod').addEventListener('change', function() {
