@@ -89,6 +89,98 @@
             transform: scale(0.95);
         }
 
+        /* ===== شاشة التسجيل ===== */
+        #registerScreen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            padding: 20px;
+        }
+        #registerScreen .register-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px 24px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #registerScreen .register-card h2 {
+            color: var(--green-dark);
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        #registerScreen .register-card .sub {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+        #registerScreen .register-card .form-group {
+            margin-bottom: 14px;
+        }
+        #registerScreen .register-card .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            color: #555;
+        }
+        #registerScreen .register-card .form-group input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background: #fafafa;
+            transition: border-color 0.2s;
+        }
+        #registerScreen .register-card .form-group input:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+        #registerScreen .register-card .form-group .hint {
+            font-size: 0.7rem;
+            color: #999;
+            margin-top: 2px;
+        }
+        #registerScreen .register-card .register-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--green);
+            color: #fff;
+            border: none;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 8px;
+        }
+        #registerScreen .register-card .register-btn:hover {
+            background: var(--green-dark);
+        }
+        #registerScreen .register-card .skip-btn {
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+            color: #888;
+            background: none;
+            border: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        #registerScreen .register-card .skip-btn:hover {
+            color: #555;
+        }
+
         /* ===== شاشة اختيار المنطقة ===== */
         #areaScreen {
             position: fixed;
@@ -213,6 +305,17 @@
             padding: 4px 10px;
             border-radius: 20px;
         }
+        .header .user-badge {
+            font-size: 0.7rem;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: none;
+        }
+        .header .user-badge.show {
+            display: inline-block;
+        }
         .area-bar {
             background: #fff;
             padding: 8px 16px;
@@ -257,6 +360,11 @@
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         .category-card::before {
             content: "";
@@ -286,14 +394,6 @@
             color: #333;
             position: relative;
             z-index: 1;
-        }
-        .category-card .cat-bg {
-            position: absolute;
-            inset: 0;
-            background-size: cover;
-            background-position: center;
-            opacity: 0.4;
-            z-index: 0;
         }
 
         /* ===== شاشة المنتجات ===== */
@@ -335,6 +435,7 @@
             cursor: pointer;
             color: #333;
             padding: 4px 8px;
+            transition: color 0.2s;
         }
         .back-bar .back-btn:hover {
             color: var(--green);
@@ -343,6 +444,12 @@
             font-weight: 700;
             font-size: 1.1rem;
             color: var(--green-dark);
+            flex: 1;
+        }
+        .back-bar .cart-status {
+            font-size: 0.8rem;
+            color: var(--green);
+            font-weight: 600;
         }
 
         .product-grid {
@@ -554,6 +661,30 @@
             border-color: var(--green);
         }
 
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        .btn-group .submit-btn {
+            flex: 2;
+        }
+        .btn-group .cancel-btn {
+            flex: 1;
+            padding: 14px;
+            background: #e0e0e0;
+            color: #555;
+            border: none;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-group .cancel-btn:hover {
+            background: #d0d0d0;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 14px;
@@ -564,7 +695,6 @@
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
-            margin-top: 8px;
             transition: background 0.2s;
         }
         .submit-btn:hover {
@@ -657,7 +787,39 @@
         <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="جولف كرافت" class="logo-img">
         <h1>جولف كرافت</h1>
         <div class="subtitle">🛒 طلبات البقالة الشهرية</div>
-        <button class="start-btn" onclick="showAreaSelection()">ابدأ التسوق 🚀</button>
+        <button class="start-btn" onclick="showRegister()">ابدأ التسوق 🚀</button>
+    </div>
+
+    <!-- ===== شاشة التسجيل ===== -->
+    <div id="registerScreen">
+        <div class="register-card">
+            <h2>📝 التسجيل</h2>
+            <div class="sub">أدخل بياناتك لتسهيل الطلبات المستقبلية</div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label>👤 الاسم الكامل</label>
+                    <input type="text" id="regName" placeholder="مثال: أحمد محمد">
+                    <div class="hint">سيظهر في رسالة الطلب</div>
+                </div>
+                <div class="form-group">
+                    <label>📞 رقم الهاتف</label>
+                    <input type="tel" id="regPhone" placeholder="مثال: 01012345678">
+                    <div class="hint">سيتم إرسال إشعار الطلب عبر واتساب</div>
+                </div>
+                <div class="form-group">
+                    <label>📍 العنوان</label>
+                    <input type="text" id="regAddress" placeholder="مثال: الحي السابع، شارع 1، عمارة 5، شقة 3">
+                    <div class="hint">سيتم حفظه للطلبات المستقبلية</div>
+                </div>
+                <div class="form-group">
+                    <label>📧 البريد الإلكتروني</label>
+                    <input type="email" id="regEmail" placeholder="مثال: ahmed@example.com">
+                    <div class="hint">اختياري</div>
+                </div>
+                <button type="submit" class="register-btn">✅ تسجيل ومتابعة</button>
+            </form>
+            <button class="skip-btn" onclick="skipRegistration()">تخطي التسجيل</button>
+        </div>
     </div>
 
     <!-- ===== شاشة اختيار المنطقة ===== -->
@@ -688,7 +850,10 @@
             <div class="logo">
                 <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار"> جولف كرافت
             </div>
-            <div class="status" id="statusIndicator">🟢 مفتوح الآن</div>
+            <div>
+                <span class="user-badge" id="userBadge" onclick="showRegister()">👤</span>
+                <span class="status" id="statusIndicator">🟢 مفتوح الآن</span>
+            </div>
         </header>
         <div class="area-bar" onclick="showAreaSelection()">
             <span>📍 المنطقة:</span>
@@ -707,6 +872,7 @@
             <div class="back-bar">
                 <button class="back-btn" onclick="showCategories()">➜</button>
                 <span class="shop-name" id="shopNameLabel">المنتجات</span>
+                <span class="cart-status" id="cartStatus">🛒 0</span>
             </div>
             <div class="product-grid" id="productGrid"></div>
         </div>
@@ -723,7 +889,7 @@
                     <span class="total" id="cartTotal">0.00 ج.م</span>
                 </div>
             </div>
-            <button class="view-cart-btn" id="viewCartBtn" disabled onclick="document.getElementById('cartModal').classList.add('open')">عرض السلة</button>
+            <button class="view-cart-btn" id="viewCartBtn" disabled onclick="openCheckout()">💳 إتمام الطلب</button>
         </div>
     </div>
 
@@ -746,28 +912,28 @@
     <!-- ===== مودال بيانات التوصيل ===== -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-sheet">
-            <button class="close-btn" onclick="document.getElementById('checkoutModal').classList.remove('open')">✕</button>
+            <button class="close-btn" onclick="closeCheckout()">✕</button>
             <h3>📋 بيانات التوصيل</h3>
             <form id="checkoutForm">
                 <div class="form-group">
-                    <label>الاسم الكامل *</label>
-                    <input type="text" id="custName" required placeholder="مثال: أحمد محمد">
+                    <label>👤 الاسم الكامل</label>
+                    <input type="text" id="custName" placeholder="أدخل اسمك">
                 </div>
                 <div class="form-group">
-                    <label>رقم الهاتف *</label>
-                    <input type="tel" id="custPhone" required placeholder="مثال: 01012345678">
+                    <label>📞 رقم الهاتف</label>
+                    <input type="tel" id="custPhone" placeholder="أدخل رقم هاتفك">
                 </div>
                 <div class="form-group">
-                    <label>المنطقة *</label>
-                    <select id="custArea" required></select>
+                    <label>📍 المنطقة</label>
+                    <select id="custArea"></select>
                 </div>
                 <div class="form-group">
-                    <label>تفاصيل العنوان (شارع، عمارة، شقة) *</label>
-                    <textarea id="custAddress" rows="2" required placeholder="مثال: شارع 1، عمارة 5، شقة 3"></textarea>
+                    <label>🏠 تفاصيل العنوان (شارع، عمارة، شقة)</label>
+                    <textarea id="custAddress" rows="2" placeholder="أدخل عنوانك التفصيلي"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>طريقة الدفع *</label>
-                    <select id="paymentMethod" required>
+                    <label>💳 طريقة الدفع</label>
+                    <select id="paymentMethod">
                         <option value="">-- اختر طريقة الدفع --</option>
                         <option value="cash">💵 نقداً عند الاستلام</option>
                         <option value="vodafone">📱 فودافون كاش</option>
@@ -783,10 +949,13 @@
                     رقم إنستاباي: <b>01555089905</b>
                 </div>
                 <div class="form-group">
-                    <label>ملاحظات</label>
+                    <label>📝 ملاحظات</label>
                     <textarea id="custNotes" placeholder="أي ملاحظات إضافية..."></textarea>
                 </div>
-                <button type="submit" class="submit-btn">📦 إرسال الطلب</button>
+                <div class="btn-group">
+                    <button type="submit" class="submit-btn">📦 إرسال الطلب</button>
+                    <button type="button" class="cancel-btn" onclick="closeCheckout()">✖ إلغاء</button>
+                </div>
             </form>
         </div>
     </div>
@@ -811,50 +980,38 @@
         ];
 
         const products = [
-            // بقالة - ألبان
             { id: 14, name: 'بيض بلدي', emoji: '🥚', weight: '12 بيضة', price: 130.00, cat: 'dairy' },
             { id: 15, name: 'جبنة رومي', emoji: '🧀', weight: '1000 جم', price: 299.99, cat: 'dairy' },
             { id: 17, name: 'زبدة', emoji: '🧈', weight: '250 جم', price: 140.00, cat: 'dairy' },
-            // بقالة - مؤن
             { id: 27, name: 'أرز مصري فاخر', emoji: '🍚', weight: '1 كجم', price: 29.99, cat: 'pantry' },
             { id: 28, name: 'مكرونه روجينة', emoji: '🍝', weight: '500 جم', price: 29.00, cat: 'pantry' },
             { id: 29, name: 'زيت خليط', emoji: '🫗', weight: '4.5 لتر', price: 344.99, cat: 'pantry' },
             { id: 33, name: 'سكر فاخر', emoji: '🍬', weight: '1000 جم', price: 33.99, cat: 'pantry' },
             { id: 52, name: 'تونه', emoji: '🥫', weight: '140 جم', price: 30.00, cat: 'pantry' },
             { id: 53, name: 'اندومي لحمة', emoji: '🍜', weight: '100 جم', price: 12.00, cat: 'pantry' },
-            // بقالة - مشروبات
             { id: 21, name: 'عصير برتقال', emoji: '🧃', weight: '1 لتر', price: 70.00, cat: 'beverages' },
             { id: 22, name: 'مياه معدنية', emoji: '💧', weight: '6×1.5 لتر', price: 60.00, cat: 'beverages' },
             { id: 23, name: 'بيبسي كولا', emoji: '🥤', weight: '2 لتر', price: 44.00, cat: 'beverages' },
-            // بقالة - تنظيف
             { id: 30, name: 'صابون سائل', emoji: '🧴', weight: '500 مل', price: 64.00, cat: 'cleaning' },
             { id: 31, name: 'منظف أرضيات', emoji: '🧹', weight: '1 لتر', price: 72.00, cat: 'cleaning' },
             { id: 32, name: 'منظف زجاج', emoji: '🪟', weight: '500 مل', price: 56.00, cat: 'cleaning' },
-            // خضار وفاكهة
             { id: 101, name: 'طماطم', emoji: '🍅', weight: '1 كجم', price: 12.00, cat: 'vegetables' },
             { id: 102, name: 'بطاطس', emoji: '🥔', weight: '2 كجم', price: 18.00, cat: 'vegetables' },
             { id: 103, name: 'بصل', emoji: '🧅', weight: '1 كجم', price: 11.00, cat: 'vegetables' },
             { id: 105, name: 'موز', emoji: '🍌', weight: '1 كجم', price: 18.00, cat: 'fruits' },
             { id: 106, name: 'تفاح أحمر', emoji: '🍎', weight: '1 كجم', price: 38.00, cat: 'fruits' },
-            // لحوم
             { id: 130, name: 'لحمة مفرومة', emoji: '🥩', weight: '1 كجم', price: 260.00, cat: 'meat' },
             { id: 131, name: 'كبدة بلدي', emoji: '🍖', weight: '1 كجم', price: 180.00, cat: 'meat' },
-            // دواجن
             { id: 110, name: 'فراخ بيضاء', emoji: '🐔', weight: '1 كجم', price: 106.00, cat: 'poultry' },
             { id: 111, name: 'اوراك', emoji: '🍗', weight: '1 كجم', price: 115.00, cat: 'poultry' },
-            // بن
             { id: 140, name: 'بن فاتح', emoji: '☕', weight: '250 جم', price: 45.00, cat: 'coffee' },
             { id: 141, name: 'بن غامق', emoji: '☕', weight: '250 جم', price: 50.00, cat: 'coffee' },
-            // محمصات
             { id: 150, name: 'لب سوري', emoji: '🥜', weight: '250 جم', price: 35.00, cat: 'snacks' },
             { id: 151, name: 'فول سوداني', emoji: '🥜', weight: '250 جم', price: 30.00, cat: 'snacks' },
-            // عطارة
             { id: 160, name: 'كمون', emoji: '🌿', weight: '100 جم', price: 15.00, cat: 'spices' },
             { id: 161, name: 'كزبرة', emoji: '🌿', weight: '100 جم', price: 12.00, cat: 'spices' },
-            // سندويتشات
             { id: 120, name: 'فول مدمس', emoji: '🥣', weight: 'طبق', price: 15.00, cat: 'restaurant' },
             { id: 121, name: 'فلافل', emoji: '🧆', weight: 'سندوتش', price: 8.00, cat: 'restaurant' },
-            // مخبوزات
             { id: 170, name: 'عيش بلدي', emoji: '🍞', weight: '5 أرغفة', price: 20.00, cat: 'bakery' },
             { id: 171, name: 'كرواسون', emoji: '🥐', weight: '4 قطع', price: 64.00, cat: 'bakery' }
         ];
@@ -873,6 +1030,7 @@
         let selectedArea = localStorage.getItem('golfcraft_area') || '';
         let currentCategoryId = null;
         let cart = {};
+        let userData = JSON.parse(localStorage.getItem('golfcraft_user') || 'null');
 
         // ============================================================
         // الدوال الأساسية
@@ -957,16 +1115,90 @@
         }
 
         // ============================================================
+        // دوال التسجيل
+        // ============================================================
+        function showRegister() {
+            document.getElementById('splashScreen').classList.add('hide');
+            document.getElementById('registerScreen').style.display = 'flex';
+            document.getElementById('areaScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'none';
+            
+            // تعبئة البيانات المحفوظة
+            if (userData) {
+                document.getElementById('regName').value = userData.name || '';
+                document.getElementById('regPhone').value = userData.phone || '';
+                document.getElementById('regAddress').value = userData.address || '';
+                document.getElementById('regEmail').value = userData.email || '';
+            }
+        }
+
+        function skipRegistration() {
+            document.getElementById('registerScreen').style.display = 'none';
+            showAreaSelection();
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
+            const address = document.getElementById('regAddress').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            
+            // حفظ بيانات المستخدم
+            userData = { name, phone, address, email };
+            localStorage.setItem('golfcraft_user', JSON.stringify(userData));
+            
+            // إرسال إشعار واتساب
+            if (phone) {
+                const msg = `📝 *تسجيل جديد في جولف كرافت*\n👤 الاسم: ${name || 'غير محدد'}\n📞 الهاتف: ${phone}\n📍 العنوان: ${address || 'غير محدد'}\n📧 البريد: ${email || 'غير محدد'}`;
+                window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+            }
+            
+            showToast('✅ تم التسجيل بنجاح');
+            document.getElementById('registerScreen').style.display = 'none';
+            
+            // تحديث شارة المستخدم
+            updateUserBadge();
+            
+            // إذا كانت المنطقة محددة مسبقاً
+            if (selectedArea) {
+                document.getElementById('areaScreen').style.display = 'none';
+                document.getElementById('mainApp').style.display = 'block';
+                document.getElementById('selectedAreaLabel').textContent = selectedArea;
+                populateAreaSelect();
+                showCategories();
+                updateUI();
+                isOpenNow();
+            } else {
+                showAreaSelection();
+            }
+        });
+
+        function updateUserBadge() {
+            const badge = document.getElementById('userBadge');
+            if (userData && userData.name) {
+                badge.textContent = '👤 ' + userData.name.split(' ')[0];
+                badge.classList.add('show');
+            } else {
+                badge.textContent = '👤';
+                badge.classList.remove('show');
+            }
+        }
+
+        // ============================================================
         // دوال الشاشات
         // ============================================================
         function showSplash() {
             document.getElementById('splashScreen').classList.remove('hide');
+            document.getElementById('registerScreen').style.display = 'none';
             document.getElementById('areaScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'none';
         }
 
         function showAreaSelection() {
             document.getElementById('splashScreen').classList.add('hide');
+            document.getElementById('registerScreen').style.display = 'none';
             document.getElementById('areaScreen').style.display = 'flex';
             document.getElementById('mainApp').style.display = 'none';
         }
@@ -981,6 +1213,7 @@
             showCategories();
             updateUI();
             isOpenNow();
+            updateUserBadge();
         }
 
         function populateAreaSelect() {
@@ -997,7 +1230,6 @@
         function showCategories() {
             document.getElementById('categoriesScreen').style.display = 'block';
             document.getElementById('productsScreen').style.display = 'none';
-            // إزالة خلفية المنتجات
             document.getElementById('productsScreen').style.backgroundImage = '';
             renderCategories();
         }
@@ -1006,7 +1238,6 @@
             const grid = document.getElementById('categoriesGrid');
             grid.innerHTML = categories.map(cat => `
                 <div class="category-card" onclick="selectCategory('${cat.id}')" style="${cat.bgImage ? `background-image: url('${cat.bgImage}'); background-size: cover; background-position: center;` : ''}">
-                    ${cat.bgImage ? `<div class="cat-bg" style="background-image: url('${cat.bgImage}');"></div>` : ''}
                     <span class="cat-emoji">${cat.emoji}</span>
                     <div class="cat-name">${cat.name}</div>
                 </div>
@@ -1021,7 +1252,6 @@
             const cat = categories.find(c => c.id === categoryId);
             document.getElementById('shopNameLabel').textContent = cat ? cat.emoji + ' ' + cat.name : 'المنتجات';
             
-            // تعيين خلفية القسم
             const productsScreen = document.getElementById('productsScreen');
             if (cat && cat.bgImage) {
                 productsScreen.style.backgroundImage = `url('${cat.bgImage}')`;
@@ -1034,6 +1264,7 @@
             document.getElementById('categoriesScreen').style.display = 'none';
             document.getElementById('productsScreen').style.display = 'block';
             renderProductsForCategory(categoryId);
+            updateCartStatus();
         }
 
         function renderProductsForCategory(categoryId) {
@@ -1078,6 +1309,11 @@
             });
         }
 
+        function updateCartStatus() {
+            const cnt = getCartCount();
+            document.getElementById('cartStatus').textContent = '🛒 ' + cnt;
+        }
+
         // ============================================================
         // دوال السلة
         // ============================================================
@@ -1089,6 +1325,7 @@
             cart[key] = (cart[key] || 0) + 1;
             saveCart();
             updateUI();
+            updateCartStatus();
             if (currentCategoryId) {
                 renderProductsForCategory(currentCategoryId);
             }
@@ -1147,12 +1384,30 @@
                 showToast('⏰ التطبيق يعمل من 7 صباحاً حتى 11 مساءً');
                 return;
             }
-            document.getElementById('cartModal').classList.remove('open');
+            
+            // تعبئة البيانات من التسجيل
+            if (userData) {
+                document.getElementById('custName').value = userData.name || '';
+                document.getElementById('custPhone').value = userData.phone || '';
+                document.getElementById('custAddress').value = userData.address || '';
+            }
+            
             document.getElementById('custArea').value = selectedArea;
             document.getElementById('checkoutModal').classList.add('open');
         }
 
-        async function submitOrder(e) {
+        function closeCheckout() {
+            document.getElementById('checkoutModal').classList.remove('open');
+            showCategories();
+            // مسح السلة
+            cart = {};
+            saveCart();
+            updateUI();
+            updateCartStatus();
+            showToast('❌ تم إلغاء الطلب');
+        }
+
+        document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             if (!isOpenNow()) {
@@ -1167,10 +1422,10 @@
             const payment = document.getElementById('paymentMethod').value;
             const notes = document.getElementById('custNotes').value.trim();
 
-            if (!name || !phone || !area || !address || !payment) {
-                showToast('⚠️ من فضلك أكمل جميع البيانات المطلوبة');
-                return;
-            }
+            // إذا كان المستخدم مسجل، استخدم بياناته حتى لو لم يملأ الحقول
+            const finalName = name || (userData ? userData.name : '') || 'عميل';
+            const finalPhone = phone || (userData ? userData.phone : '') || 'غير محدد';
+            const finalAddress = address || (userData ? userData.address : '') || 'غير محدد';
 
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
@@ -1180,7 +1435,7 @@
                 vodafone: '📱 فودافون كاش (01002811810)',
                 instapay: '🟣 إنستاباي (01555089905)'
             };
-            const payLabel = paymentLabels[payment] || payment;
+            const payLabel = paymentLabels[payment] || 'لم يحدد';
             const items = getCartItems();
 
             let itemsText = '';
@@ -1188,9 +1443,13 @@
                 itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`;
             });
 
+            const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
+            
             const msg = `📦 *طلب جديد من جولف كرافت*\n` +
-                `👤 ${name} | 📞 ${phone}\n` +
-                `📍 ${area} - ${address}\n` +
+                `👤 ${finalName}\n` +
+                `📞 ${finalPhone}\n` +
+                `📍 ${area} - ${finalAddress}\n` +
+                `📂 القسم: ${categoryName}\n` +
                 `💳 ${payLabel}\n\n` +
                 `*المنتجات:*\n${itemsText}\n` +
                 `المجموع الفرعي: ${fPrice(subtotal)}\n` +
@@ -1203,12 +1462,12 @@
             const orderForSheet = {
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
-                name,
-                phone,
-                area,
-                address,
+                name: finalName,
+                phone: finalPhone,
+                area: area,
+                address: finalAddress,
                 payment: payLabel,
-                notes: `القسم: ${categories.find(c => c.id === currentCategoryId)?.name || ''} | ${notes}`,
+                notes: `القسم: ${categoryName} | ${notes}`,
                 items: items.map(i => `${i.product} (${i.quantity})`).join(', '),
                 total: total,
                 lat: '',
@@ -1227,35 +1486,48 @@
                 console.log('Sheet send error:', e);
             }
 
+            // تنظيف السلة
             cart = {};
             saveCart();
             updateUI();
+            updateCartStatus();
             document.getElementById('checkoutModal').classList.remove('open');
             showToast('✅ تم إرسال الطلب بنجاح');
-        }
+            
+            // العودة للأقسام
+            showCategories();
+        });
+
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            document.getElementById('vodafoneDetails').style.display = this.value === 'vodafone' ? 'block' : 'none';
+            document.getElementById('instapayDetails').style.display = this.value === 'instapay' ? 'block' : 'none';
+        });
 
         // ============================================================
         // التهيئة
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             loadCart();
-
-            document.getElementById('checkoutForm').addEventListener('submit', submitOrder);
-
-            document.getElementById('paymentMethod').addEventListener('change', function() {
-                document.getElementById('vodafoneDetails').style.display = this.value === 'vodafone' ? 'block' : 'none';
-                document.getElementById('instapayDetails').style.display = this.value === 'instapay' ? 'block' : 'none';
-            });
-
-            if (selectedArea) {
+            
+            // إذا كان المستخدم مسجلاً وله منطقة محددة
+            if (userData && selectedArea) {
                 document.getElementById('splashScreen').classList.add('hide');
+                document.getElementById('registerScreen').style.display = 'none';
                 document.getElementById('areaScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
                 document.getElementById('selectedAreaLabel').textContent = selectedArea;
                 populateAreaSelect();
                 showCategories();
                 updateUI();
+                updateCartStatus();
                 isOpenNow();
+                updateUserBadge();
+            } else if (userData) {
+                // مستخدم مسجل لكن لا توجد منطقة
+                document.getElementById('splashScreen').classList.add('hide');
+                document.getElementById('registerScreen').style.display = 'none';
+                showAreaSelection();
+                updateUserBadge();
             }
         });
 
