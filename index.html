@@ -831,17 +831,6 @@
             margin-top: 4px;
         }
 
-        .shop-badge {
-            display: inline-block;
-            background: var(--green);
-            color: #fff;
-            padding: 2px 12px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-top: 4px;
-        }
-
         .toast {
             position: fixed;
             top: 20px;
@@ -859,6 +848,18 @@
         }
         .toast.show {
             opacity: 1;
+        }
+
+        /* ===== شارة القسم في السلة ===== */
+        .cart-section-badge {
+            display: inline-block;
+            background: var(--green);
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            margin-top: 4px;
         }
 
         @media (max-width: 400px) {
@@ -1151,7 +1152,7 @@
         // البيانات
         // ============================================================
         const categories = [
-            { id: 'grocery', name: 'بقالة', emoji: '🛒', bgImage: '', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
+            { id: 'grocery', name: 'بقالة', emoji: '🛒', bgImage: 'https://i.ibb.co/Gr5bjBr/grocery-main-1.jpg', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
             { id: 'vegetables', name: 'خضار وفاكهة', emoji: '🥬', bgImage: 'https://i.ibb.co/rGYk6S2p/1.jpg', categories: ['fruits', 'vegetables'] },
             { id: 'meat', name: 'لحوم', emoji: '🥩', bgImage: 'https://i.ibb.co/1tn52HjX/1.jpg', categories: ['meat'] },
             { id: 'chicken', name: 'دواجن', emoji: '🍗', bgImage: 'https://i.ibb.co/BHVVm2yP/1.jpg', categories: ['poultry'] },
@@ -1282,11 +1283,19 @@
                         quantity: qty,
                         unitPrice: p.price,
                         lineTotal: p.price * qty,
-                        emoji: p.emoji
+                        emoji: p.emoji,
+                        category: getProductCategory(p.id)
                     });
                 }
             }
             return items;
+        }
+
+        function getProductCategory(productId) {
+            const p = products.find(pr => pr.id === productId);
+            if (!p) return 'غير محدد';
+            const cat = categories.find(c => c.categories.includes(p.cat));
+            return cat ? cat.name : 'غير محدد';
         }
 
         function getCartCount() {
@@ -1637,6 +1646,7 @@
                         <div style="flex:1;">
                             <b>${item.product}</b>
                             <div style="font-size:0.8rem;color:#666;">${fPrice(item.unitPrice)} × ${item.quantity}</div>
+                            <div style="font-size:0.7rem;color:var(--green);font-weight:600;margin-top:2px;">📂 ${item.category}</div>
                         </div>
                         <div>${fPrice(item.lineTotal)}</div>
                     </div>
@@ -1705,7 +1715,7 @@
 
             let itemsText = '';
             items.forEach(i => {
-                itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`;
+                itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)} (${i.category})\n`;
             });
 
             const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
