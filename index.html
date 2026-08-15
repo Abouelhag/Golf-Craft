@@ -9,18 +9,6 @@
     <title>جولف كرافت</title>
     <link rel="manifest" href="manifest.json">
     <script src="products.js"></script>
-    .nav {
-    z-index: 9999 !important;
-    position: relative;
-    pointer-events: auto;
-}
-.product-grid {
-    position: relative;
-    z-index: 1;
-}
-#mainApp::before {
-    pointer-events: none !important;
-}
     <style>
         :root { --green: #4CAF50; --green-dark: #388E3C; --orange: #FF9800; --red: #f44336; --card: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -28,37 +16,22 @@
 
         /* شاشة اختيار المنطقة */
         .area-screen {
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background-image: url('https://i.ibb.co/tpcHyjTP/Grocery-main-2-1.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 16px;
-            flex-direction: column;
+            background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000; padding: 16px; flex-direction: column;
         }
         .area-screen::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 0;
+            content: ""; position: absolute; inset: 0;
+            background: rgba(0, 0, 0, 0.45); z-index: 0;
         }
         .area-card {
-            position: relative;
-            z-index: 1;
-            background: #fff;
-            border-radius: 20px;
-            padding: 24px 20px;
-            max-width: 400px;
-            width: 100%;
+            position: relative; z-index: 1;
+            background: #fff; border-radius: 20px; padding: 24px 20px;
+            max-width: 400px; width: 100%;
             box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-            text-align: center;
-            max-height: 80vh;
-            overflow-y: auto;
+            text-align: center; max-height: 80vh; overflow-y: auto;
         }
         .area-card .app-logo { width: 80px; height: 80px; border-radius: 20px; margin-bottom: 8px; }
         .area-card h2 { color: var(--green-dark); margin-bottom: 4px; font-size: 1.5rem; }
@@ -73,53 +46,95 @@
         .area-btn.primary { background: var(--green); color: #fff; }
         .area-btn.primary:hover { background: var(--green-dark); }
 
-        /* خلفية المحتوى الرئيسي */
+        /* التطبيق الرئيسي */
         #mainApp {
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            min-height: 100vh;
-            transition: background-image 0.3s;
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            min-height: 100vh; transition: background-image 0.3s;
+            position: relative; z-index: 1;
         }
         #mainApp::before {
-            content: "";
-            position: fixed; inset: 0;
-            background: rgba(255,255,255,0.75);
-            z-index: 0;
+            content: ""; position: fixed; inset: 0;
+            background: rgba(255,255,255,0.75); z-index: 0; pointer-events: none;
         }
         #mainApp > * { position: relative; z-index: 1; }
 
-        .header { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff; padding: 12px 16px;
+            position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
         .logo { display: flex; align-items: center; gap: 8px; font-size: 1.2rem; font-weight: 700; }
         .logo img { height: 32px; width: auto; border-radius: 4px; }
         .status { font-size: 0.7rem; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; }
-        .area-bar { background: #fff; padding: 8px 16px; font-weight: 600; display: flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .nav { display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto; background: #fff; position: sticky; top: 56px; z-index: 99; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .nav-item { flex-shrink: 0; padding: 6px 14px; border-radius: 24px; border: 1px solid #ddd; background: #fff; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; color: #666; }
+
+        .area-bar {
+            background: #fff; padding: 8px 16px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+            cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: relative; z-index: 5;
+        }
+
+        /* شريط الأقسام – مهم جدًا */
+        .nav {
+            display: flex; gap: 8px; padding: 10px 16px; overflow-x: auto;
+            background: #fff; position: sticky; top: 56px; z-index: 9999;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            pointer-events: auto; height: auto; min-height: 50px;
+            flex-wrap: nowrap; margin-bottom: 10px;
+        }
+        .nav-item {
+            flex-shrink: 0; padding: 6px 14px; border-radius: 24px; border: 1px solid #ddd;
+            background: #fff; font-size: 0.8rem; font-weight: 600; cursor: pointer; white-space: nowrap; color: #666;
+        }
         .nav-item.active { background: var(--green); color: #fff; border-color: var(--green); }
+
         .section-title { padding: 12px 16px 4px; font-size: 0.85rem; font-weight: 700; color: #444; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 14px 10px; }
-        .product-card { background: var(--card); border-radius: 10px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; transition: transform 0.15s; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 0 14px 10px; position: relative; z-index: 1; }
+        .product-card {
+            background: var(--card); border-radius: 10px; padding: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            cursor: pointer; display: flex; flex-direction: column; align-items: center; text-align: center;
+            position: relative; transition: transform 0.15s;
+        }
         .product-card:active { transform: scale(0.97); }
         .emoji { font-size: 2.5rem; margin-bottom: 4px; }
         .name { font-weight: 600; font-size: 0.85rem; line-height: 1.3; }
         .weight { font-size: 0.7rem; color: #666; margin: 2px 0; }
         .price { font-weight: 700; font-size: 0.9rem; color: var(--green-dark); }
-        .add-btn { margin-top: 6px; background: var(--green); color: #fff; border: none; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.75rem; width: 100%; cursor: pointer; }
+        .add-btn {
+            margin-top: 6px; background: var(--green); color: #fff; border: none; padding: 6px 14px;
+            border-radius: 20px; font-weight: 700; font-size: 0.75rem; width: 100%; cursor: pointer;
+        }
         .add-btn.in-cart { background: var(--orange); }
-        .qty-badge { position: absolute; top: 8px; right: 8px; background: var(--red); color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 0.65rem; display: none; align-items: center; justify-content: center; }
+        .qty-badge {
+            position: absolute; top: 8px; right: 8px; background: var(--red); color: #fff; width: 20px; height: 20px;
+            border-radius: 50%; font-size: 0.65rem; display: none; align-items: center; justify-content: center;
+        }
         .product-card.has-qty .qty-badge { display: flex; }
-        .cart-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; color: #fff; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; z-index: 200; height: 60px; }
+
+        .cart-bar {
+            position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a1a; color: #fff; padding: 10px 16px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 200; height: 60px;
+        }
         .cart-info { display: flex; align-items: center; gap: 10px; }
         .cart-icon-wrap { position: relative; font-size: 1.6rem; }
-        .cart-count { position: absolute; top: -6px; right: -8px; background: var(--red); width: 20px; height: 20px; border-radius: 50%; font-size: 0.65rem; font-weight: 700; display: none; align-items: center; justify-content: center; }
+        .cart-count {
+            position: absolute; top: -6px; right: -8px; background: var(--red); width: 20px; height: 20px;
+            border-radius: 50%; font-size: 0.65rem; font-weight: 700; display: none; align-items: center; justify-content: center;
+        }
         .cart-count.show { display: flex; }
         .total { font-weight: 700; font-size: 1rem; }
-        .view-cart-btn { background: var(--green); color: #fff; border: none; padding: 10px 20px; border-radius: 24px; font-weight: 700; cursor: pointer; }
+        .view-cart-btn {
+            background: var(--green); color: #fff; border: none; padding: 10px 20px; border-radius: 24px; font-weight: 700; cursor: pointer;
+        }
         .view-cart-btn:disabled { background: #555; opacity: 0.6; }
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; }
+
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 300; display: flex; align-items: flex-end; justify-content: center;
+            opacity: 0; pointer-events: none; transition: opacity 0.25s;
+        }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
-        .modal-sheet { background: #fff; width: 100%; max-width: 480px; max-height: 85vh; border-radius: 20px 20px 0 0; overflow-y: auto; padding: 16px; box-shadow: 0 -4px 20px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 0.3s ease; }
+        .modal-sheet {
+            background: #fff; width: 100%; max-width: 480px; max-height: 85vh; border-radius: 20px 20px 0 0; overflow-y: auto;
+            padding: 16px; box-shadow: 0 -4px 20px rgba(0,0,0,0.2); transform: translateY(100%); transition: transform 0.3s ease;
+        }
         .modal-overlay.open .modal-sheet { transform: translateY(0); }
         .close-btn { float: left; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #888; }
         .cart-item { padding: 10px 0; border-bottom: 1px solid #eee; }
@@ -186,7 +201,7 @@
         </div>
     </div>
 
-    <!-- مودال السلة -->
+    <!-- مودالات السلة والدفع والباقة -->
     <div class="modal-overlay" id="cartModal">
         <div class="modal-sheet">
             <button class="close-btn" id="closeCartModal">✕</button>
@@ -202,7 +217,6 @@
         </div>
     </div>
 
-    <!-- مودال تأكيد الطلب -->
     <div class="modal-overlay" id="checkoutModal">
         <div class="modal-sheet">
             <button class="close-btn" id="closeCheckoutModal">✕</button>
@@ -238,7 +252,6 @@
         </div>
     </div>
 
-    <!-- مودال الباقة المخصصة -->
     <div class="modal-overlay" id="customPackageModal">
         <div class="modal-sheet">
             <button class="close-btn" onclick="closeCustomPackageModal()">✕</button>
@@ -262,15 +275,10 @@
         let currentShop = 'grocery';
         let cart = {};
 
-        // دالة حساب المصاريف الإدارية (حد أدنى 3 جنيه، 1% بعد 100)
         function getAdminFee(subtotal) {
-            if (subtotal <= 100) {
-                return 3;
-            } else {
-                return 3 + (subtotal - 100) * ADMIN_FEE_PERCENT / 100;
-            }
+            if (subtotal <= 100) return 3;
+            return 3 + (subtotal - 100) * ADMIN_FEE_PERCENT / 100;
         }
-
         function getSubtotal() {
             let t = 0;
             for (let key in cart) {
@@ -285,11 +293,9 @@
             const subtotal = getSubtotal();
             return subtotal + DELIVERY_FEE + getAdminFee(subtotal);
         }
-
         function loadCart() { try { cart = JSON.parse(localStorage.getItem('gcart')||'{}'); } catch(e){ cart={}; } }
         function saveCart() { localStorage.setItem('gcart', JSON.stringify(cart)); }
         function fPrice(n) { return n.toFixed(2) + ' ج.م'; }
-
         function getCartItems() {
             const items = [];
             for (let [key, qty] of Object.entries(cart)) {
@@ -307,19 +313,13 @@
                 <div class="nav-item ${shop.id === currentShop ? 'active' : ''}" onclick="switchShop('${shop.id}')">${shop.emoji} ${shop.name}</div>
             `).join('');
         }
-
         function switchShop(shopId) {
             currentShop = shopId;
             const shop = shops.find(s => s.id === shopId);
-            if (shop && shop.image) {
-                document.getElementById('mainApp').style.backgroundImage = `url('${shop.image}')`;
-            } else {
-                document.getElementById('mainApp').style.backgroundImage = '';
-            }
+            document.getElementById('mainApp').style.backgroundImage = (shop && shop.image) ? `url('${shop.image}')` : '';
             buildShopNav();
             renderProductsForShop();
         }
-
         function renderProductsForShop() {
             const grid = document.getElementById('productGrid');
             const label = document.getElementById('sectionLabel');
@@ -358,9 +358,7 @@
                 grid.querySelectorAll('[data-product-id]').forEach(card => card.addEventListener('click', () => addToCart('prod_' + parseInt(card.dataset.productId))));
             }
         }
-
         function addToCart(key) { cart[key] = (cart[key] || 0) + 1; saveCart(); updateUI(); }
-
         function updateUI() {
             const cnt = getCartCount();
             const subtotal = getSubtotal();
@@ -377,7 +375,6 @@
             document.getElementById('checkoutBtn').disabled = cnt===0;
             renderCartItems();
         }
-
         function renderCartItems() {
             const container = document.getElementById('cartItemsContainer');
             const items = getCartItems();
@@ -390,7 +387,6 @@
                 </div></div>`;
             }).join('');
         }
-
         function selectArea(area) {
             selectedArea = area;
             localStorage.setItem('golfcraft_area', area);
@@ -399,28 +395,24 @@
             document.getElementById('selectedAreaLabel').textContent = area;
             populateAreaSelect();
             buildShopNav();
-            switchShop('grocery'); // يعرض البقالة كقسم افتراضي مع الخلفية
+            switchShop('grocery');
             updateUI();
         }
-
         function showAreaSelection() {
             document.getElementById('areaScreen').style.display = 'flex';
             document.getElementById('mainApp').style.display = 'none';
         }
-
         function populateAreaSelect() {
             const select = document.getElementById('custArea');
             const areas = ['الحي السابع','الحي السادس','الحي التاسع','الحي الخامس','الحي الثالث','الحي الثاني','الحي الأول','أخرى'];
             select.innerHTML = areas.map(a => `<option value="${a}" ${a===selectedArea?'selected':''}>${a}</option>`).join('');
         }
-
         function openCheckout() {
             if (getCartCount()===0) return;
             document.getElementById('cartModal').classList.remove('open');
             document.getElementById('custArea').value = selectedArea;
             document.getElementById('checkoutModal').classList.add('open');
         }
-
         async function submitOrder(e) {
             e.preventDefault();
             const name = document.getElementById('custName').value.trim();
@@ -434,19 +426,16 @@
                 alert('من فضلك أكمل جميع البيانات المطلوبة');
                 return;
             }
-
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
             const total = getTotalWithFees();
             const paymentLabels = { cash: '💵 كاش', vodafone: '📱 فودافون كاش (01002811810)', instapay: '🟣 إنستاباي (01555089905)' };
             const payLabel = paymentLabels[payment] || payment;
             const items = getCartItems();
-
             let itemsText = '';
             items.forEach(i => itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`);
             const msg = `📦 *طلب جديد من جولف كرافت*\n👤 ${name} | 📞 ${phone}\n📍 ${area} - ${address}\n🕒 موعد التوصيل: ${deliveryTime}\n💳 ${payLabel}\n\n*المنتجات:*\n${itemsText}\nالمجموع الفرعي: ${fPrice(subtotal)}\nرسوم توصيل: ${fPrice(DELIVERY_FEE)}\nرسوم إدارية: ${fPrice(adminFee)}\n💰 *الإجمالي:* ${fPrice(total)}`;
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
-
             const orderForSheet = {
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
@@ -459,12 +448,10 @@
                 driverPhone: ''
             };
             try { await fetch(GOOGLE_SHEET_WEBHOOK, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderForSheet) }); } catch(e) {}
-
             cart = {}; saveCart(); updateUI();
             document.getElementById('checkoutModal').classList.remove('open');
             showToast('✅ تم إرسال الطلب');
         }
-
         function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
 
         // التهيئة
@@ -476,6 +463,9 @@
             buildShopNav();
             switchShop('grocery');
             updateUI();
+        } else {
+            document.getElementById('areaScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
         }
 
         // ربط الأحداث
