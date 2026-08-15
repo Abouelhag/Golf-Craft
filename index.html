@@ -48,36 +48,13 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-        .area-card .app-logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 20px;
-            margin-bottom: 8px;
-        }
-        .area-card h2 {
-            color: var(--green-dark);
-            margin-bottom: 4px;
-            font-size: 1.5rem;
-        }
-        .area-card p {
-            color: #666;
-            margin-bottom: 16px;
-            font-size: 0.9rem;
-        }
-        .area-grid {
-            display: grid;
-            gap: 10px;
-        }
+        .area-card .app-logo { width: 80px; height: 80px; border-radius: 20px; margin-bottom: 8px; }
+        .area-card h2 { color: var(--green-dark); margin-bottom: 4px; font-size: 1.5rem; }
+        .area-card p { color: #666; margin-bottom: 16px; font-size: 0.9rem; }
+        .area-grid { display: grid; gap: 10px; }
         .area-btn {
-            background: #f0f0f0;
-            border: 2px solid transparent;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: #333;
+            background: #f0f0f0; border: 2px solid transparent; padding: 12px; border-radius: 12px;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; color: #333;
         }
         .area-btn:hover { background: #e0e0e0; }
         .area-btn:active { transform: scale(0.97); border-color: var(--green); }
@@ -94,17 +71,12 @@
         }
         #mainApp::before {
             content: "";
-            position: fixed;
-            inset: 0;
+            position: fixed; inset: 0;
             background: rgba(255,255,255,0.75);
             z-index: 0;
         }
-        #mainApp > * {
-            position: relative;
-            z-index: 1;
-        }
+        #mainApp > * { position: relative; z-index: 1; }
 
-        /* باقي الأنماط السابقة ... */
         .header { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
         .logo { display: flex; align-items: center; gap: 8px; font-size: 1.2rem; font-weight: 700; }
         .logo img { height: 32px; width: auto; border-radius: 4px; }
@@ -174,12 +146,156 @@
         </div>
     </div>
 
-    <!-- باقي HTML كما في السابق مع إضافة mainApp ... -->
-    <!-- لن أكرر كل شيء، فقط التعديلات الهامة موجودة في الكود أعلاه -->
+    <!-- التطبيق الرئيسي -->
+    <div id="mainApp" style="display:none;">
+        <div style="background:#FF9800; color:#fff; text-align:center; padding:6px; font-weight:bold; font-size:0.85rem;">
+            📍 التوصيل متاح داخل العبور، العطور الجديدة، والشروق
+        </div>
+        <header class="header">
+            <div class="logo"><img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار"> جولف كرافت</div>
+            <div class="status">🟢 مفتوح 24/7</div>
+        </header>
+        <div class="area-bar" onclick="showAreaSelection()">
+            <span>📍 المنطقة:</span>
+            <span id="selectedAreaLabel">غير محددة</span>
+            <span style="margin-right:auto;">تغيير</span>
+        </div>
+        <nav class="nav" id="shopNav"></nav>
+        <main>
+            <div class="section-title" id="sectionLabel">اختر متجراً للبدء</div>
+            <div class="product-grid" id="productGrid"></div>
+        </main>
+        <div class="cart-bar" id="cartBar">
+            <div class="cart-info">
+                <div class="cart-icon-wrap">🛒<span class="cart-count" id="cartCountBadge">0</span></div>
+                <div><small>السلة</small><br><span class="total" id="cartTotal">0.00 ج.م</span></div>
+            </div>
+            <button class="view-cart-btn" id="viewCartBtn" disabled>عرض السلة</button>
+        </div>
+    </div>
+
+    <!-- مودال السلة -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-sheet">
+            <button class="close-btn" id="closeCartModal">✕</button>
+            <h3>🛒 سلة التسوق</h3>
+            <div id="cartItemsContainer"></div>
+            <div class="fee-summary">
+                <div>المجموع الفرعي: <span id="subtotalAmount">0.00</span> ج.م</div>
+                <div>رسوم توصيل: <span id="deliveryFeeAmount">20.00</span> ج.م</div>
+                <div>رسوم إدارية: <span id="adminFeeAmount">0.00</span> ج.م</div>
+                <div style="font-weight:bold;">الإجمالي: <span id="cartModalTotal">0.00 ج.م</span></div>
+            </div>
+            <button class="submit-btn" id="checkoutBtn" disabled>الدفع</button>
+        </div>
+    </div>
+
+    <!-- مودال تأكيد الطلب -->
+    <div class="modal-overlay" id="checkoutModal">
+        <div class="modal-sheet">
+            <button class="close-btn" id="closeCheckoutModal">✕</button>
+            <h3>📋 بيانات التوصيل</h3>
+            <form id="checkoutForm">
+                <div class="form-group"><label>الاسم الكامل *</label><input type="text" id="custName" required></div>
+                <div class="form-group"><label>رقم الهاتف *</label><input type="tel" id="custPhone" required></div>
+                <div class="form-group"><label>المنطقة *</label><select id="custArea" required></select></div>
+                <div class="form-group"><label>تفاصيل العنوان (شارع، عمارة، شقة) *</label><textarea id="custAddress" rows="2" required></textarea></div>
+                <div class="form-group"><label>موعد التوصيل المناسب *</label>
+                    <select id="deliveryTime" required>
+                        <option value="">-- اختر الفترة --</option>
+                        <option value="10 ص - 12 م">10 صباحاً - 12 ظهراً</option>
+                        <option value="12 م - 2 م">12 ظهراً - 2 مساءً</option>
+                        <option value="2 م - 4 م">2 مساءً - 4 مساءً</option>
+                        <option value="4 م - 6 م">4 مساءً - 6 مساءً</option>
+                        <option value="6 م - 8 م">6 مساءً - 8 مساءً</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>طريقة الدفع *</label>
+                    <select id="paymentMethod" required>
+                        <option value="">-- اختر طريقة الدفع --</option>
+                        <option value="cash">💵 نقداً عند الاستلام</option>
+                        <option value="vodafone">📱 فودافون كاش</option>
+                        <option value="instapay">🟣 إنستاباي</option>
+                    </select>
+                </div>
+                <div id="vodafoneDetails"><strong>📱 حول إلى فودافون كاش:</strong><br>رقم المحفظة: <b>01002811810</b></div>
+                <div id="instapayDetails"><strong>🟣 حول إلى إنستاباي:</strong><br>رقم إنستاباي: <b>01555089905</b></div>
+                <div class="form-group"><label>ملاحظات</label><textarea id="custNotes"></textarea></div>
+                <button type="submit" class="submit-btn">📦 إرسال الطلب وعرض الفاتورة</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- مودال الباقة المخصصة -->
+    <div class="modal-overlay" id="customPackageModal">
+        <div class="modal-sheet">
+            <button class="close-btn" onclick="closeCustomPackageModal()">✕</button>
+            <h3>✨ صمم باقتك الشهرية</h3>
+            <div class="form-group"><label>اسم لباقتك</label><input type="text" id="customPackageName"></div>
+            <div class="form-group"><label>اختر المنتجات والكميات</label><div class="custom-product-list" id="customProductList"></div></div>
+            <button class="submit-btn" onclick="addCustomPackageToCart()">📦 أضف الباقة للسلة</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
 
     <script>
-        // نفس السكريبت السابق، مع تعديل switchShop لتعيين الخلفية
-        // ...
+        const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
+        const YOUR_WHATSAPP = "201002811810";
+        const LOGO_URL = "https://i.ibb.co/cXSf6txM/icon-512.png";
+        const DELIVERY_FEE = 20;
+        const ADMIN_FEE_PERCENT = 1;
+
+        let selectedArea = localStorage.getItem('golfcraft_area') || '';
+        let currentShop = 'grocery';
+        let cart = {};
+
+        // دالة حساب المصاريف الإدارية (حد أدنى 3 جنيه، 1% بعد 100)
+        function getAdminFee(subtotal) {
+            if (subtotal <= 100) {
+                return 3;
+            } else {
+                return 3 + (subtotal - 100) * ADMIN_FEE_PERCENT / 100;
+            }
+        }
+
+        function getSubtotal() {
+            let t = 0;
+            for (let key in cart) {
+                let q = cart[key];
+                if(q <= 0) continue;
+                if(key.startsWith('prod_')) { let id = parseInt(key.split('_')[1]); let p = products.find(pr => pr.id === id); if(p) t += p.price * q; }
+                else if(key.startsWith('pkg_')) { let pkgId = key.substring(4); let allPkgs = getAllPackages(); let pkg = allPkgs.find(p => p.id === pkgId); if(pkg) t += pkg.price * q; }
+            }
+            return t;
+        }
+        function getTotalWithFees() {
+            const subtotal = getSubtotal();
+            return subtotal + DELIVERY_FEE + getAdminFee(subtotal);
+        }
+
+        function loadCart() { try { cart = JSON.parse(localStorage.getItem('gcart')||'{}'); } catch(e){ cart={}; } }
+        function saveCart() { localStorage.setItem('gcart', JSON.stringify(cart)); }
+        function fPrice(n) { return n.toFixed(2) + ' ج.م'; }
+
+        function getCartItems() {
+            const items = [];
+            for (let [key, qty] of Object.entries(cart)) {
+                if(qty <= 0) continue;
+                if(key.startsWith('prod_')) { let id = parseInt(key.split('_')[1]); let p = products.find(pr => pr.id === id); if(p) items.push({ product: p.name, quantity: qty, unitPrice: p.price, lineTotal: p.price * qty }); }
+                else if(key.startsWith('pkg_')) { let pkgId = key.substring(4); let allPkgs = getAllPackages(); let pkg = allPkgs.find(p => p.id === pkgId); if(pkg) items.push({ product: pkg.name + ' (باقة)', quantity: qty, unitPrice: pkg.price, lineTotal: pkg.price * qty }); }
+            }
+            return items;
+        }
+        function getCartCount() { return Object.values(cart).reduce((s,q)=>s+q,0); }
+
+        function buildShopNav() {
+            const nav = document.getElementById('shopNav');
+            nav.innerHTML = shops.map(shop => `
+                <div class="nav-item ${shop.id === currentShop ? 'active' : ''}" onclick="switchShop('${shop.id}')">${shop.emoji} ${shop.name}</div>
+            `).join('');
+        }
+
         function switchShop(shopId) {
             currentShop = shopId;
             const shop = shops.find(s => s.id === shopId);
@@ -191,8 +307,177 @@
             buildShopNav();
             renderProductsForShop();
         }
-        // في selectArea نستدعي switchShop('grocery') بعد البناء
-        // ...
+
+        function renderProductsForShop() {
+            const grid = document.getElementById('productGrid');
+            const label = document.getElementById('sectionLabel');
+            const shop = shops.find(s => s.id === currentShop);
+            label.textContent = shop ? shop.name : 'المنتجات';
+
+            if (currentShop === 'packages') {
+                const allPkgs = getAllPackages();
+                grid.innerHTML = allPkgs.map(pkg => {
+                    const q = cart['pkg_' + pkg.id] || 0;
+                    return `<div class="product-card ${q?'has-qty':''}" data-package-id="${pkg.id}">
+                        <span class="qty-badge">${q||''}</span>
+                        <div class="emoji">${pkg.emoji}</div>
+                        <div class="name">${pkg.name}</div>
+                        <div class="weight">${pkg.desc} | التوصيل مجاني</div>
+                        <div class="price">${fPrice(pkg.price)}</div>
+                        <div class="weight" style="font-size:0.65rem;">${pkg.contents||''}</div>
+                        <button class="add-btn ${q?'in-cart':''}">${q?'✓ في السلة':'+ أضف'}</button>
+                    </div>`;
+                }).join('');
+                grid.querySelectorAll('[data-package-id]').forEach(card => card.addEventListener('click', () => addToCart('pkg_' + card.dataset.packageId)));
+            } else {
+                const allowedCats = shop.categories;
+                const filtered = products.filter(p => allowedCats.includes(p.cat));
+                grid.innerHTML = filtered.map(p => {
+                    const q = cart['prod_' + p.id] || 0;
+                    return `<div class="product-card ${q?'has-qty':''}" data-product-id="${p.id}">
+                        <span class="qty-badge">${q||''}</span>
+                        <div class="emoji">${p.emoji}</div>
+                        <div class="name">${p.name}</div>
+                        <div class="weight">${p.weight}</div>
+                        <div class="price">${fPrice(p.price)}</div>
+                        <button class="add-btn ${q?'in-cart':''}">${q?'✓ في السلة':'+ أضف'}</button>
+                    </div>`;
+                }).join('');
+                grid.querySelectorAll('[data-product-id]').forEach(card => card.addEventListener('click', () => addToCart('prod_' + parseInt(card.dataset.productId))));
+            }
+        }
+
+        function addToCart(key) { cart[key] = (cart[key] || 0) + 1; saveCart(); updateUI(); }
+
+        function updateUI() {
+            const cnt = getCartCount();
+            const subtotal = getSubtotal();
+            const adminFee = getAdminFee(subtotal);
+            const total = getTotalWithFees();
+            document.getElementById('cartCountBadge').textContent = cnt;
+            document.getElementById('cartCountBadge').classList.toggle('show', cnt>0);
+            document.getElementById('cartTotal').textContent = fPrice(total);
+            document.getElementById('subtotalAmount').textContent = subtotal.toFixed(2);
+            document.getElementById('adminFeeAmount').textContent = adminFee.toFixed(2);
+            document.getElementById('deliveryFeeAmount').textContent = DELIVERY_FEE.toFixed(2);
+            document.getElementById('cartModalTotal').textContent = fPrice(total);
+            document.getElementById('viewCartBtn').disabled = cnt===0;
+            document.getElementById('checkoutBtn').disabled = cnt===0;
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cartItemsContainer');
+            const items = getCartItems();
+            if (!items.length) { container.innerHTML = '<div style="text-align:center;padding:40px">🛒 السلة فارغة</div>'; return; }
+            container.innerHTML = items.map(item => {
+                return `<div class="cart-item"><div class="item-row">
+                    <span style="font-size:2rem">${item.emoji||'🛒'}</span>
+                    <div style="flex:1"><b>${item.product}</b><br>${fPrice(item.unitPrice)} × ${item.quantity}</div>
+                    <div>${fPrice(item.lineTotal)}</div>
+                </div></div>`;
+            }).join('');
+        }
+
+        function selectArea(area) {
+            selectedArea = area;
+            localStorage.setItem('golfcraft_area', area);
+            document.getElementById('areaScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('selectedAreaLabel').textContent = area;
+            populateAreaSelect();
+            buildShopNav();
+            switchShop('grocery'); // يعرض البقالة كقسم افتراضي مع الخلفية
+            updateUI();
+        }
+
+        function showAreaSelection() {
+            document.getElementById('areaScreen').style.display = 'flex';
+            document.getElementById('mainApp').style.display = 'none';
+        }
+
+        function populateAreaSelect() {
+            const select = document.getElementById('custArea');
+            const areas = ['الحي السابع','الحي السادس','الحي التاسع','الحي الخامس','الحي الثالث','الحي الثاني','الحي الأول','أخرى'];
+            select.innerHTML = areas.map(a => `<option value="${a}" ${a===selectedArea?'selected':''}>${a}</option>`).join('');
+        }
+
+        function openCheckout() {
+            if (getCartCount()===0) return;
+            document.getElementById('cartModal').classList.remove('open');
+            document.getElementById('custArea').value = selectedArea;
+            document.getElementById('checkoutModal').classList.add('open');
+        }
+
+        async function submitOrder(e) {
+            e.preventDefault();
+            const name = document.getElementById('custName').value.trim();
+            const phone = document.getElementById('custPhone').value.trim();
+            const area = document.getElementById('custArea').value;
+            const address = document.getElementById('custAddress').value.trim();
+            const deliveryTime = document.getElementById('deliveryTime').value;
+            const payment = document.getElementById('paymentMethod').value;
+            const notes = document.getElementById('custNotes').value.trim();
+            if (!name || !phone || !area || !address || !deliveryTime || !payment) {
+                alert('من فضلك أكمل جميع البيانات المطلوبة');
+                return;
+            }
+
+            const subtotal = getSubtotal();
+            const adminFee = getAdminFee(subtotal);
+            const total = getTotalWithFees();
+            const paymentLabels = { cash: '💵 كاش', vodafone: '📱 فودافون كاش (01002811810)', instapay: '🟣 إنستاباي (01555089905)' };
+            const payLabel = paymentLabels[payment] || payment;
+            const items = getCartItems();
+
+            let itemsText = '';
+            items.forEach(i => itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`);
+            const msg = `📦 *طلب جديد من جولف كرافت*\n👤 ${name} | 📞 ${phone}\n📍 ${area} - ${address}\n🕒 موعد التوصيل: ${deliveryTime}\n💳 ${payLabel}\n\n*المنتجات:*\n${itemsText}\nالمجموع الفرعي: ${fPrice(subtotal)}\nرسوم توصيل: ${fPrice(DELIVERY_FEE)}\nرسوم إدارية: ${fPrice(adminFee)}\n💰 *الإجمالي:* ${fPrice(total)}`;
+            window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+
+            const orderForSheet = {
+                date: new Date().toLocaleDateString('ar-EG'),
+                time: new Date().toLocaleTimeString('ar-EG'),
+                name, phone, area, address,
+                payment: payLabel,
+                notes: `الطلبات من متجر: ${shops.find(s=>s.id===currentShop)?.name} | موعد التوصيل: ${deliveryTime} | ${notes}`,
+                items: items.map(i=>`${i.product} (${i.quantity})`).join(', '),
+                total: total,
+                lat: '', lng: '',
+                driverPhone: ''
+            };
+            try { await fetch(GOOGLE_SHEET_WEBHOOK, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(orderForSheet) }); } catch(e) {}
+
+            cart = {}; saveCart(); updateUI();
+            document.getElementById('checkoutModal').classList.remove('open');
+            showToast('✅ تم إرسال الطلب');
+        }
+
+        function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
+
+        // التهيئة
+        if (selectedArea) {
+            document.getElementById('areaScreen').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            document.getElementById('selectedAreaLabel').textContent = selectedArea;
+            populateAreaSelect();
+            buildShopNav();
+            switchShop('grocery');
+            updateUI();
+        }
+
+        // ربط الأحداث
+        document.getElementById('viewCartBtn').addEventListener('click', ()=> document.getElementById('cartModal').classList.add('open'));
+        document.getElementById('closeCartModal').addEventListener('click', ()=> document.getElementById('cartModal').classList.remove('open'));
+        document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
+        document.getElementById('closeCheckoutModal').addEventListener('click', ()=> document.getElementById('checkoutModal').classList.remove('open'));
+        document.getElementById('paymentMethod').addEventListener('change', function() {
+            document.getElementById('vodafoneDetails').style.display = this.value==='vodafone' ? 'block':'none';
+            document.getElementById('instapayDetails').style.display = this.value==='instapay' ? 'block':'none';
+        });
+        document.getElementById('checkoutForm').addEventListener('submit', submitOrder);
+        document.getElementById('cartModal').addEventListener('click', function(e) { if(e.target===this) this.classList.remove('open'); });
+        document.getElementById('checkoutModal').addEventListener('click', function(e) { if(e.target===this) this.classList.remove('open'); });
     </script>
 </body>
 </html>
