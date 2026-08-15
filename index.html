@@ -66,7 +66,7 @@
     <div id="areaSelectionModal" class="modal-overlay" style="display:flex; align-items:center; justify-content:center;">
         <div class="modal-sheet" style="max-width:400px; max-height:70vh;">
             <h3 style="text-align:center; margin-bottom:16px;">📍 اختر منطقتك</h3>
-            <div id="areaList" style="display:grid; gap:8px;">
+            <div style="display:grid; gap:8px;">
                 <button class="submit-btn" onclick="selectArea('الحي السابع')">الحي السابع</button>
                 <button class="submit-btn" onclick="selectArea('الحي السادس')">الحي السادس</button>
                 <button class="submit-btn" onclick="selectArea('الحي التاسع')">الحي التاسع</button>
@@ -88,16 +88,12 @@
                 <div class="logo"><img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار"> جولف كرافت</div>
                 <div class="status">🟢 مفتوح 24/7</div>
             </header>
-            <!-- شريط المنطقة المختارة -->
             <div class="area-bar" onclick="showAreaSelection()">
                 <span>📍 المنطقة:</span>
                 <span id="selectedAreaLabel">غير محددة</span>
                 <span style="margin-right:auto;">تغيير</span>
             </div>
-            <!-- قائمة المحلات -->
-            <nav class="nav" id="shopNav">
-                <!-- يتم إنشاؤها ديناميكياً -->
-            </nav>
+            <nav class="nav" id="shopNav"></nav>
             <main>
                 <div class="section-title" id="sectionLabel">اختر متجراً للبدء</div>
                 <div class="product-grid" id="productGrid"></div>
@@ -178,23 +174,20 @@
     <div class="toast" id="toast"></div>
 
     <script>
-        // إعدادات
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
         const LOGO_URL = "https://i.ibb.co/cXSf6txM/icon-512.png";
         const DELIVERY_FEE = 20;
-        const ADMIN_FEE_PERCENT = 1; // 1%
+        const ADMIN_FEE_PERCENT = 1;
 
         let selectedArea = localStorage.getItem('golfcraft_area') || '';
-        let currentShop = 'grocery'; // المتجر الافتراضي
+        let currentShop = 'grocery';
         let cart = {};
 
-        // تحميل السلة والمنطقة
         function loadCart() { try { cart = JSON.parse(localStorage.getItem('gcart')||'{}'); } catch(e){ cart={}; } }
         function saveCart() { localStorage.setItem('gcart', JSON.stringify(cart)); }
         function fPrice(n) { return n.toFixed(2) + ' ج.م'; }
 
-        // رسوم
         function getSubtotal() {
             let t = 0;
             for (let key in cart) {
@@ -220,24 +213,19 @@
 
         function getCartCount() { return Object.values(cart).reduce((s,q)=>s+q,0); }
 
-        // بناء قائمة المحلات
         function buildShopNav() {
             const nav = document.getElementById('shopNav');
             nav.innerHTML = shops.map(shop => `
-                <div class="nav-item ${shop.id === currentShop ? 'active' : ''}" onclick="switchShop('${shop.id}')">
-                    ${shop.emoji} ${shop.name}
-                </div>
+                <div class="nav-item ${shop.id === currentShop ? 'active' : ''}" onclick="switchShop('${shop.id}')">${shop.emoji} ${shop.name}</div>
             `).join('');
         }
 
-        // تبديل المتجر الحالي
         function switchShop(shopId) {
             currentShop = shopId;
             buildShopNav();
             renderProductsForShop();
         }
 
-        // عرض منتجات المتجر الحالي
         function renderProductsForShop() {
             const grid = document.getElementById('productGrid');
             const label = document.getElementById('sectionLabel');
@@ -278,6 +266,7 @@
         }
 
         function addToCart(key) { cart[key] = (cart[key] || 0) + 1; saveCart(); updateUI(); }
+
         function updateUI() {
             const cnt = getCartCount();
             const subtotal = getSubtotal();
@@ -308,7 +297,6 @@
             }).join('');
         }
 
-        // منطقة
         function selectArea(area) {
             selectedArea = area;
             localStorage.setItem('golfcraft_area', area);
@@ -331,7 +319,6 @@
             select.innerHTML = areas.map(a => `<option value="${a}" ${a===selectedArea?'selected':''}>${a}</option>`).join('');
         }
 
-        // Checkout
         function openCheckout() {
             if (getCartCount()===0) return;
             document.getElementById('cartModal').classList.remove('open');
@@ -360,13 +347,11 @@
             const payLabel = paymentLabels[payment] || payment;
             const items = getCartItems();
 
-            // رسالة واتساب
             let itemsText = '';
             items.forEach(i => itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)}\n`);
             const msg = `📦 *طلب جديد من جولف كرافت*\n👤 ${name} | 📞 ${phone}\n📍 ${area} - ${address}\n🕒 موعد التوصيل: ${deliveryTime}\n💳 ${payLabel}\n\n*المنتجات:*\n${itemsText}\nالمجموع الفرعي: ${fPrice(subtotal)}\nرسوم توصيل: ${fPrice(DELIVERY_FEE)}\nرسوم إدارية (1%): ${fPrice(adminFee)}\n💰 *الإجمالي:* ${fPrice(total)}`;
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 
-            // إرسال إلى Google Sheets
             const orderForSheet = {
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
@@ -387,7 +372,7 @@
 
         function showToast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
 
-        // بدء التطبيق
+        // تهيئة التطبيق
         if (selectedArea) {
             document.getElementById('areaSelectionModal').style.display = 'none';
             document.getElementById('mainApp').style.display = 'block';
@@ -400,7 +385,7 @@
             document.getElementById('areaSelectionModal').style.display = 'flex';
         }
 
-        // ربط الأحداث العامة
+        // ربط الأحداث
         document.getElementById('viewCartBtn').addEventListener('click', ()=> document.getElementById('cartModal').classList.add('open'));
         document.getElementById('closeCartModal').addEventListener('click', ()=> document.getElementById('cartModal').classList.remove('open'));
         document.getElementById('checkoutBtn').addEventListener('click', openCheckout);
