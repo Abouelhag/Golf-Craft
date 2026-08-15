@@ -319,17 +319,19 @@
             border-radius: 20px;
         }
         .header .user-badge {
-            font-size: 0.75rem;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
+            font-size: 0.8rem;
+            background: rgba(255,255,255,0.25);
+            padding: 6px 14px;
             border-radius: 20px;
             cursor: pointer;
             display: none;
             border: 1px solid rgba(255,255,255,0.3);
             transition: background 0.2s;
+            font-weight: 600;
+            color: #fff;
         }
         .header .user-badge:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.35);
         }
         .header .user-badge.show {
             display: inline-block;
@@ -450,13 +452,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
+            background: rgba(76, 175, 80, 0.08);
         }
         .back-bar .back-btn:hover {
             color: var(--green);
-            background: rgba(76, 175, 80, 0.1);
+            background: rgba(76, 175, 80, 0.18);
+        }
+        .back-bar .back-btn:active {
+            transform: scale(0.92);
         }
         .back-bar .shop-name {
             font-weight: 700;
@@ -780,29 +786,51 @@
             cursor: pointer;
             transition: background 0.2s;
             margin-bottom: 4px;
+            background: #f8f9fa;
         }
         .user-menu-item:hover {
-            background: #f0f0f0;
+            background: #e8f5e9;
         }
         .user-menu-item .menu-icon {
-            font-size: 1.4rem;
-            width: 36px;
+            font-size: 1.6rem;
+            width: 44px;
             text-align: center;
+            flex-shrink: 0;
         }
         .user-menu-item .menu-text {
-            font-weight: 600;
+            font-weight: 700;
             color: #333;
+            font-size: 1rem;
         }
         .user-menu-item .menu-desc {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #888;
+            margin-top: 2px;
         }
         .user-menu-divider {
             border-top: 1px solid #eee;
             margin: 8px 0;
         }
+        .user-menu-header {
+            padding: 4px 0 16px 0;
+            border-bottom: 2px solid var(--green);
+            margin-bottom: 12px;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .user-menu-header .user-name {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--green-dark);
+        }
+        .user-menu-header .user-email {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 4px;
+        }
 
-        /* ===== Shop Section Badge ===== */
         .shop-badge {
             display: inline-block;
             background: var(--green);
@@ -844,6 +872,7 @@
             .product-card .emoji { font-size: 2.2rem; }
             .product-card .p-name { font-size: 0.8rem; }
             .product-card .p-price { font-size: 0.85rem; }
+            .back-bar .back-btn { font-size: 1.5rem; width: 38px; height: 38px; }
         }
     </style>
 </head>
@@ -986,8 +1015,8 @@
         <div class="modal-sheet">
             <button class="close-btn" onclick="closeCheckout()">✕</button>
             <h3>📋 بيانات التوصيل</h3>
-            <div style="background:#f1f8e9; padding:8px 12px; border-radius:8px; margin-bottom:12px; font-size:0.85rem;">
-                <strong>📂 القسم:</strong> <span id="checkoutCategoryName">غير محدد</span>
+            <div style="background:#e8f5e9; padding:10px 14px; border-radius:10px; margin-bottom:14px; font-size:0.95rem; border-right:4px solid var(--green);">
+                <strong>📂 القسم:</strong> <span id="checkoutCategoryName" style="color:var(--green-dark);font-weight:700;">غير محدد</span>
             </div>
             <form id="checkoutForm">
                 <div class="form-group">
@@ -1041,9 +1070,9 @@
             <button class="close-btn" onclick="document.getElementById('userMenuModal').classList.remove('open')">✕</button>
             <h3>👤 حسابي</h3>
             <div id="userMenuContent">
-                <div style="padding:4px 0 12px 0; border-bottom:1px solid #eee;">
-                    <div style="font-weight:700;font-size:1.1rem;color:var(--green-dark);" id="userMenuName">مستخدم</div>
-                    <div style="font-size:0.8rem;color:#888;" id="userMenuEmail">البريد الإلكتروني</div>
+                <div class="user-menu-header">
+                    <div class="user-name" id="userMenuName">مستخدم</div>
+                    <div class="user-email" id="userMenuEmail">البريد الإلكتروني</div>
                 </div>
                 <div class="user-menu-item" onclick="editProfile()">
                     <span class="menu-icon">✏️</span>
@@ -1067,7 +1096,7 @@
                     </div>
                 </div>
                 <div class="user-menu-divider"></div>
-                <div class="user-menu-item" onclick="logoutUser()" style="color:var(--red);">
+                <div class="user-menu-item" onclick="logoutUser()" style="background:#fff3f3;">
                     <span class="menu-icon">🚪</span>
                     <div>
                         <div class="menu-text" style="color:var(--red);">تسجيل الخروج</div>
@@ -1405,14 +1434,14 @@
                 container.innerHTML = '<div style="text-align:center;padding:30px;color:#888;">📭 لا توجد طلبات سابقة</div>';
             } else {
                 container.innerHTML = orderHistory.map((order, index) => `
-                    <div style="padding:12px 0; border-bottom:1px solid #eee;">
+                    <div style="padding:14px 0; border-bottom:1px solid #eee;">
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <div>
                                 <div style="font-weight:600;">#${index + 1} - ${order.date || 'تاريخ غير محدد'}</div>
-                                <div style="font-size:0.8rem;color:#888;">${order.items || 'لا توجد منتجات'}</div>
-                                <div style="font-size:0.7rem;color:var(--green);">📂 ${order.category || 'قسم غير محدد'}</div>
+                                <div style="font-size:0.8rem;color:#888;margin:4px 0;">${order.items || 'لا توجد منتجات'}</div>
+                                <div style="font-size:0.75rem;color:var(--green);font-weight:600;">📂 ${order.category || 'قسم غير محدد'}</div>
                             </div>
-                            <div style="font-weight:700;color:var(--green-dark);">${order.total || '0.00 ج.م'}</div>
+                            <div style="font-weight:700;color:var(--green-dark);font-size:1.1rem;">${order.total || '0.00 ج.م'}</div>
                         </div>
                         <div style="font-size:0.7rem;color:#999;margin-top:4px;">${order.status || 'تم التسليم'}</div>
                     </div>
@@ -1625,7 +1654,6 @@
                 return;
             }
             
-            // عرض اسم القسم في شاشة الدفع
             const cat = categories.find(c => c.id === currentCategoryId);
             document.getElementById('checkoutCategoryName').textContent = cat ? cat.emoji + ' ' + cat.name : 'غير محدد';
             
@@ -1642,7 +1670,6 @@
         function closeCheckout() {
             document.getElementById('checkoutModal').classList.remove('open');
             showCategories();
-            // مسح السلة فقط لهذا القسم
             cart = {};
             saveCart();
             updateUI();
@@ -1697,7 +1724,6 @@
 
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 
-            // حفظ الطلب في السجل مع اسم القسم
             const orderEntry = {
                 date: new Date().toLocaleDateString('ar-EG'),
                 time: new Date().toLocaleTimeString('ar-EG'),
@@ -1736,15 +1762,12 @@
                 console.log('Sheet send error:', e);
             }
 
-            // مسح السلة بعد إرسال الطلب
             cart = {};
             saveCart();
             updateUI();
             updateCartStatus();
             document.getElementById('checkoutModal').classList.remove('open');
             showToast('✅ تم إرسال طلب قسم ' + categoryName + ' بنجاح');
-            
-            // العودة للأقسام
             showCategories();
         });
 
