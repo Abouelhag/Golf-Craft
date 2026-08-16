@@ -635,6 +635,54 @@
         .product-card .add-btn.in-cart {
             background: var(--orange);
         }
+        /* ===== أزرار + و - ===== */
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            width: 100%;
+            justify-content: center;
+        }
+        .qty-control .qty-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            font-size: 1.4rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f0f0;
+            color: #333;
+        }
+        .qty-control .qty-btn.minus {
+            background: #ffebee;
+            color: var(--red);
+        }
+        .qty-control .qty-btn.minus:hover {
+            background: #ffcdd2;
+        }
+        .qty-control .qty-btn.plus {
+            background: #e8f5e9;
+            color: var(--green);
+        }
+        .qty-control .qty-btn.plus:hover {
+            background: #c8e6c9;
+        }
+        .qty-control .qty-btn:active {
+            transform: scale(0.92);
+        }
+        .qty-control .qty-value {
+            font-weight: 700;
+            font-size: 1.1rem;
+            min-width: 28px;
+            text-align: center;
+            color: var(--green-dark);
+        }
         .cart-bar {
             position: fixed;
             bottom: 0;
@@ -1090,6 +1138,7 @@
             #pdfInvoice .invoice-details { flex-direction: column; }
             .cart-sections-summary .section-tag { font-size: 0.65rem; padding: 3px 10px 3px 8px; }
             .cart-sections-summary .section-tag .count { width: 16px; height: 16px; font-size: 0.5rem; }
+            .qty-control .qty-btn { width: 30px; height: 30px; font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -1446,7 +1495,7 @@
 
     <script>
         // ============================================================
-        // البيانات - إضافة أقسام المطاعم والمنتجات الجديدة
+        // البيانات - المطاعم والمنتجات
         // ============================================================
         const categories = [
             // الأقسام الأصلية
@@ -1457,12 +1506,23 @@
             { id: 'coffee', name: 'بن', emoji: '☕', bgImage: 'https://i.ibb.co/My5KmmTB/1.jpg', categories: ['coffee'] },
             { id: 'roastery', name: 'محمصات', emoji: '🥜', bgImage: 'https://i.ibb.co/Qj3zfG96/1.jpg', categories: ['snacks'] },
             { id: 'spices', name: 'عطارة', emoji: '🌿', bgImage: 'https://i.ibb.co/GfxfwGp3/1.jpg', categories: ['spices'] },
-            // أقسام المطاعم الجديدة
-            { id: 'restaurants', name: 'مطاعم ووجبات', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant'] },
-            { id: 'bakery', name: 'مخبوزات', emoji: '🥖', bgImage: 'https://i.ibb.co/zhW7TY71/1.jpg', categories: ['bakery'] }
+            // قسم المطاعم الرئيسي
+            { id: 'restaurants_main', name: 'مطاعم', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant_main'] }
         ];
 
-        // المنتجات - إضافة منتجات المطاعم الجديدة
+        // المطاعم الفرعية (تظهر كأيقونات عند النقر على مطاعم)
+        const restaurantCategories = [
+            { id: 'koshari_hend', name: 'كشري هند', emoji: '🍛', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'mahi', name: 'الماحي للمشويات', emoji: '🥩', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'halabi_shawarma', name: 'احلبي للشاورمه', emoji: '🌯', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'tseebs', name: 'حلويات تسيبس', emoji: '🍰', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'abo_laban', name: 'حلوي ابو لبن', emoji: '🍮', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'halabi_shawarma2', name: 'شاورمه الحلبي', emoji: '🥙', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'ard_alahlam', name: 'شاورما ارض الاحلام', emoji: '🌯', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
+            { id: 'marakbia', name: 'اسماك المراكبية', emoji: '🐟', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' }
+        ];
+
+        // المنتجات - إضافة منتجات لكل مطعم (سيتم إضافتها لاحقاً)
         const products = [
             // المنتجات الأصلية
             { id: 14, name: 'بيض بلدي', emoji: '🥚', weight: '12 بيضة', price: 130.00, cat: 'dairy' },
@@ -1495,27 +1555,32 @@
             { id: 151, name: 'فول سوداني', emoji: '🥜', weight: '250 جم', price: 30.00, cat: 'snacks' },
             { id: 160, name: 'كمون', emoji: '🌿', weight: '100 جم', price: 15.00, cat: 'spices' },
             { id: 161, name: 'كزبرة', emoji: '🌿', weight: '100 جم', price: 12.00, cat: 'spices' },
-            // منتجات المطاعم الجديدة (مطعم حلب الشام، أصل الحكاية، مخبز العبور)
-            { id: 200, name: 'شاورما لحم', emoji: '🥙', weight: 'ساندوتش', price: 45.00, cat: 'restaurant' },
-            { id: 201, name: 'شاورما دجاج', emoji: '🌯', weight: 'ساندوتش', price: 40.00, cat: 'restaurant' },
-            { id: 202, name: 'شاورما لحم (وجبة)', emoji: '🍱', weight: 'مع بطاطس ومشروب', price: 85.00, cat: 'restaurant' },
-            { id: 203, name: 'شاورما دجاج (وجبة)', emoji: '🍱', weight: 'مع بطاطس ومشروب', price: 80.00, cat: 'restaurant' },
-            { id: 204, name: 'وجبة عائلة شاورما', emoji: '🧆', weight: 'تكفي 4 أشخاص', price: 280.00, cat: 'restaurant' },
-            { id: 205, name: 'بطاطس مقلية', emoji: '🍟', weight: 'حصة', price: 20.00, cat: 'restaurant' },
-            { id: 206, name: 'مشروب غازي', emoji: '🥤', weight: 'علبة', price: 10.00, cat: 'restaurant' },
-            { id: 207, name: 'شاورما لحم (سوبر)', emoji: '🥙', weight: 'ساندوتش كبير', price: 60.00, cat: 'restaurant' },
-            { id: 208, name: 'شاورما دجاج (سوبر)', emoji: '🌯', weight: 'ساندوتش كبير', price: 55.00, cat: 'restaurant' },
-            // منتجات مخبز العبور
-            { id: 300, name: 'عيش بلدي طازج', emoji: '🍞', weight: '5 أرغفة', price: 22.00, cat: 'bakery' },
-            { id: 301, name: 'عيش فينو', emoji: '🥖', weight: '4 قطع', price: 24.00, cat: 'bakery' },
-            { id: 302, name: 'كرواسون جبنة', emoji: '🥐', weight: '4 قطع', price: 72.00, cat: 'bakery' },
-            { id: 303, name: 'كرواسون شوكولاتة', emoji: '🥐', weight: '4 قطع', price: 76.00, cat: 'bakery' },
-            { id: 304, name: 'باتيه جبنة', emoji: '🥧', weight: '4 قطع', price: 40.00, cat: 'bakery' },
-            { id: 305, name: 'باتيه لحم', emoji: '🥧', weight: '4 قطع', price: 56.00, cat: 'bakery' },
-            { id: 306, name: 'بيتزا صغيرة', emoji: '🍕', weight: 'قطر 25 سم', price: 55.00, cat: 'bakery' },
-            { id: 307, name: 'بيتزا وسط', emoji: '🍕', weight: 'قطر 35 سم', price: 85.00, cat: 'bakery' },
-            { id: 308, name: 'فطير مشلتت', emoji: '🥮', weight: 'قطعة', price: 15.00, cat: 'bakery' },
-            { id: 309, name: 'معمول', emoji: '🍪', weight: '6 قطع', price: 35.00, cat: 'bakery' }
+            
+            // منتجات المطاعم - سيتم إضافتها لاحقاً
+            // كشري هند
+            { id: 1001, name: 'كشري', emoji: '🍛', weight: 'طبق', price: 25.00, cat: 'koshari_hend' },
+            { id: 1002, name: 'كشري باللحمة', emoji: '🍛', weight: 'طبق', price: 45.00, cat: 'koshari_hend' },
+            // الماحي للمشويات
+            { id: 2001, name: 'شيش طاووق', emoji: '🍗', weight: 'وجبة', price: 60.00, cat: 'mahi' },
+            { id: 2002, name: 'كفتة مشوية', emoji: '🥩', weight: 'وجبة', price: 70.00, cat: 'mahi' },
+            // احلبي للشاورمه
+            { id: 3001, name: 'شاورما دجاج', emoji: '🌯', weight: 'ساندوتش', price: 35.00, cat: 'halabi_shawarma' },
+            { id: 3002, name: 'شاورما لحم', emoji: '🥙', weight: 'ساندوتش', price: 40.00, cat: 'halabi_shawarma' },
+            // حلويات تسيبس
+            { id: 4001, name: 'كنافة', emoji: '🍰', weight: 'قطعة', price: 20.00, cat: 'tseebs' },
+            { id: 4002, name: 'بسبوسة', emoji: '🍮', weight: 'قطعة', price: 15.00, cat: 'tseebs' },
+            // حلوي ابو لبن
+            { id: 5001, name: 'مهلبية', emoji: '🍮', weight: 'كوب', price: 12.00, cat: 'abo_laban' },
+            { id: 5002, name: 'أرز بلبن', emoji: '🍚', weight: 'كوب', price: 15.00, cat: 'abo_laban' },
+            // شاورمه الحلبي
+            { id: 6001, name: 'شاورما سوري', emoji: '🌯', weight: 'ساندوتش', price: 38.00, cat: 'halabi_shawarma2' },
+            { id: 6002, name: 'شاورما عربي', emoji: '🥙', weight: 'ساندوتش', price: 42.00, cat: 'halabi_shawarma2' },
+            // شاورما ارض الاحلام
+            { id: 7001, name: 'شاورما مميزة', emoji: '🌯', weight: 'ساندوتش', price: 40.00, cat: 'ard_alahlam' },
+            { id: 7002, name: 'وجبة شاورما', emoji: '🍱', weight: 'مع مشروب', price: 70.00, cat: 'ard_alahlam' },
+            // اسماك المراكبية
+            { id: 8001, name: 'سمك مقلي', emoji: '🐟', weight: 'وجبة', price: 55.00, cat: 'marakbia' },
+            { id: 8002, name: 'سمك مشوي', emoji: '🐟', weight: 'وجبة', price: 60.00, cat: 'marakbia' }
         ];
 
         // ============================================================
@@ -1523,24 +1588,13 @@
         // ============================================================
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
-        const ADMIN_FEE_PERCENT = 0.01; // 1%
+        const ADMIN_FEE_PERCENT = 0.01;
 
-        // رسوم التوصيل حسب المنطقة
         function getDeliveryFeeByArea(area) {
             const areaLower = area.trim();
-            // الحي الأول والثاني: 25 ج.م
-            if (areaLower === 'الحي الأول' || areaLower === 'الحي الثاني') {
-                return 25;
-            }
-            // الحي الثالث والرابع والخامس: 30 ج.م
-            if (areaLower === 'الحي الثالث' || areaLower === 'الحي الرابع' || areaLower === 'الحي الخامس') {
-                return 30;
-            }
-            // الحي السادس والسابع والتاسع: 35 ج.م
-            if (areaLower === 'الحي السادس' || areaLower === 'الحي السابع' || areaLower === 'الحي التاسع') {
-                return 35;
-            }
-            // المنطقة الافتراضية (أخرى أو غير محددة): 35 ج.م
+            if (areaLower === 'الحي الأول' || areaLower === 'الحي الثاني') return 25;
+            if (areaLower === 'الحي الثالث' || areaLower === 'الحي الرابع' || areaLower === 'الحي الخامس') return 30;
+            if (areaLower === 'الحي السادس' || areaLower === 'الحي السابع' || areaLower === 'الحي التاسع') return 35;
             return 35;
         }
 
@@ -1549,6 +1603,7 @@
         // ============================================================
         let selectedArea = localStorage.getItem('golfcraft_area') || '';
         let currentCategoryId = null;
+        let currentRestaurantId = null;
         let cart = {};
         let userData = JSON.parse(localStorage.getItem('golfcraft_user') || 'null');
         let orderHistory = JSON.parse(localStorage.getItem('golfcraft_orders') || '[]');
@@ -1557,28 +1612,18 @@
         let selectedFile = null;
 
         // ============================================================
-        // الدوال الأساسية - تحديث مواعيد العمل
+        // الدوال الأساسية
         // ============================================================
         function isOpenNow() {
             const now = new Date();
             const hours = now.getHours();
-            // مواعيد العمل من 9 صباحاً (9) إلى 12 منتصف الليل (24 = 0)
-            // نستخدم الساعة من 9 إلى 23 (11 مساءً) ولكن 12 منتصف الليل = 0
-            // لذا نتحقق: الساعة >= 9 أو الساعة < 0 (أي بعد 12 منتصف الليل)
-            // ولكن بما أن 12 منتصف الليل = 0، فالتطبيق يعمل من 9 صباحاً حتى 11:59 مساءً
-            // ولن يشتغل من 12 منتصف الليل حتى 8:59 صباحاً
-            const isOpen = hours >= 9 || hours === 0 || hours === 1 || hours === 2 || hours === 3 || hours === 4 || hours === 5 || hours === 6 || hours === 7 || hours === 8;
-            // تبسيط: التطبيق يعمل إذا كانت الساعة بين 9 و 23 (11 مساءً)
-            const isOpenSimplified = hours >= 9 && hours < 24;
-            // لكن 12 منتصف الليل = 0، لذا نضيف شرط للساعة 0 إلى 8 غير مفتوح
-            const isOpenFinal = hours >= 9 && hours < 24;
-            
+            const isOpen = hours >= 9 && hours < 24;
             const indicator = document.getElementById('statusIndicator');
             if (indicator) {
-                indicator.textContent = isOpenFinal ? '🟢 مفتوح الآن' : '🔴 مغلق (9ص - 12م)';
-                indicator.style.background = isOpenFinal ? 'rgba(255,255,255,0.2)' : 'rgba(255,0,0,0.3)';
+                indicator.textContent = isOpen ? '🟢 مفتوح الآن' : '🔴 مغلق (9ص - 12م)';
+                indicator.style.background = isOpen ? 'rgba(255,255,255,0.2)' : 'rgba(255,0,0,0.3)';
             }
-            return isOpenFinal;
+            return isOpen;
         }
 
         function getAdminFee(subtotal) {
@@ -1600,15 +1645,11 @@
         }
 
         function getDeliveryFeeForCart() {
-            const area = selectedArea || 'الحي السابع';
-            return getDeliveryFeeByArea(area);
+            return getDeliveryFeeByArea(selectedArea || 'الحي السابع');
         }
 
         function getTotalWithFees() {
-            const subtotal = getSubtotal();
-            const deliveryFee = getDeliveryFeeForCart();
-            // نطبق رسوم التوصيل مرة واحدة للطلب بالكامل كما هو مطلوب
-            return subtotal + deliveryFee + getAdminFee(subtotal);
+            return getSubtotal() + getDeliveryFeeForCart() + getAdminFee(getSubtotal());
         }
 
         function loadCart() {
@@ -1650,7 +1691,9 @@
             const p = products.find(pr => pr.id === productId);
             if (!p) return 'غير محدد';
             const cat = categories.find(c => c.categories.includes(p.cat));
-            return cat ? cat.name : 'غير محدد';
+            if (cat) return cat.name;
+            const restCat = restaurantCategories.find(r => r.id === p.cat);
+            return restCat ? restCat.name : 'غير محدد';
         }
 
         function getCartCount() {
@@ -1724,7 +1767,6 @@
             document.getElementById('registerScreen').style.display = 'flex';
             document.getElementById('areaScreen').style.display = 'none';
             document.getElementById('mainApp').style.display = 'none';
-            
             if (userData) {
                 document.getElementById('regName').value = userData.name || '';
                 document.getElementById('regPhone').value = userData.phone || '';
@@ -1741,25 +1783,20 @@
 
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const name = document.getElementById('regName').value.trim();
             const phone = document.getElementById('regPhone').value.trim();
             const address = document.getElementById('regAddress').value.trim();
             const email = document.getElementById('regEmail').value.trim();
             const password = document.getElementById('regPassword').value.trim();
-            
             userData = { name, phone, address, email, password };
             localStorage.setItem('golfcraft_user', JSON.stringify(userData));
-            
             if (phone) {
                 const msg = `📝 *تسجيل جديد في جولف كرافت*\n👤 الاسم: ${name || 'غير محدد'}\n📞 الهاتف: ${phone}\n📍 العنوان: ${address || 'غير محدد'}\n📧 البريد: ${email || 'غير محدد'}`;
                 window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
             }
-            
             showToast('✅ تم التسجيل بنجاح');
             document.getElementById('registerScreen').style.display = 'none';
             updateUserBadge();
-            
             if (selectedArea) {
                 document.getElementById('areaScreen').style.display = 'none';
                 document.getElementById('mainApp').style.display = 'block';
@@ -1785,10 +1822,7 @@
         }
 
         function showUserMenu() {
-            if (!userData) {
-                showRegister();
-                return;
-            }
+            if (!userData) { showRegister(); return; }
             document.getElementById('userMenuName').textContent = userData.name || 'مستخدم';
             document.getElementById('userMenuEmail').textContent = userData.email || 'لا يوجد بريد إلكتروني';
             document.getElementById('userMenuModal').classList.add('open');
@@ -1809,22 +1843,18 @@
             const oldPass = document.getElementById('oldPassword').value.trim();
             const newPass = document.getElementById('newPassword').value.trim();
             const confirmPass = document.getElementById('confirmPassword').value.trim();
-            
             if (userData.password && oldPass !== userData.password) {
                 showToast('❌ كلمة المرور الحالية غير صحيحة');
                 return;
             }
-            
             if (newPass !== confirmPass) {
                 showToast('❌ كلمة المرور الجديدة غير متطابقة');
                 return;
             }
-            
             if (newPass.length < 4) {
                 showToast('❌ كلمة المرور يجب أن تكون 4 أحرف على الأقل');
                 return;
             }
-            
             userData.password = newPass;
             localStorage.setItem('golfcraft_user', JSON.stringify(userData));
             document.getElementById('passwordModal').classList.remove('open');
@@ -1834,7 +1864,6 @@
         function showOrderHistory() {
             document.getElementById('userMenuModal').classList.remove('open');
             const container = document.getElementById('orderHistoryContainer');
-            
             if (orderHistory.length === 0) {
                 container.innerHTML = '<div style="text-align:center;padding:30px;color:#888;">📭 لا توجد طلبات سابقة</div>';
             } else {
@@ -1931,26 +1960,106 @@
         }
 
         // ============================================================
-        // شاشة المنتجات
+        // شاشة المنتجات - مع دعم المطاعم الفرعية
         // ============================================================
         function selectCategory(categoryId) {
             currentCategoryId = categoryId;
-            const cat = categories.find(c => c.id === categoryId);
-            document.getElementById('shopNameLabel').textContent = cat ? cat.emoji + ' ' + cat.name : 'المنتجات';
+            currentRestaurantId = null;
             
-            const productsScreen = document.getElementById('productsScreen');
-            if (cat && cat.bgImage) {
-                productsScreen.style.backgroundImage = `url('${cat.bgImage}')`;
-                productsScreen.style.backgroundSize = 'cover';
-                productsScreen.style.backgroundPosition = 'center';
-            } else {
-                productsScreen.style.backgroundImage = '';
+            if (categoryId === 'restaurants_main') {
+                // عرض المطاعم الفرعية
+                renderRestaurants();
+                return;
             }
             
+            const cat = categories.find(c => c.id === categoryId);
+            document.getElementById('shopNameLabel').textContent = cat ? cat.emoji + ' ' + cat.name : 'المنتجات';
             document.getElementById('categoriesScreen').style.display = 'none';
             document.getElementById('productsScreen').style.display = 'block';
             renderProductsForCategory(categoryId);
             updateCartStatus();
+        }
+
+        function renderRestaurants() {
+            document.getElementById('shopNameLabel').textContent = '🍽️ المطاعم';
+            document.getElementById('categoriesScreen').style.display = 'none';
+            document.getElementById('productsScreen').style.display = 'block';
+            document.getElementById('productsScreen').style.backgroundImage = '';
+            
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = restaurantCategories.map(rest => `
+                <div class="category-card" onclick="selectRestaurant('${rest.id}')" style="background:#fff; border:2px solid #e8f5e9; min-height:120px;">
+                    <span class="cat-emoji" style="font-size:3rem;">${rest.emoji}</span>
+                    <div class="cat-name" style="color:var(--green-dark); background:none; text-shadow:none; backdrop-filter:none; font-size:1.1rem;">${rest.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectRestaurant(restaurantId) {
+            currentRestaurantId = restaurantId;
+            const rest = restaurantCategories.find(r => r.id === restaurantId);
+            document.getElementById('shopNameLabel').textContent = rest ? rest.emoji + ' ' + rest.name : 'المنتجات';
+            document.getElementById('productsScreen').style.display = 'block';
+            renderProductsForRestaurant(restaurantId);
+            updateCartStatus();
+        }
+
+        function renderProductsForRestaurant(restaurantId) {
+            const grid = document.getElementById('productGrid');
+            const filtered = products.filter(p => p.cat === restaurantId);
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="text-align:center;padding:40px;color:#888;grid-column:1/-1;">
+                    😅 لا توجد منتجات في هذا المطعم حالياً<br>
+                    <span style="font-size:0.8rem;">سيتم إضافتها قريباً</span>
+                </div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => {
+                const q = cart['prod_' + p.id] || 0;
+                return `
+                    <div class="product-card" data-product-id="${p.id}">
+                        ${q > 0 ? `<span class="qty-badge">${q}</span>` : ''}
+                        <div class="emoji">${p.emoji}</div>
+                        <div class="p-name">${p.name}</div>
+                        <div class="p-weight">${p.weight}</div>
+                        <div class="p-price">${fPrice(p.price)}</div>
+                        <div class="qty-control">
+                            <button class="qty-btn minus" onclick="event.stopPropagation(); updateQuantity(${p.id}, -1)">−</button>
+                            <span class="qty-value" id="qty_${p.id}">${q}</span>
+                            <button class="qty-btn plus" onclick="event.stopPropagation(); updateQuantity(${p.id}, 1)">+</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateQuantity(productId, delta) {
+            const key = 'prod_' + productId;
+            const current = cart[key] || 0;
+            const newQty = Math.max(0, current + delta);
+            if (newQty === 0) {
+                delete cart[key];
+            } else {
+                cart[key] = newQty;
+            }
+            saveCart();
+            updateUI();
+            updateCartStatus();
+            updateCartSectionsSummary();
+            // تحديث العرض
+            const qtyEl = document.getElementById('qty_' + productId);
+            if (qtyEl) qtyEl.textContent = newQty;
+            const badge = document.querySelector(`.product-card[data-product-id="${productId}"] .qty-badge`);
+            if (badge) {
+                if (newQty > 0) {
+                    badge.textContent = newQty;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
+            }
         }
 
         function renderProductsForCategory(categoryId) {
@@ -1974,25 +2083,14 @@
                         <div class="p-name">${p.name}</div>
                         <div class="p-weight">${p.weight}</div>
                         <div class="p-price">${fPrice(p.price)}</div>
-                        <button class="add-btn ${q > 0 ? 'in-cart' : ''}">${q > 0 ? '✓ في السلة' : '+ أضف'}</button>
+                        <div class="qty-control">
+                            <button class="qty-btn minus" onclick="event.stopPropagation(); updateQuantity(${p.id}, -1)">−</button>
+                            <span class="qty-value" id="qty_${p.id}">${q}</span>
+                            <button class="qty-btn plus" onclick="event.stopPropagation(); updateQuantity(${p.id}, 1)">+</button>
+                        </div>
                     </div>
                 `;
             }).join('');
-
-            grid.querySelectorAll('.product-card').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('add-btn')) return;
-                    const id = parseInt(card.dataset.productId);
-                    addToCart('prod_' + id);
-                });
-
-                const btn = card.querySelector('.add-btn');
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const id = parseInt(card.dataset.productId);
-                    addToCart('prod_' + id);
-                });
-            });
         }
 
         function updateCartStatus() {
@@ -2026,8 +2124,11 @@
             
             emptyMsg.style.display = 'none';
             container.innerHTML = sectionKeys.map(section => {
+                let emoji = '📦';
                 const cat = categories.find(c => c.name === section);
-                const emoji = cat ? cat.emoji : '📦';
+                if (cat) emoji = cat.emoji;
+                const rest = restaurantCategories.find(r => r.name === section);
+                if (rest) emoji = rest.emoji;
                 return `
                     <span class="section-tag">
                         ${emoji} ${section}
@@ -2038,23 +2139,8 @@
         }
 
         // ============================================================
-        // دوال السلة - تحديث نظام التوصيل
+        // دوال السلة
         // ============================================================
-        function addToCart(key) {
-            if (!isOpenNow()) {
-                showToast('⏰ التطبيق يعمل من 9 صباحاً حتى 12 منتصف الليل');
-                return;
-            }
-            cart[key] = (cart[key] || 0) + 1;
-            saveCart();
-            updateUI();
-            updateCartStatus();
-            updateCartSectionsSummary();
-            if (currentCategoryId) {
-                renderProductsForCategory(currentCategoryId);
-            }
-        }
-
         function updateUI() {
             const cnt = getCartCount();
             const subtotal = getSubtotal();
@@ -2074,7 +2160,6 @@
             document.getElementById('totalDeliveryFee').textContent = deliveryFee.toFixed(2);
             document.getElementById('totalAdminFee').textContent = adminFee.toFixed(2);
 
-            // عرض رسوم التوصيل حسب المنطقة
             const container = document.getElementById('deliveryFeesContainer');
             container.innerHTML = `
                 <div class="fee-row" style="background:#f1f8e9;">
@@ -2116,7 +2201,6 @@
         // ============================================================
         function generatePDF(orderData) {
             currentPdfData = orderData;
-            
             document.getElementById('pdfOrderNumber').textContent = orderData.orderNumber;
             document.getElementById('pdfDate').textContent = orderData.date;
             document.getElementById('pdfTime').textContent = orderData.time;
@@ -2173,7 +2257,7 @@
         }
 
         // ============================================================
-        // الدفع - تحديث نظام التوصيل
+        // الدفع
         // ============================================================
         function openCheckout() {
             if (getCartCount() === 0) return;
@@ -2182,15 +2266,21 @@
                 return;
             }
             
-            const cat = categories.find(c => c.id === currentCategoryId);
-            document.getElementById('checkoutCategoryName').textContent = cat ? cat.emoji + ' ' + cat.name : 'غير محدد';
+            let categoryName = 'غير محدد';
+            if (currentRestaurantId) {
+                const rest = restaurantCategories.find(r => r.id === currentRestaurantId);
+                categoryName = rest ? rest.emoji + ' ' + rest.name : 'مطعم';
+            } else if (currentCategoryId) {
+                const cat = categories.find(c => c.id === currentCategoryId);
+                categoryName = cat ? cat.emoji + ' ' + cat.name : 'قسم';
+            }
+            document.getElementById('checkoutCategoryName').textContent = categoryName;
             
             if (userData) {
                 document.getElementById('custName').value = userData.name || '';
                 document.getElementById('custPhone').value = userData.phone || '';
                 document.getElementById('custAddress').value = userData.address || '';
             }
-            
             document.getElementById('custArea').value = selectedArea;
             document.getElementById('checkoutModal').classList.add('open');
         }
@@ -2248,18 +2338,18 @@
                 itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)} (${i.category})\n`;
             });
 
-            const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
+            let categoryName = 'غير محدد';
+            if (currentRestaurantId) {
+                const rest = restaurantCategories.find(r => r.id === currentRestaurantId);
+                categoryName = rest ? rest.name : 'مطعم';
+            } else if (currentCategoryId) {
+                const cat = categories.find(c => c.id === currentCategoryId);
+                categoryName = cat ? cat.name : 'قسم';
+            }
+
             const orderNumber = String(orderCounter).padStart(4, '0');
-            
-            let locationText = '';
-            if (location) {
-                locationText = `📍 الموقع: https://www.google.com/maps?q=${lat},${lng}\n`;
-            }
-            
-            let imageText = '';
-            if (selectedFile) {
-                imageText = `🖼️ صورة التحويل: ${selectedFile.name}\n`;
-            }
+            let locationText = location ? `📍 الموقع: https://www.google.com/maps?q=${lat},${lng}\n` : '';
+            let imageText = selectedFile ? `🖼️ صورة التحويل: ${selectedFile.name}\n` : '';
             
             const msg = `📦 *طلب جديد من جولف كرافت*\n` +
                 `🧾 رقم الطلب: #${orderNumber}\n` +
@@ -2350,7 +2440,6 @@
             }
 
             generatePDF(pdfData);
-
             document.getElementById('transferImage').value = '';
             document.getElementById('fileName').textContent = 'لا يوجد ملف';
             selectedFile = null;
@@ -2374,7 +2463,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadCart();
             updateUserBadge();
-            
             if (userData && selectedArea) {
                 document.getElementById('splashScreen').classList.add('hide');
                 document.getElementById('registerScreen').style.display = 'none';
