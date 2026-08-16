@@ -644,7 +644,6 @@
             text-align: center;
             color: var(--green-dark);
         }
-        /* زر الرجوع في أسفل الصفحة */
         .back-bottom {
             display: flex;
             justify-content: center;
@@ -1126,6 +1125,13 @@
             font-size: 0.8rem;
             color: #888;
         }
+        /* إضافة تنسيق الصورة في PDF */
+        .pdf-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
         @media (max-width: 400px) {
             #splashScreen h1 { font-size: 2.8rem; }
             .categories-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1253,7 +1259,6 @@
                 <span class="cart-status" id="cartStatus">🛒 0</span>
             </div>
             <div class="product-grid" id="productGrid"></div>
-            <!-- زر الرجوع في أسفل الصفحة -->
             <div class="back-bottom">
                 <button class="back-btn" onclick="showCategories()">🏠 الرجوع للقائمة الرئيسية</button>
             </div>
@@ -1376,9 +1381,10 @@
         </div>
     </div>
 
-    <!-- ===== PDF Invoice (Hidden - used for generation) ===== -->
+    <!-- ===== PDF Invoice (Hidden - used as template) ===== -->
     <div id="pdfInvoice" style="display:none;">
         <div class="invoice-header">
+            <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار جولف كرافت" class="pdf-logo">
             <h1>🧾 جولف كرافت</h1>
             <div class="sub">فاتورة طلب رقم #<span id="pdfOrderNumber">0000</span></div>
         </div>
@@ -2193,10 +2199,12 @@
         }
 
         // ============================================================
-        // دوال PDF
+        // دوال PDF (تم إصلاحها لاستخدام عنصر المعاينة)
         // ============================================================
         function generatePDF(orderData) {
             currentPdfData = orderData;
+            
+            // تحديث عناصر القالب المخفي
             document.getElementById('pdfOrderNumber').textContent = orderData.orderNumber;
             document.getElementById('pdfDate').textContent = orderData.date;
             document.getElementById('pdfTime').textContent = orderData.time;
@@ -2229,14 +2237,23 @@
                 </div>
             `;
 
+            // نسخ المحتوى إلى عنصر المعاينة المرئي
             const preview = document.getElementById('pdfPreview');
             const pdfElement = document.getElementById('pdfInvoice');
             preview.innerHTML = pdfElement.innerHTML;
+            
+            // فتح المودال
             document.getElementById('pdfModal').classList.add('open');
         }
 
+        // تحميل PDF باستخدام عنصر المعاينة بدلاً من العنصر المخفي
         function downloadPDF() {
-            const element = document.getElementById('pdfInvoice');
+            const element = document.getElementById('pdfPreview');
+            if (!element) {
+                showToast('❌ لا توجد فاتورة للتحميل');
+                return;
+            }
+
             const opt = {
                 margin: 10,
                 filename: `فاتورة_جولف_كرافت_${currentPdfData.orderNumber}.pdf`,
@@ -2244,6 +2261,7 @@
                 html2canvas: { scale: 2, useCORS: true, letterRendering: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
+            
             html2pdf().set(opt).from(element).save().then(() => {
                 showToast('✅ تم تحميل الفاتورة');
             }).catch(err => {
