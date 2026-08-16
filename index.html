@@ -1077,6 +1077,20 @@
         #pdfPreview .invoice-details strong {
             color: var(--green-dark);
         }
+        #pdfPreview .customer-info {
+            background: #f1f8e9;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 14px;
+            border-right: 3px solid var(--green);
+        }
+        #pdfPreview .customer-info div {
+            font-size: 0.85rem;
+            padding: 2px 0;
+        }
+        #pdfPreview .customer-info strong {
+            color: var(--green-dark);
+        }
         #pdfPreview table {
             width: 100%;
             border-collapse: collapse;
@@ -1378,49 +1392,6 @@
                 <button class="submit-btn" onclick="downloadPDF()">📥 تحميل PDF</button>
                 <button class="cancel-btn" onclick="document.getElementById('pdfModal').classList.remove('open')">✖ إغلاق</button>
             </div>
-        </div>
-    </div>
-
-    <!-- ===== قالب الفاتورة المخفي (يستخدم كمرجع فقط) ===== -->
-    <div id="pdfInvoice" style="display:none;">
-        <div class="invoice-header">
-            <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار جولف كرافت" class="pdf-logo">
-            <h1>🧾 جولف كرافت</h1>
-            <div class="sub">فاتورة طلب رقم #<span class="order-number">0000</span></div>
-        </div>
-        <div class="invoice-details">
-            <div><strong>📅 التاريخ:</strong> <span class="invoice-date"></span></div>
-            <div><strong>🕐 الوقت:</strong> <span class="invoice-time"></span></div>
-            <div><strong>📂 القسم:</strong> <span class="invoice-category"></span></div>
-        </div>
-        <div style="background:#f1f8e9; padding:10px 14px; border-radius:8px; margin-bottom:14px; border-right:3px solid var(--green);">
-            <div><strong>👤 العميل:</strong> <span class="invoice-name"></span></div>
-            <div><strong>📞 الهاتف:</strong> <span class="invoice-phone"></span></div>
-            <div><strong>📍 العنوان:</strong> <span class="invoice-address"></span></div>
-            <div><strong>📍 الموقع:</strong> <span class="invoice-location"></span></div>
-            <div><strong>💳 طريقة الدفع:</strong> <span class="invoice-payment"></span></div>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>المنتج</th>
-                    <th>الكمية</th>
-                    <th>السعر</th>
-                    <th>الإجمالي</th>
-                </tr>
-            </thead>
-            <tbody class="invoice-items-body"></tbody>
-        </table>
-        <div class="totals">
-            <div><span>المجموع الفرعي</span><span class="invoice-subtotal">0.00 ج.م</span></div>
-            <div class="invoice-delivery-fees"></div>
-            <div><span>💰 مصاريف إدارية (1%)</span><span class="invoice-admin-fee">0.00 ج.م</span></div>
-            <div class="grand-total"><span>💰 الإجمالي</span><span class="invoice-total">0.00 ج.م</span></div>
-        </div>
-        <div class="footer">
-            📍 التوصيل داخل مدينة العبور فقط | 🕓 من 9 صباحاً حتى 12 منتصف الليل<br>
-            شكراً لتسوقكم مع جولف كرافت ❤️
         </div>
     </div>
 
@@ -2202,29 +2173,40 @@
         // دوال PDF - إعادة بناء كاملة لضمان ظهور جميع البيانات
         // ============================================================
         function generatePDF(orderData) {
+            // حفظ البيانات للاستخدام في التحميل
             currentPdfData = orderData;
             
             // الحصول على عنصر المعاينة
             const preview = document.getElementById('pdfPreview');
             
-            // بناء HTML كامل للفاتورة
+            // التأكد من وجود البيانات المطلوبة
+            if (!orderData) {
+                preview.innerHTML = '<div style="text-align:center;color:red;padding:20px;">❌ لا توجد بيانات للفاتورة</div>';
+                document.getElementById('pdfModal').classList.add('open');
+                return;
+            }
+
+            // التحقق من وجود المنتجات
+            const items = orderData.items || [];
+            
+            // بناء HTML كامل للفاتورة مع جميع البيانات
             let html = `
                 <div class="invoice-header">
                     <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار جولف كرافت" class="pdf-logo">
                     <h1>🧾 جولف كرافت</h1>
-                    <div class="sub">فاتورة طلب رقم #${orderData.orderNumber}</div>
+                    <div class="sub">فاتورة طلب رقم #${orderData.orderNumber || '0000'}</div>
                 </div>
                 <div class="invoice-details">
-                    <div><strong>📅 التاريخ:</strong> ${orderData.date}</div>
-                    <div><strong>🕐 الوقت:</strong> ${orderData.time}</div>
-                    <div><strong>📂 القسم:</strong> ${orderData.category}</div>
+                    <div><strong>📅 التاريخ:</strong> ${orderData.date || new Date().toLocaleDateString('ar-EG')}</div>
+                    <div><strong>🕐 الوقت:</strong> ${orderData.time || new Date().toLocaleTimeString('ar-EG')}</div>
+                    <div><strong>📂 القسم:</strong> ${orderData.category || 'غير محدد'}</div>
                 </div>
-                <div style="background:#f1f8e9; padding:10px 14px; border-radius:8px; margin-bottom:14px; border-right:3px solid var(--green);">
-                    <div><strong>👤 العميل:</strong> ${orderData.name}</div>
-                    <div><strong>📞 الهاتف:</strong> ${orderData.phone}</div>
-                    <div><strong>📍 العنوان:</strong> ${orderData.address}</div>
+                <div class="customer-info">
+                    <div><strong>👤 العميل:</strong> ${orderData.name || 'غير محدد'}</div>
+                    <div><strong>📞 الهاتف:</strong> ${orderData.phone || 'غير محدد'}</div>
+                    <div><strong>📍 العنوان:</strong> ${orderData.address || 'غير محدد'}</div>
                     <div><strong>📍 الموقع:</strong> ${orderData.location || 'لم يتم تحديده'}</div>
-                    <div><strong>💳 طريقة الدفع:</strong> ${orderData.payment}</div>
+                    <div><strong>💳 طريقة الدفع:</strong> ${orderData.payment || 'غير محددة'}</div>
                 </div>
                 <table>
                     <thead>
@@ -2239,15 +2221,18 @@
                     <tbody>
             `;
             
-            if (orderData.items && orderData.items.length > 0) {
-                orderData.items.forEach((item, index) => {
+            if (items && items.length > 0) {
+                items.forEach((item, index) => {
+                    const unitPrice = item.unitPrice || 0;
+                    const quantity = item.quantity || 0;
+                    const lineTotal = unitPrice * quantity;
                     html += `
                         <tr>
                             <td>${index + 1}</td>
-                            <td>${item.product}</td>
-                            <td>${item.quantity}</td>
-                            <td>${fPrice(item.unitPrice)}</td>
-                            <td>${fPrice(item.lineTotal)}</td>
+                            <td>${item.product || 'منتج غير معروف'}</td>
+                            <td>${quantity}</td>
+                            <td>${fPrice(unitPrice)}</td>
+                            <td>${fPrice(lineTotal)}</td>
                         </tr>
                     `;
                 });
@@ -2259,17 +2244,23 @@
                 `;
             }
             
+            // حساب المجاميع
+            const subtotal = orderData.subtotal || 0;
+            const deliveryFee = orderData.deliveryFee || 0;
+            const adminFee = orderData.adminFee || 0;
+            const total = orderData.total || (subtotal + deliveryFee + adminFee);
+            
             html += `
                     </tbody>
                 </table>
                 <div class="totals">
-                    <div><span>المجموع الفرعي</span><span>${fPrice(orderData.subtotal)}</span></div>
-                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
-                        <span>📦 رسوم التوصيل (${orderData.area || selectedArea})</span>
-                        <span>${fPrice(orderData.deliveryFee)}</span>
+                    <div><span>المجموع الفرعي</span><span>${fPrice(subtotal)}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:3px 0;">
+                        <span>📦 رسوم التوصيل (${orderData.area || selectedArea || 'المنطقة'})</span>
+                        <span>${fPrice(deliveryFee)}</span>
                     </div>
-                    <div><span>💰 مصاريف إدارية (1%)</span><span>${fPrice(orderData.adminFee)}</span></div>
-                    <div class="grand-total"><span>💰 الإجمالي</span><span>${fPrice(orderData.total)}</span></div>
+                    <div><span>💰 مصاريف إدارية (1%)</span><span>${fPrice(adminFee)}</span></div>
+                    <div class="grand-total"><span>💰 الإجمالي</span><span>${fPrice(total)}</span></div>
                 </div>
                 <div class="footer">
                     📍 التوصيل داخل مدينة العبور فقط | 🕓 من 9 صباحاً حتى 12 منتصف الليل<br>
@@ -2299,7 +2290,7 @@
             setTimeout(function() {
                 const opt = {
                     margin: 10,
-                    filename: `فاتورة_جولف_كرافت_${currentPdfData.orderNumber}.pdf`,
+                    filename: `فاتورة_جولف_كرافت_${currentPdfData ? currentPdfData.orderNumber : '0000'}.pdf`,
                     image: { type: 'jpeg', quality: 0.98 },
                     html2canvas: { 
                         scale: 2, 
@@ -2389,7 +2380,7 @@
 
             // التحقق من إلزامية صورة التحويل
             if (!selectedFile) {
-                showToast('⚠️ من فضلك ارفع صورة التحويل (إلزامي)');
+                showToast('⚠️ من فضلك ارفق صورة التحويل (إلزامي)');
                 document.getElementById('fileUploadWrapper').style.borderColor = 'var(--red)';
                 return;
             }
@@ -2456,6 +2447,7 @@
 
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
 
+            // بناء بيانات PDF كاملة
             const pdfData = {
                 orderNumber: orderNumber,
                 date: new Date().toLocaleDateString('ar-EG'),
@@ -2463,7 +2455,7 @@
                 category: categoryName,
                 name: name,
                 phone: phone,
-                address: address + ' - ' + area,
+                address: address,
                 area: area,
                 location: location ? `https://www.google.com/maps?q=${lat},${lng}` : 'لم يتم تحديده',
                 payment: payLabel,
@@ -2527,7 +2519,9 @@
                 console.log('Sheet send error:', e);
             }
 
+            // عرض الفاتورة مع البيانات الكاملة
             generatePDF(pdfData);
+            
             document.getElementById('transferImage').value = '';
             document.getElementById('fileName').textContent = 'لا يوجد ملف';
             document.getElementById('fileUploadWrapper').classList.remove('has-file');
