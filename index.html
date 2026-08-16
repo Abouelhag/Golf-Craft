@@ -563,6 +563,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            margin-top: 2px;
         }
         .back-bar .back-btn:hover {
             background: var(--green-dark);
@@ -574,7 +575,7 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
-            padding: 12px 14px;
+            padding: 16px 14px 12px;
         }
         .product-card {
             background: rgba(255,255,255,0.92);
@@ -1120,7 +1121,7 @@
             .category-card { min-height: 110px; padding: 16px 10px; }
             .category-card .cat-emoji { font-size: 2.8rem; }
             .category-card .cat-name { font-size: 1rem; }
-            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 8px 10px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 16px 10px 12px; }
             .product-card { padding: 12px 8px; }
             .product-card .emoji { font-size: 2.2rem; }
             .product-card .p-name { font-size: 0.8rem; }
@@ -1489,17 +1490,18 @@
 
     <script>
         // ============================================================
-        // البيانات - المطاعم والمنتجات
+        // البيانات - المطاعم والمنتجات (المطاعم أولاً)
         // ============================================================
+        // جعل المطاعم أول عنصر في القائمة
         const categories = [
+            { id: 'restaurants_main', name: 'مطاعم', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant_main'] },
             { id: 'grocery', name: 'بقالة', emoji: '🛒', bgImage: 'https://i.ibb.co/Gr5bjBr/grocery-main-1.jpg', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
             { id: 'vegetables', name: 'خضار وفاكهة', emoji: '🥬', bgImage: 'https://i.ibb.co/rGYk6S2p/1.jpg', categories: ['fruits', 'vegetables'] },
             { id: 'meat', name: 'لحوم', emoji: '🥩', bgImage: 'https://i.ibb.co/1tn52HjX/1.jpg', categories: ['meat'] },
             { id: 'chicken', name: 'دواجن', emoji: '🍗', bgImage: 'https://i.ibb.co/BHVVm2yP/1.jpg', categories: ['poultry'] },
             { id: 'coffee', name: 'بن', emoji: '☕', bgImage: 'https://i.ibb.co/My5KmmTB/1.jpg', categories: ['coffee'] },
             { id: 'roastery', name: 'محمصات', emoji: '🥜', bgImage: 'https://i.ibb.co/Qj3zfG96/1.jpg', categories: ['snacks'] },
-            { id: 'spices', name: 'عطارة', emoji: '🌿', bgImage: 'https://i.ibb.co/GfxfwGp3/1.jpg', categories: ['spices'] },
-            { id: 'restaurants_main', name: 'مطاعم', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant_main'] }
+            { id: 'spices', name: 'عطارة', emoji: '🌿', bgImage: 'https://i.ibb.co/GfxfwGp3/1.jpg', categories: ['spices'] }
         ];
 
         const restaurantCategories = [
