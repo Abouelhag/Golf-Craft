@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <title>جولف كرافت</title>
     <link rel="manifest" href="manifest.json">
-    <!-- Include html2pdf library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         :root {
@@ -32,8 +31,6 @@
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
-
-        /* ===== شاشة البداية ===== */
         #splashScreen {
             position: fixed;
             inset: 0;
@@ -103,8 +100,6 @@
         #splashScreen .start-btn:active {
             transform: scale(0.95);
         }
-
-        /* ===== شاشة التسجيل ===== */
         #registerScreen {
             position: fixed;
             inset: 0;
@@ -195,8 +190,6 @@
         #registerScreen .register-card .skip-btn:hover {
             color: #555;
         }
-
-        /* ===== شاشة اختيار المنطقة ===== */
         #areaScreen {
             position: fixed;
             inset: 0;
@@ -269,8 +262,6 @@
         #areaScreen .area-btn.primary:hover {
             background: var(--green-dark);
         }
-
-        /* ===== التطبيق الرئيسي ===== */
         #mainApp {
             display: none;
             min-height: 100vh;
@@ -289,7 +280,6 @@
             position: relative;
             z-index: 1;
         }
-
         .header {
             background: linear-gradient(135deg, #4CAF50, #2E7D32);
             color: #fff;
@@ -351,8 +341,6 @@
         .area-bar span:last-child {
             color: var(--green);
         }
-
-        /* ===== عرض جميع الأقسام في السلة - الشريط الجانبي ===== */
         .cart-sections-summary {
             background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
             padding: 10px 16px;
@@ -418,8 +406,6 @@
         .cart-sections-summary .view-all-btn:hover {
             background: var(--green-dark);
         }
-
-        /* ===== شاشة الأقسام ===== */
         #categoriesScreen {
             padding: 16px;
             display: none;
@@ -510,8 +496,6 @@
         .category-card.no-bg .cat-emoji {
             filter: none;
         }
-
-        /* ===== شاشة المنتجات ===== */
         #productsScreen {
             display: none;
             padding-bottom: 80px;
@@ -577,7 +561,6 @@
             color: var(--green);
             font-weight: 600;
         }
-
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -652,8 +635,6 @@
         .product-card .add-btn.in-cart {
             background: var(--orange);
         }
-
-        /* ===== شريط السلة ===== */
         .cart-bar {
             position: fixed;
             bottom: 0;
@@ -711,8 +692,6 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-
-        /* ===== المودالات ===== */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -759,7 +738,6 @@
             margin-bottom: 16px;
             color: var(--green-dark);
         }
-
         .form-group {
             margin-bottom: 12px;
         }
@@ -806,7 +784,6 @@
             color: #888;
             margin-top: 4px;
         }
-
         .btn-group {
             display: flex;
             gap: 10px;
@@ -830,7 +807,6 @@
         .btn-group .cancel-btn:hover {
             background: #d0d0d0;
         }
-
         .submit-btn {
             width: 100%;
             padding: 14px;
@@ -850,7 +826,6 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
-
         .fee-summary {
             background: #f8f9fa;
             padding: 12px;
@@ -885,7 +860,6 @@
             margin-top: 4px;
             font-weight: 600;
         }
-
         .cart-item {
             padding: 8px 0;
             border-bottom: 1px solid #eee;
@@ -902,7 +876,6 @@
         .cart-item .item-emoji {
             font-size: 1.8rem;
         }
-
         #vodafoneDetails,
         #instapayDetails {
             display: none;
@@ -912,8 +885,6 @@
             margin-top: 5px;
             margin-bottom: 10px;
         }
-
-        /* ===== File upload ===== */
         .file-upload-wrapper {
             border: 2px dashed #ddd;
             border-radius: 10px;
@@ -944,8 +915,6 @@
         .file-upload-wrapper input[type="file"] {
             display: none;
         }
-
-        /* ===== User Menu Modal ===== */
         .user-menu-item {
             display: flex;
             align-items: center;
@@ -999,7 +968,6 @@
             color: #888;
             margin-top: 4px;
         }
-
         .toast {
             position: fixed;
             top: 20px;
@@ -1018,8 +986,6 @@
         .toast.show {
             opacity: 1;
         }
-
-        /* ===== PDF Invoice Styles ===== */
         #pdfInvoice {
             direction: rtl;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -1108,7 +1074,6 @@
             font-size: 0.8rem;
             color: #888;
         }
-
         @media (max-width: 400px) {
             #splashScreen h1 { font-size: 2.8rem; }
             .categories-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1134,7 +1099,7 @@
     <div id="splashScreen">
         <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="جولف كرافت" class="logo-img">
         <h1>جولف كرافت</h1>
-        <div class="subtitle">🛒 طلبات البقالة الشهرية</div>
+        <div class="subtitle">🛒 طلبات البقالة والمطاعم</div>
         <button class="start-btn" onclick="checkUserAndProceed()">ابدأ التسوق 🚀</button>
     </div>
 
@@ -1197,7 +1162,7 @@
     <div id="mainApp">
         <!-- الهيدر -->
         <div style="background:#FF9800; color:#fff; text-align:center; padding:4px; font-weight:bold; font-size:0.8rem;">
-            📍 التوصيل داخل العبور فقط | 🕓 من 7 صباحاً حتى 11 مساءً
+            📍 التوصيل داخل العبور فقط | 🕓 من 9 صباحاً حتى 12 منتصف الليل
         </div>
         <header class="header">
             <div class="logo">
@@ -1392,7 +1357,7 @@
             <div class="grand-total"><span>💰 الإجمالي</span><span id="pdfTotal">0.00 ج.م</span></div>
         </div>
         <div class="footer">
-            📍 التوصيل داخل مدينة العبور فقط | 🕓 من 7 صباحاً حتى 11 مساءً<br>
+            📍 التوصيل داخل مدينة العبور فقط | 🕓 من 9 صباحاً حتى 12 منتصف الليل<br>
             شكراً لتسوقكم مع جولف كرافت ❤️
         </div>
     </div>
@@ -1481,9 +1446,10 @@
 
     <script>
         // ============================================================
-        // البيانات
+        // البيانات - إضافة أقسام المطاعم والمنتجات الجديدة
         // ============================================================
         const categories = [
+            // الأقسام الأصلية
             { id: 'grocery', name: 'بقالة', emoji: '🛒', bgImage: 'https://i.ibb.co/Gr5bjBr/grocery-main-1.jpg', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
             { id: 'vegetables', name: 'خضار وفاكهة', emoji: '🥬', bgImage: 'https://i.ibb.co/rGYk6S2p/1.jpg', categories: ['fruits', 'vegetables'] },
             { id: 'meat', name: 'لحوم', emoji: '🥩', bgImage: 'https://i.ibb.co/1tn52HjX/1.jpg', categories: ['meat'] },
@@ -1491,11 +1457,14 @@
             { id: 'coffee', name: 'بن', emoji: '☕', bgImage: 'https://i.ibb.co/My5KmmTB/1.jpg', categories: ['coffee'] },
             { id: 'roastery', name: 'محمصات', emoji: '🥜', bgImage: 'https://i.ibb.co/Qj3zfG96/1.jpg', categories: ['snacks'] },
             { id: 'spices', name: 'عطارة', emoji: '🌿', bgImage: 'https://i.ibb.co/GfxfwGp3/1.jpg', categories: ['spices'] },
-            { id: 'sandwiches', name: 'سندويتشات', emoji: '🥪', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant'] },
+            // أقسام المطاعم الجديدة
+            { id: 'restaurants', name: 'مطاعم ووجبات', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant'] },
             { id: 'bakery', name: 'مخبوزات', emoji: '🥖', bgImage: 'https://i.ibb.co/zhW7TY71/1.jpg', categories: ['bakery'] }
         ];
 
+        // المنتجات - إضافة منتجات المطاعم الجديدة
         const products = [
+            // المنتجات الأصلية
             { id: 14, name: 'بيض بلدي', emoji: '🥚', weight: '12 بيضة', price: 130.00, cat: 'dairy' },
             { id: 15, name: 'جبنة رومي', emoji: '🧀', weight: '1000 جم', price: 299.99, cat: 'dairy' },
             { id: 17, name: 'زبدة', emoji: '🧈', weight: '250 جم', price: 140.00, cat: 'dairy' },
@@ -1526,19 +1495,54 @@
             { id: 151, name: 'فول سوداني', emoji: '🥜', weight: '250 جم', price: 30.00, cat: 'snacks' },
             { id: 160, name: 'كمون', emoji: '🌿', weight: '100 جم', price: 15.00, cat: 'spices' },
             { id: 161, name: 'كزبرة', emoji: '🌿', weight: '100 جم', price: 12.00, cat: 'spices' },
-            { id: 120, name: 'فول مدمس', emoji: '🥣', weight: 'طبق', price: 15.00, cat: 'restaurant' },
-            { id: 121, name: 'فلافل', emoji: '🧆', weight: 'سندوتش', price: 8.00, cat: 'restaurant' },
-            { id: 170, name: 'عيش بلدي', emoji: '🍞', weight: '5 أرغفة', price: 20.00, cat: 'bakery' },
-            { id: 171, name: 'كرواسون', emoji: '🥐', weight: '4 قطع', price: 64.00, cat: 'bakery' }
+            // منتجات المطاعم الجديدة (مطعم حلب الشام، أصل الحكاية، مخبز العبور)
+            { id: 200, name: 'شاورما لحم', emoji: '🥙', weight: 'ساندوتش', price: 45.00, cat: 'restaurant' },
+            { id: 201, name: 'شاورما دجاج', emoji: '🌯', weight: 'ساندوتش', price: 40.00, cat: 'restaurant' },
+            { id: 202, name: 'شاورما لحم (وجبة)', emoji: '🍱', weight: 'مع بطاطس ومشروب', price: 85.00, cat: 'restaurant' },
+            { id: 203, name: 'شاورما دجاج (وجبة)', emoji: '🍱', weight: 'مع بطاطس ومشروب', price: 80.00, cat: 'restaurant' },
+            { id: 204, name: 'وجبة عائلة شاورما', emoji: '🧆', weight: 'تكفي 4 أشخاص', price: 280.00, cat: 'restaurant' },
+            { id: 205, name: 'بطاطس مقلية', emoji: '🍟', weight: 'حصة', price: 20.00, cat: 'restaurant' },
+            { id: 206, name: 'مشروب غازي', emoji: '🥤', weight: 'علبة', price: 10.00, cat: 'restaurant' },
+            { id: 207, name: 'شاورما لحم (سوبر)', emoji: '🥙', weight: 'ساندوتش كبير', price: 60.00, cat: 'restaurant' },
+            { id: 208, name: 'شاورما دجاج (سوبر)', emoji: '🌯', weight: 'ساندوتش كبير', price: 55.00, cat: 'restaurant' },
+            // منتجات مخبز العبور
+            { id: 300, name: 'عيش بلدي طازج', emoji: '🍞', weight: '5 أرغفة', price: 22.00, cat: 'bakery' },
+            { id: 301, name: 'عيش فينو', emoji: '🥖', weight: '4 قطع', price: 24.00, cat: 'bakery' },
+            { id: 302, name: 'كرواسون جبنة', emoji: '🥐', weight: '4 قطع', price: 72.00, cat: 'bakery' },
+            { id: 303, name: 'كرواسون شوكولاتة', emoji: '🥐', weight: '4 قطع', price: 76.00, cat: 'bakery' },
+            { id: 304, name: 'باتيه جبنة', emoji: '🥧', weight: '4 قطع', price: 40.00, cat: 'bakery' },
+            { id: 305, name: 'باتيه لحم', emoji: '🥧', weight: '4 قطع', price: 56.00, cat: 'bakery' },
+            { id: 306, name: 'بيتزا صغيرة', emoji: '🍕', weight: 'قطر 25 سم', price: 55.00, cat: 'bakery' },
+            { id: 307, name: 'بيتزا وسط', emoji: '🍕', weight: 'قطر 35 سم', price: 85.00, cat: 'bakery' },
+            { id: 308, name: 'فطير مشلتت', emoji: '🥮', weight: 'قطعة', price: 15.00, cat: 'bakery' },
+            { id: 309, name: 'معمول', emoji: '🍪', weight: '6 قطع', price: 35.00, cat: 'bakery' }
         ];
 
         // ============================================================
-        // الإعدادات
+        // الإعدادات - نظام التوصيل حسب المنطقة
         // ============================================================
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
-        const DELIVERY_FEE = 23;
         const ADMIN_FEE_PERCENT = 0.01; // 1%
+
+        // رسوم التوصيل حسب المنطقة
+        function getDeliveryFeeByArea(area) {
+            const areaLower = area.trim();
+            // الحي الأول والثاني: 25 ج.م
+            if (areaLower === 'الحي الأول' || areaLower === 'الحي الثاني') {
+                return 25;
+            }
+            // الحي الثالث والرابع والخامس: 30 ج.م
+            if (areaLower === 'الحي الثالث' || areaLower === 'الحي الرابع' || areaLower === 'الحي الخامس') {
+                return 30;
+            }
+            // الحي السادس والسابع والتاسع: 35 ج.م
+            if (areaLower === 'الحي السادس' || areaLower === 'الحي السابع' || areaLower === 'الحي التاسع') {
+                return 35;
+            }
+            // المنطقة الافتراضية (أخرى أو غير محددة): 35 ج.م
+            return 35;
+        }
 
         // ============================================================
         // المتغيرات العامة
@@ -1553,18 +1557,28 @@
         let selectedFile = null;
 
         // ============================================================
-        // الدوال الأساسية
+        // الدوال الأساسية - تحديث مواعيد العمل
         // ============================================================
         function isOpenNow() {
             const now = new Date();
             const hours = now.getHours();
-            const isOpen = hours >= 7 && hours < 23;
+            // مواعيد العمل من 9 صباحاً (9) إلى 12 منتصف الليل (24 = 0)
+            // نستخدم الساعة من 9 إلى 23 (11 مساءً) ولكن 12 منتصف الليل = 0
+            // لذا نتحقق: الساعة >= 9 أو الساعة < 0 (أي بعد 12 منتصف الليل)
+            // ولكن بما أن 12 منتصف الليل = 0، فالتطبيق يعمل من 9 صباحاً حتى 11:59 مساءً
+            // ولن يشتغل من 12 منتصف الليل حتى 8:59 صباحاً
+            const isOpen = hours >= 9 || hours === 0 || hours === 1 || hours === 2 || hours === 3 || hours === 4 || hours === 5 || hours === 6 || hours === 7 || hours === 8;
+            // تبسيط: التطبيق يعمل إذا كانت الساعة بين 9 و 23 (11 مساءً)
+            const isOpenSimplified = hours >= 9 && hours < 24;
+            // لكن 12 منتصف الليل = 0، لذا نضيف شرط للساعة 0 إلى 8 غير مفتوح
+            const isOpenFinal = hours >= 9 && hours < 24;
+            
             const indicator = document.getElementById('statusIndicator');
             if (indicator) {
-                indicator.textContent = isOpen ? '🟢 مفتوح الآن' : '🔴 مغلق الآن';
-                indicator.style.background = isOpen ? 'rgba(255,255,255,0.2)' : 'rgba(255,0,0,0.3)';
+                indicator.textContent = isOpenFinal ? '🟢 مفتوح الآن' : '🔴 مغلق (9ص - 12م)';
+                indicator.style.background = isOpenFinal ? 'rgba(255,255,255,0.2)' : 'rgba(255,0,0,0.3)';
             }
-            return isOpen;
+            return isOpenFinal;
         }
 
         function getAdminFee(subtotal) {
@@ -1585,19 +1599,16 @@
             return t;
         }
 
+        function getDeliveryFeeForCart() {
+            const area = selectedArea || 'الحي السابع';
+            return getDeliveryFeeByArea(area);
+        }
+
         function getTotalWithFees() {
             const subtotal = getSubtotal();
-            const items = getCartItems();
-            const sections = {};
-            items.forEach(item => {
-                if (!sections[item.category]) {
-                    sections[item.category] = { items: [], subtotal: 0 };
-                }
-                sections[item.category].items.push(item);
-                sections[item.category].subtotal += item.lineTotal;
-            });
-            const totalDelivery = Object.keys(sections).length * DELIVERY_FEE;
-            return subtotal + totalDelivery + getAdminFee(subtotal);
+            const deliveryFee = getDeliveryFeeForCart();
+            // نطبق رسوم التوصيل مرة واحدة للطلب بالكامل كما هو مطلوب
+            return subtotal + deliveryFee + getAdminFee(subtotal);
         }
 
         function loadCart() {
@@ -1892,7 +1903,7 @@
 
         function populateAreaSelect() {
             const select = document.getElementById('custArea');
-            const areas = ['الحي السابع', 'الحي السادس', 'الحي التاسع', 'الحي الخامس', 'الحي الثالث', 'الحي الثاني', 'الحي الأول', 'أخرى'];
+            const areas = ['الحي السابع', 'الحي السادس', 'الحي التاسع', 'الحي الخامس', 'الحي الثالث', 'الحي الثاني', 'الحي الأول', 'الحي الرابع', 'أخرى'];
             select.innerHTML = areas.map(a =>
                 `<option value="${a}" ${a === selectedArea ? 'selected' : ''}>${a}</option>`
             ).join('');
@@ -2027,11 +2038,11 @@
         }
 
         // ============================================================
-        // دوال السلة
+        // دوال السلة - تحديث نظام التوصيل
         // ============================================================
         function addToCart(key) {
             if (!isOpenNow()) {
-                showToast('⏰ التطبيق يعمل من 7 صباحاً حتى 11 مساءً');
+                showToast('⏰ التطبيق يعمل من 9 صباحاً حتى 12 منتصف الليل');
                 return;
             }
             cart[key] = (cart[key] || 0) + 1;
@@ -2048,18 +2059,8 @@
             const cnt = getCartCount();
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
-            
-            const items = getCartItems();
-            const sections = {};
-            items.forEach(item => {
-                if (!sections[item.category]) {
-                    sections[item.category] = { items: [], subtotal: 0 };
-                }
-                sections[item.category].items.push(item);
-                sections[item.category].subtotal += item.lineTotal;
-            });
-            const totalDelivery = Object.keys(sections).length * DELIVERY_FEE;
-            const total = subtotal + totalDelivery + adminFee;
+            const deliveryFee = getDeliveryFeeForCart();
+            const total = subtotal + deliveryFee + adminFee;
 
             const badge = document.getElementById('cartCountBadge');
             badge.textContent = cnt;
@@ -2070,55 +2071,20 @@
 
             document.getElementById('subtotalAmount').textContent = subtotal.toFixed(2);
             document.getElementById('cartModalTotal').textContent = fPrice(total);
-            document.getElementById('totalDeliveryFee').textContent = totalDelivery.toFixed(2);
+            document.getElementById('totalDeliveryFee').textContent = deliveryFee.toFixed(2);
             document.getElementById('totalAdminFee').textContent = adminFee.toFixed(2);
 
-            updateDeliveryFeesPerSection();
-            renderCartItems();
-            updateCartSectionsSummary();
-        }
-
-        function updateDeliveryFeesPerSection() {
+            // عرض رسوم التوصيل حسب المنطقة
             const container = document.getElementById('deliveryFeesContainer');
-            const items = getCartItems();
-            
-            const sections = {};
-            items.forEach(item => {
-                if (!sections[item.category]) {
-                    sections[item.category] = { items: [], subtotal: 0 };
-                }
-                sections[item.category].items.push(item);
-                sections[item.category].subtotal += item.lineTotal;
-            });
-
-            const sectionKeys = Object.keys(sections);
-            if (sectionKeys.length === 0) {
-                container.innerHTML = `<div><span>📦 رسوم توصيل</span><span>${DELIVERY_FEE.toFixed(2)}</span> ج.م</div>`;
-                return;
-            }
-
-            let html = '';
-            let totalDelivery = 0;
-            sectionKeys.forEach((section, index) => {
-                const fee = DELIVERY_FEE;
-                totalDelivery += fee;
-                html += `
-                    <div class="fee-row" style="background: ${index % 2 === 0 ? '#f1f8e9' : '#fff'};">
-                        <span class="fee-section">📦 ${section}</span>
-                        <span>${fee.toFixed(2)} ج.م</span>
-                    </div>
-                `;
-            });
-
-            html += `
-                <div style="border-top:1px dashed #ddd;padding-top:4px;margin-top:4px;font-weight:600;display:flex;justify-content:space-between;">
-                    <span>📦 إجمالي رسوم التوصيل</span>
-                    <span>${totalDelivery.toFixed(2)} ج.م</span>
+            container.innerHTML = `
+                <div class="fee-row" style="background:#f1f8e9;">
+                    <span class="fee-section">📦 رسوم التوصيل (${selectedArea || 'المنطقة'})</span>
+                    <span>${deliveryFee.toFixed(2)} ج.م</span>
                 </div>
             `;
 
-            container.innerHTML = html;
-            document.getElementById('totalDeliveryFee').textContent = totalDelivery.toFixed(2);
+            renderCartItems();
+            updateCartSectionsSummary();
         }
 
         function renderCartItems() {
@@ -2176,19 +2142,12 @@
             `).join('');
 
             const feesContainer = document.getElementById('pdfDeliveryFees');
-            if (orderData.deliveryFees && orderData.deliveryFees.length > 0) {
-                feesContainer.innerHTML = orderData.deliveryFees.map(f => `
-                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
-                        <span>📦 ${f.section}</span>
-                        <span>${fPrice(f.fee)}</span>
-                    </div>
-                `).join('');
-            } else {
-                feesContainer.innerHTML = `<div style="display:flex;justify-content:space-between;padding:2px 0;">
-                    <span>📦 رسوم توصيل</span>
-                    <span>${fPrice(orderData.totalDelivery)}</span>
-                </div>`;
-            }
+            feesContainer.innerHTML = `
+                <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                    <span>📦 رسوم التوصيل (${orderData.area || selectedArea})</span>
+                    <span>${fPrice(orderData.deliveryFee)}</span>
+                </div>
+            `;
 
             const preview = document.getElementById('pdfPreview');
             const pdfElement = document.getElementById('pdfInvoice');
@@ -2214,12 +2173,12 @@
         }
 
         // ============================================================
-        // الدفع
+        // الدفع - تحديث نظام التوصيل
         // ============================================================
         function openCheckout() {
             if (getCartCount() === 0) return;
             if (!isOpenNow()) {
-                showToast('⏰ التطبيق يعمل من 7 صباحاً حتى 11 مساءً');
+                showToast('⏰ التطبيق يعمل من 9 صباحاً حتى 12 منتصف الليل');
                 return;
             }
             
@@ -2238,7 +2197,6 @@
 
         function closeCheckout() {
             document.getElementById('checkoutModal').classList.remove('open');
-            // Reset file input
             document.getElementById('transferImage').value = '';
             document.getElementById('fileName').textContent = 'لا يوجد ملف';
             selectedFile = null;
@@ -2254,7 +2212,7 @@
             e.preventDefault();
 
             if (!isOpenNow()) {
-                showToast('⏰ التطبيق يعمل من 7 صباحاً حتى 11 مساءً');
+                showToast('⏰ التطبيق يعمل من 9 صباحاً حتى 12 منتصف الليل');
                 return;
             }
 
@@ -2275,19 +2233,8 @@
 
             const subtotal = getSubtotal();
             const adminFee = getAdminFee(subtotal);
-            
-            const items = getCartItems();
-            const sections = {};
-            items.forEach(item => {
-                if (!sections[item.category]) {
-                    sections[item.category] = { items: [], subtotal: 0 };
-                }
-                sections[item.category].items.push(item);
-                sections[item.category].subtotal += item.lineTotal;
-            });
-            
-            const totalDelivery = Object.keys(sections).length * DELIVERY_FEE;
-            const total = subtotal + totalDelivery + adminFee;
+            const deliveryFee = getDeliveryFeeByArea(area);
+            const total = subtotal + deliveryFee + adminFee;
 
             const paymentLabels = {
                 vodafone: '📱 فودافون كاش (01002811810)',
@@ -2296,27 +2243,19 @@
             const payLabel = paymentLabels[payment] || 'لم يحدد';
 
             let itemsText = '';
+            const items = getCartItems();
             items.forEach(i => {
                 itemsText += `*${i.quantity}× ${i.product}* – ${fPrice(i.lineTotal)} (${i.category})\n`;
-            });
-
-            let feesText = '';
-            const deliveryFeesList = [];
-            Object.keys(sections).forEach(section => {
-                feesText += `📦 رسوم توصيل ${section}: ${DELIVERY_FEE.toFixed(2)} ج.م\n`;
-                deliveryFeesList.push({ section: section, fee: DELIVERY_FEE });
             });
 
             const categoryName = categories.find(c => c.id === currentCategoryId)?.name || 'غير محدد';
             const orderNumber = String(orderCounter).padStart(4, '0');
             
-            // Prepare location text
             let locationText = '';
             if (location) {
                 locationText = `📍 الموقع: https://www.google.com/maps?q=${lat},${lng}\n`;
             }
             
-            // Image upload info
             let imageText = '';
             if (selectedFile) {
                 imageText = `🖼️ صورة التحويل: ${selectedFile.name}\n`;
@@ -2332,10 +2271,9 @@
                 `💳 ${payLabel}\n` +
                 `${imageText}` +
                 `\n*المنتجات:*\n${itemsText}\n` +
-                `${feesText}` +
+                `📦 رسوم التوصيل (${area}): ${deliveryFee.toFixed(2)} ج.م\n` +
                 `المجموع الفرعي: ${fPrice(subtotal)}\n` +
                 `💰 مصاريف إدارية (1%): ${fPrice(adminFee)}\n` +
-                `📦 إجمالي رسوم التوصيل: ${fPrice(totalDelivery)}\n` +
                 `💰 *الإجمالي:* ${fPrice(total)}`;
 
             window.open(`https://wa.me/${YOUR_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
@@ -2348,19 +2286,19 @@
                 name: name,
                 phone: phone,
                 address: address + ' - ' + area,
+                area: area,
                 location: location ? `https://www.google.com/maps?q=${lat},${lng}` : 'لم يتم تحديده',
                 payment: payLabel,
                 subtotal: subtotal,
                 adminFee: adminFee,
-                totalDelivery: totalDelivery,
+                deliveryFee: deliveryFee,
                 total: total,
                 items: items.map(i => ({
                     product: i.product,
                     quantity: i.quantity,
                     unitPrice: i.unitPrice,
                     lineTotal: i.lineTotal
-                })),
-                deliveryFees: deliveryFeesList
+                }))
             };
 
             const orderEntry = {
@@ -2393,7 +2331,7 @@
                 notes: `القسم: ${categoryName} | ${notes}`,
                 items: items.map(i => `${i.product} (${i.quantity})`).join(', '),
                 subtotal: subtotal,
-                delivery_fee: totalDelivery,
+                delivery_fee: deliveryFee,
                 admin_fee: adminFee,
                 total: total,
                 transfer_image: selectedFile ? selectedFile.name : '',
@@ -2411,10 +2349,8 @@
                 console.log('Sheet send error:', e);
             }
 
-            // Show PDF
             generatePDF(pdfData);
 
-            // Reset file input
             document.getElementById('transferImage').value = '';
             document.getElementById('fileName').textContent = 'لا يوجد ملف';
             selectedFile = null;
@@ -2459,6 +2395,5 @@
 
         setInterval(isOpenNow, 60000);
     </script>
-
 </body>
 </html>
