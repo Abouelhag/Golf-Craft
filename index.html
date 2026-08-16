@@ -520,19 +520,12 @@
             background: rgba(255,255,255,0.95);
             padding: 10px 16px;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
             border-bottom: 1px solid #eee;
             position: sticky;
             top: 60px;
             z-index: 50;
-        }
-        .back-bar .top-row {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            justify-content: space-between;
         }
         .back-bar .shop-name {
             font-weight: 700;
@@ -545,31 +538,6 @@
             font-size: 0.85rem;
             color: var(--green);
             font-weight: 600;
-        }
-        .back-bar .back-btn {
-            background: var(--green);
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 28px;
-            font-weight: 700;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 2px;
-        }
-        .back-bar .back-btn:hover {
-            background: var(--green-dark);
-        }
-        .back-bar .back-btn:active {
-            transform: scale(0.97);
         }
         .product-grid {
             display: grid;
@@ -675,6 +643,37 @@
             min-width: 28px;
             text-align: center;
             color: var(--green-dark);
+        }
+        /* زر الرجوع في أسفل الصفحة */
+        .back-bottom {
+            display: flex;
+            justify-content: center;
+            padding: 16px 14px 20px;
+            grid-column: 1 / -1;
+        }
+        .back-bottom .back-btn {
+            background: var(--green);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .back-bottom .back-btn:hover {
+            background: var(--green-dark);
+        }
+        .back-bottom .back-btn:active {
+            transform: scale(0.97);
         }
         .cart-bar {
             position: fixed;
@@ -789,6 +788,10 @@
             margin-bottom: 4px;
             color: #666;
         }
+        .form-group label .required-star {
+            color: var(--red);
+            margin-right: 2px;
+        }
         .form-group input,
         .form-group textarea,
         .form-group select {
@@ -824,6 +827,44 @@
             font-size: 0.75rem;
             color: #888;
             margin-top: 4px;
+        }
+        .form-group .location-status.success {
+            color: var(--green);
+            font-weight: 600;
+        }
+        .form-group .location-status.error {
+            color: var(--red);
+        }
+        .file-upload-wrapper {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            background: #fafafa;
+        }
+        .file-upload-wrapper.has-file {
+            border-color: var(--green);
+            background: #e8f5e9;
+        }
+        .file-upload-wrapper .file-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .file-upload-wrapper .file-text {
+            font-size: 0.8rem;
+            color: #888;
+        }
+        .file-upload-wrapper .file-name {
+            font-size: 0.8rem;
+            color: var(--green-dark);
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        .file-upload-wrapper input[type="file"] {
+            display: none;
         }
         .btn-group {
             display: flex;
@@ -925,36 +966,6 @@
             border-radius: 10px;
             margin-top: 5px;
             margin-bottom: 10px;
-        }
-        .file-upload-wrapper {
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 16px;
-            text-align: center;
-            cursor: pointer;
-            transition: border-color 0.2s;
-            background: #fafafa;
-        }
-        .file-upload-wrapper:hover {
-            border-color: var(--green);
-        }
-        .file-upload-wrapper .file-icon {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .file-upload-wrapper .file-text {
-            font-size: 0.8rem;
-            color: #888;
-        }
-        .file-upload-wrapper .file-name {
-            font-size: 0.8rem;
-            color: var(--green-dark);
-            font-weight: 600;
-            margin-top: 4px;
-        }
-        .file-upload-wrapper input[type="file"] {
-            display: none;
         }
         .user-menu-item {
             display: flex;
@@ -1126,7 +1137,7 @@
             .product-card .emoji { font-size: 2.2rem; }
             .product-card .p-name { font-size: 0.8rem; }
             .product-card .p-price { font-size: 0.85rem; }
-            .back-bar .back-btn { font-size: 0.85rem; padding: 10px 16px; max-width: 100%; }
+            .back-bottom .back-btn { font-size: 0.85rem; padding: 10px 16px; max-width: 100%; }
             .back-bar .shop-name { font-size: 1rem; }
             #pdfInvoice .invoice-details { flex-direction: column; }
             .cart-sections-summary .section-tag { font-size: 0.65rem; padding: 3px 10px 3px 8px; }
@@ -1238,13 +1249,14 @@
         <!-- ===== شاشة المنتجات ===== -->
         <div id="productsScreen">
             <div class="back-bar">
-                <div class="top-row">
-                    <span class="shop-name" id="shopNameLabel">المنتجات</span>
-                    <span class="cart-status" id="cartStatus">🛒 0</span>
-                </div>
-                <button class="back-btn" onclick="showCategories()">🏠 الرجوع للقائمة الرئيسية</button>
+                <span class="shop-name" id="shopNameLabel">المنتجات</span>
+                <span class="cart-status" id="cartStatus">🛒 0</span>
             </div>
             <div class="product-grid" id="productGrid"></div>
+            <!-- زر الرجوع في أسفل الصفحة -->
+            <div class="back-bottom">
+                <button class="back-btn" onclick="showCategories()">🏠 الرجوع للقائمة الرئيسية</button>
+            </div>
         </div>
 
         <!-- شريط السلة -->
@@ -1307,9 +1319,9 @@
                     <textarea id="custAddress" rows="2" placeholder="أدخل عنوانك التفصيلي"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>📍 موقعك على الخريطة (اختياري)</label>
+                    <label>📍 موقعك على الخريطة <span class="required-star">*</span></label>
                     <button type="button" class="location-btn" onclick="getLocation()">📍 الحصول على الموقع</button>
-                    <div class="location-status" id="locationStatus">لم يتم تحديد الموقع</div>
+                    <div class="location-status" id="locationStatus">لم يتم تحديد الموقع (إلزامي)</div>
                     <input type="hidden" id="custLat" value="">
                     <input type="hidden" id="custLng" value="">
                     <input type="hidden" id="custLocation" value="">
@@ -1331,10 +1343,10 @@
                     رقم إنستاباي: <b>01555089905</b>
                 </div>
                 <div class="form-group">
-                    <label>🖼️ صورة التحويل (اختياري)</label>
-                    <div class="file-upload-wrapper" onclick="document.getElementById('transferImage').click()">
+                    <label>🖼️ صورة التحويل <span class="required-star">*</span></label>
+                    <div class="file-upload-wrapper" id="fileUploadWrapper" onclick="document.getElementById('transferImage').click()">
                         <span class="file-icon">📎</span>
-                        <div class="file-text">اضغط لرفع صورة التحويل</div>
+                        <div class="file-text">اضغط لرفع صورة التحويل (إلزامي)</div>
                         <div class="file-name" id="fileName">لا يوجد ملف</div>
                         <input type="file" id="transferImage" accept="image/*" capture="environment">
                     </div>
@@ -1492,7 +1504,6 @@
         // ============================================================
         // البيانات - المطاعم والمنتجات (المطاعم أولاً)
         // ============================================================
-        // جعل المطاعم أول عنصر في القائمة
         const categories = [
             { id: 'restaurants_main', name: 'مطاعم', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant_main'] },
             { id: 'grocery', name: 'بقالة', emoji: '🛒', bgImage: 'https://i.ibb.co/Gr5bjBr/grocery-main-1.jpg', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
@@ -1690,14 +1701,16 @@
         }
 
         // ============================================================
-        // دوال الموقع
+        // دوال الموقع (إلزامي)
         // ============================================================
         function getLocation() {
             if (!navigator.geolocation) {
                 document.getElementById('locationStatus').textContent = '❌ متصفحك لا يدعم تحديد الموقع';
+                document.getElementById('locationStatus').className = 'location-status error';
                 return;
             }
             document.getElementById('locationStatus').textContent = '⏳ جاري تحديد الموقع...';
+            document.getElementById('locationStatus').className = 'location-status';
             navigator.geolocation.getCurrentPosition(
                 function(position) {
                     const lat = position.coords.latitude;
@@ -1706,27 +1719,31 @@
                     document.getElementById('custLng').value = lng;
                     document.getElementById('custLocation').value = lat + ',' + lng;
                     document.getElementById('locationStatus').textContent = '✅ تم تحديد الموقع: ' + lat.toFixed(6) + ', ' + lng.toFixed(6);
+                    document.getElementById('locationStatus').className = 'location-status success';
                     showToast('✅ تم تحديد موقعك بنجاح');
                 },
                 function(error) {
                     document.getElementById('locationStatus').textContent = '❌ فشل تحديد الموقع: ' + error.message;
+                    document.getElementById('locationStatus').className = 'location-status error';
                     showToast('❌ فشل تحديد الموقع');
                 }
             );
         }
 
         // ============================================================
-        // دوال رفع الصورة
+        // دوال رفع الصورة (إلزامي)
         // ============================================================
         document.getElementById('transferImage').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 selectedFile = file;
                 document.getElementById('fileName').textContent = '📷 ' + file.name;
+                document.getElementById('fileUploadWrapper').classList.add('has-file');
                 showToast('✅ تم رفع الصورة: ' + file.name);
             } else {
                 selectedFile = null;
                 document.getElementById('fileName').textContent = 'لا يوجد ملف';
+                document.getElementById('fileUploadWrapper').classList.remove('has-file');
             }
         });
 
@@ -2236,7 +2253,7 @@
         }
 
         // ============================================================
-        // الدفع
+        // الدفع - مع التحقق من إلزامية الموقع والصورة
         // ============================================================
         function openCheckout() {
             if (getCartCount() === 0) return;
@@ -2261,6 +2278,14 @@
                 document.getElementById('custAddress').value = userData.address || '';
             }
             document.getElementById('custArea').value = selectedArea;
+            
+            // إعادة تعيين حالة الموقع والصورة عند فتح المودال
+            document.getElementById('locationStatus').textContent = 'لم يتم تحديد الموقع (إلزامي)';
+            document.getElementById('locationStatus').className = 'location-status';
+            document.getElementById('custLocation').value = '';
+            document.getElementById('custLat').value = '';
+            document.getElementById('custLng').value = '';
+            
             document.getElementById('checkoutModal').classList.add('open');
         }
 
@@ -2268,6 +2293,7 @@
             document.getElementById('checkoutModal').classList.remove('open');
             document.getElementById('transferImage').value = '';
             document.getElementById('fileName').textContent = 'لا يوجد ملف';
+            document.getElementById('fileUploadWrapper').classList.remove('has-file');
             selectedFile = null;
             showCategories();
             cart = {};
@@ -2285,13 +2311,29 @@
                 return;
             }
 
+            // التحقق من إلزامية الموقع
+            const location = document.getElementById('custLocation').value;
+            if (!location) {
+                showToast('⚠️ من فضلك حدد موقعك على الخريطة (إلزامي)');
+                document.getElementById('locationStatus').textContent = '❌ الموقع مطلوب لإتمام الطلب';
+                document.getElementById('locationStatus').className = 'location-status error';
+                return;
+            }
+
+            // التحقق من إلزامية صورة التحويل
+            if (!selectedFile) {
+                showToast('⚠️ من فضلك ارفع صورة التحويل (إلزامي)');
+                document.getElementById('fileUploadWrapper').style.borderColor = 'var(--red)';
+                return;
+            }
+            document.getElementById('fileUploadWrapper').style.borderColor = '';
+
             const name = document.getElementById('custName').value.trim() || (userData ? userData.name : '') || 'عميل';
             const phone = document.getElementById('custPhone').value.trim() || (userData ? userData.phone : '') || 'غير محدد';
             const area = document.getElementById('custArea').value;
             const address = document.getElementById('custAddress').value.trim() || (userData ? userData.address : '') || 'غير محدد';
             const payment = document.getElementById('paymentMethod').value;
             const notes = document.getElementById('custNotes').value.trim();
-            const location = document.getElementById('custLocation').value || '';
             const lat = document.getElementById('custLat').value || '';
             const lng = document.getElementById('custLng').value || '';
 
@@ -2421,6 +2463,7 @@
             generatePDF(pdfData);
             document.getElementById('transferImage').value = '';
             document.getElementById('fileName').textContent = 'لا يوجد ملف';
+            document.getElementById('fileUploadWrapper').classList.remove('has-file');
             selectedFile = null;
 
             cart = {};
