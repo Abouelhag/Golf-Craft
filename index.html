@@ -1037,7 +1037,8 @@
         .toast.show {
             opacity: 1;
         }
-        #pdfInvoice {
+        /* تنسيق PDF داخل المعاينة */
+        #pdfPreview {
             direction: rtl;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
@@ -1045,22 +1046,22 @@
             max-width: 800px;
             margin: 0 auto;
         }
-        #pdfInvoice .invoice-header {
+        #pdfPreview .invoice-header {
             text-align: center;
             border-bottom: 3px solid var(--green);
             padding-bottom: 15px;
             margin-bottom: 20px;
         }
-        #pdfInvoice .invoice-header h1 {
+        #pdfPreview .invoice-header h1 {
             color: var(--green-dark);
             font-size: 2rem;
             margin-bottom: 4px;
         }
-        #pdfInvoice .invoice-header .sub {
+        #pdfPreview .invoice-header .sub {
             color: #666;
             font-size: 0.9rem;
         }
-        #pdfInvoice .invoice-details {
+        #pdfPreview .invoice-details {
             display: flex;
             justify-content: space-between;
             background: #f8f9fa;
@@ -1070,46 +1071,46 @@
             flex-wrap: wrap;
             gap: 8px;
         }
-        #pdfInvoice .invoice-details div {
+        #pdfPreview .invoice-details div {
             font-size: 0.85rem;
         }
-        #pdfInvoice .invoice-details strong {
+        #pdfPreview .invoice-details strong {
             color: var(--green-dark);
         }
-        #pdfInvoice table {
+        #pdfPreview table {
             width: 100%;
             border-collapse: collapse;
             margin: 12px 0;
         }
-        #pdfInvoice table th {
+        #pdfPreview table th {
             background: var(--green);
             color: #fff;
             padding: 10px 12px;
             text-align: center;
             font-size: 0.85rem;
         }
-        #pdfInvoice table td {
+        #pdfPreview table td {
             padding: 8px 12px;
             text-align: center;
             border-bottom: 1px solid #eee;
             font-size: 0.85rem;
         }
-        #pdfInvoice table tr:nth-child(even) {
+        #pdfPreview table tr:nth-child(even) {
             background: #f8f9fa;
         }
-        #pdfInvoice .totals {
+        #pdfPreview .totals {
             margin-top: 12px;
             padding: 12px 16px;
             background: #f8f9fa;
             border-radius: 8px;
         }
-        #pdfInvoice .totals div {
+        #pdfPreview .totals div {
             display: flex;
             justify-content: space-between;
             padding: 3px 0;
             font-size: 0.9rem;
         }
-        #pdfInvoice .totals .grand-total {
+        #pdfPreview .totals .grand-total {
             border-top: 2px solid var(--green);
             padding-top: 8px;
             margin-top: 4px;
@@ -1117,7 +1118,7 @@
             font-size: 1.1rem;
             color: var(--green-dark);
         }
-        #pdfInvoice .footer {
+        #pdfPreview .footer {
             text-align: center;
             margin-top: 20px;
             padding-top: 12px;
@@ -1125,7 +1126,6 @@
             font-size: 0.8rem;
             color: #888;
         }
-        /* إضافة تنسيق الصورة في PDF */
         .pdf-logo {
             width: 60px;
             height: 60px;
@@ -1145,7 +1145,7 @@
             .product-card .p-price { font-size: 0.85rem; }
             .back-bottom .back-btn { font-size: 0.85rem; padding: 10px 16px; max-width: 100%; }
             .back-bar .shop-name { font-size: 1rem; }
-            #pdfInvoice .invoice-details { flex-direction: column; }
+            #pdfPreview .invoice-details { flex-direction: column; }
             .cart-sections-summary .section-tag { font-size: 0.65rem; padding: 3px 10px 3px 8px; }
             .cart-sections-summary .section-tag .count { width: 16px; height: 16px; font-size: 0.5rem; }
             .qty-control .qty-btn { width: 30px; height: 30px; font-size: 1.2rem; }
@@ -1381,24 +1381,24 @@
         </div>
     </div>
 
-    <!-- ===== PDF Invoice (Hidden - used as template) ===== -->
+    <!-- ===== قالب الفاتورة المخفي (يستخدم كمرجع فقط) ===== -->
     <div id="pdfInvoice" style="display:none;">
         <div class="invoice-header">
             <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار جولف كرافت" class="pdf-logo">
             <h1>🧾 جولف كرافت</h1>
-            <div class="sub">فاتورة طلب رقم #<span id="pdfOrderNumber">0000</span></div>
+            <div class="sub">فاتورة طلب رقم #<span class="order-number">0000</span></div>
         </div>
         <div class="invoice-details">
-            <div><strong>📅 التاريخ:</strong> <span id="pdfDate"></span></div>
-            <div><strong>🕐 الوقت:</strong> <span id="pdfTime"></span></div>
-            <div><strong>📂 القسم:</strong> <span id="pdfCategory"></span></div>
+            <div><strong>📅 التاريخ:</strong> <span class="invoice-date"></span></div>
+            <div><strong>🕐 الوقت:</strong> <span class="invoice-time"></span></div>
+            <div><strong>📂 القسم:</strong> <span class="invoice-category"></span></div>
         </div>
         <div style="background:#f1f8e9; padding:10px 14px; border-radius:8px; margin-bottom:14px; border-right:3px solid var(--green);">
-            <div><strong>👤 العميل:</strong> <span id="pdfName"></span></div>
-            <div><strong>📞 الهاتف:</strong> <span id="pdfPhone"></span></div>
-            <div><strong>📍 العنوان:</strong> <span id="pdfAddress"></span></div>
-            <div><strong>📍 الموقع:</strong> <span id="pdfLocation"></span></div>
-            <div><strong>💳 طريقة الدفع:</strong> <span id="pdfPayment"></span></div>
+            <div><strong>👤 العميل:</strong> <span class="invoice-name"></span></div>
+            <div><strong>📞 الهاتف:</strong> <span class="invoice-phone"></span></div>
+            <div><strong>📍 العنوان:</strong> <span class="invoice-address"></span></div>
+            <div><strong>📍 الموقع:</strong> <span class="invoice-location"></span></div>
+            <div><strong>💳 طريقة الدفع:</strong> <span class="invoice-payment"></span></div>
         </div>
         <table>
             <thead>
@@ -1410,13 +1410,13 @@
                     <th>الإجمالي</th>
                 </tr>
             </thead>
-            <tbody id="pdfItemsBody"></tbody>
+            <tbody class="invoice-items-body"></tbody>
         </table>
         <div class="totals">
-            <div><span>المجموع الفرعي</span><span id="pdfSubtotal">0.00 ج.م</span></div>
-            <div id="pdfDeliveryFees"></div>
-            <div><span>💰 مصاريف إدارية (1%)</span><span id="pdfAdminFee">0.00 ج.م</span></div>
-            <div class="grand-total"><span>💰 الإجمالي</span><span id="pdfTotal">0.00 ج.م</span></div>
+            <div><span>المجموع الفرعي</span><span class="invoice-subtotal">0.00 ج.م</span></div>
+            <div class="invoice-delivery-fees"></div>
+            <div><span>💰 مصاريف إدارية (1%)</span><span class="invoice-admin-fee">0.00 ج.م</span></div>
+            <div class="grand-total"><span>💰 الإجمالي</span><span class="invoice-total">0.00 ج.م</span></div>
         </div>
         <div class="footer">
             📍 التوصيل داخل مدينة العبور فقط | 🕓 من 9 صباحاً حتى 12 منتصف الليل<br>
@@ -2199,57 +2199,84 @@
         }
 
         // ============================================================
-        // دوال PDF (تم إصلاحها لاستخدام عنصر المعاينة)
+        // دوال PDF (تعمل مباشرة على عنصر المعاينة)
         // ============================================================
         function generatePDF(orderData) {
             currentPdfData = orderData;
             
-            // تحديث عناصر القالب المخفي
-            document.getElementById('pdfOrderNumber').textContent = orderData.orderNumber;
-            document.getElementById('pdfDate').textContent = orderData.date;
-            document.getElementById('pdfTime').textContent = orderData.time;
-            document.getElementById('pdfCategory').textContent = orderData.category;
-            document.getElementById('pdfName').textContent = orderData.name;
-            document.getElementById('pdfPhone').textContent = orderData.phone;
-            document.getElementById('pdfAddress').textContent = orderData.address;
-            document.getElementById('pdfLocation').textContent = orderData.location || 'لم يتم تحديده';
-            document.getElementById('pdfPayment').textContent = orderData.payment;
-            document.getElementById('pdfSubtotal').textContent = fPrice(orderData.subtotal);
-            document.getElementById('pdfAdminFee').textContent = fPrice(orderData.adminFee);
-            document.getElementById('pdfTotal').textContent = fPrice(orderData.total);
-
-            const tbody = document.getElementById('pdfItemsBody');
-            tbody.innerHTML = orderData.items.map((item, index) => `
-                <tr>
-                    <td>${index + 1}</td>
-                    <td>${item.product}</td>
-                    <td>${item.quantity}</td>
-                    <td>${fPrice(item.unitPrice)}</td>
-                    <td>${fPrice(item.lineTotal)}</td>
-                </tr>
-            `).join('');
-
-            const feesContainer = document.getElementById('pdfDeliveryFees');
-            feesContainer.innerHTML = `
-                <div style="display:flex;justify-content:space-between;padding:2px 0;">
-                    <span>📦 رسوم التوصيل (${orderData.area || selectedArea})</span>
-                    <span>${fPrice(orderData.deliveryFee)}</span>
+            // الحصول على عنصر المعاينة
+            const preview = document.getElementById('pdfPreview');
+            
+            // بناء محتوى الفاتورة يدوياً داخل المعاينة
+            let html = `
+                <div class="invoice-header">
+                    <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار جولف كرافت" class="pdf-logo">
+                    <h1>🧾 جولف كرافت</h1>
+                    <div class="sub">فاتورة طلب رقم #${orderData.orderNumber}</div>
+                </div>
+                <div class="invoice-details">
+                    <div><strong>📅 التاريخ:</strong> ${orderData.date}</div>
+                    <div><strong>🕐 الوقت:</strong> ${orderData.time}</div>
+                    <div><strong>📂 القسم:</strong> ${orderData.category}</div>
+                </div>
+                <div style="background:#f1f8e9; padding:10px 14px; border-radius:8px; margin-bottom:14px; border-right:3px solid var(--green);">
+                    <div><strong>👤 العميل:</strong> ${orderData.name}</div>
+                    <div><strong>📞 الهاتف:</strong> ${orderData.phone}</div>
+                    <div><strong>📍 العنوان:</strong> ${orderData.address}</div>
+                    <div><strong>📍 الموقع:</strong> ${orderData.location || 'لم يتم تحديده'}</div>
+                    <div><strong>💳 طريقة الدفع:</strong> ${orderData.payment}</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>المنتج</th>
+                            <th>الكمية</th>
+                            <th>السعر</th>
+                            <th>الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            orderData.items.forEach((item, index) => {
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${item.product}</td>
+                        <td>${item.quantity}</td>
+                        <td>${fPrice(item.unitPrice)}</td>
+                        <td>${fPrice(item.lineTotal)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                    </tbody>
+                </table>
+                <div class="totals">
+                    <div><span>المجموع الفرعي</span><span>${fPrice(orderData.subtotal)}</span></div>
+                    <div style="display:flex;justify-content:space-between;padding:2px 0;">
+                        <span>📦 رسوم التوصيل (${orderData.area || selectedArea})</span>
+                        <span>${fPrice(orderData.deliveryFee)}</span>
+                    </div>
+                    <div><span>💰 مصاريف إدارية (1%)</span><span>${fPrice(orderData.adminFee)}</span></div>
+                    <div class="grand-total"><span>💰 الإجمالي</span><span>${fPrice(orderData.total)}</span></div>
+                </div>
+                <div class="footer">
+                    📍 التوصيل داخل مدينة العبور فقط | 🕓 من 9 صباحاً حتى 12 منتصف الليل<br>
+                    شكراً لتسوقكم مع جولف كرافت ❤️
                 </div>
             `;
-
-            // نسخ المحتوى إلى عنصر المعاينة المرئي
-            const preview = document.getElementById('pdfPreview');
-            const pdfElement = document.getElementById('pdfInvoice');
-            preview.innerHTML = pdfElement.innerHTML;
             
-            // فتح المودال
+            preview.innerHTML = html;
             document.getElementById('pdfModal').classList.add('open');
         }
 
-        // تحميل PDF باستخدام عنصر المعاينة بدلاً من العنصر المخفي
+        // تحميل PDF باستخدام عنصر المعاينة
         function downloadPDF() {
             const element = document.getElementById('pdfPreview');
-            if (!element) {
+            if (!element || !element.innerHTML.trim()) {
                 showToast('❌ لا توجد فاتورة للتحميل');
                 return;
             }
