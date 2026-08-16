@@ -520,46 +520,55 @@
             background: rgba(255,255,255,0.95);
             padding: 10px 16px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             border-bottom: 1px solid #eee;
             position: sticky;
             top: 60px;
             z-index: 50;
         }
-        .back-bar .back-btn {
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: #333;
-            padding: 4px 8px;
-            transition: color 0.2s;
+        .back-bar .top-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(76, 175, 80, 0.08);
-        }
-        .back-bar .back-btn:hover {
-            color: var(--green);
-            background: rgba(76, 175, 80, 0.18);
-        }
-        .back-bar .back-btn:active {
-            transform: scale(0.92);
+            width: 100%;
+            justify-content: space-between;
         }
         .back-bar .shop-name {
             font-weight: 700;
             font-size: 1.3rem;
             color: var(--green-dark);
             flex: 1;
+            text-align: center;
         }
         .back-bar .cart-status {
             font-size: 0.85rem;
             color: var(--green);
             font-weight: 600;
+        }
+        .back-bar .back-btn {
+            background: var(--green);
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .back-bar .back-btn:hover {
+            background: var(--green-dark);
+        }
+        .back-bar .back-btn:active {
+            transform: scale(0.97);
         }
         .product-grid {
             display: grid;
@@ -619,23 +628,6 @@
             color: var(--green-dark);
             margin: 4px 0;
         }
-        .product-card .add-btn {
-            margin-top: 6px;
-            background: var(--green);
-            color: #fff;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            width: 100%;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .product-card .add-btn.in-cart {
-            background: var(--orange);
-        }
-        /* ===== أزرار + و - ===== */
         .qty-control {
             display: flex;
             align-items: center;
@@ -1133,7 +1125,7 @@
             .product-card .emoji { font-size: 2.2rem; }
             .product-card .p-name { font-size: 0.8rem; }
             .product-card .p-price { font-size: 0.85rem; }
-            .back-bar .back-btn { font-size: 1.5rem; width: 38px; height: 38px; }
+            .back-bar .back-btn { font-size: 0.85rem; padding: 10px 16px; max-width: 100%; }
             .back-bar .shop-name { font-size: 1rem; }
             #pdfInvoice .invoice-details { flex-direction: column; }
             .cart-sections-summary .section-tag { font-size: 0.65rem; padding: 3px 10px 3px 8px; }
@@ -1245,9 +1237,11 @@
         <!-- ===== شاشة المنتجات ===== -->
         <div id="productsScreen">
             <div class="back-bar">
-                <button class="back-btn" onclick="showCategories()">➜</button>
-                <span class="shop-name" id="shopNameLabel">المنتجات</span>
-                <span class="cart-status" id="cartStatus">🛒 0</span>
+                <div class="top-row">
+                    <span class="shop-name" id="shopNameLabel">المنتجات</span>
+                    <span class="cart-status" id="cartStatus">🛒 0</span>
+                </div>
+                <button class="back-btn" onclick="showCategories()">🏠 الرجوع للقائمة الرئيسية</button>
             </div>
             <div class="product-grid" id="productGrid"></div>
         </div>
@@ -1498,7 +1492,6 @@
         // البيانات - المطاعم والمنتجات
         // ============================================================
         const categories = [
-            // الأقسام الأصلية
             { id: 'grocery', name: 'بقالة', emoji: '🛒', bgImage: 'https://i.ibb.co/Gr5bjBr/grocery-main-1.jpg', categories: ['dairy', 'pantry', 'beverages', 'cleaning'] },
             { id: 'vegetables', name: 'خضار وفاكهة', emoji: '🥬', bgImage: 'https://i.ibb.co/rGYk6S2p/1.jpg', categories: ['fruits', 'vegetables'] },
             { id: 'meat', name: 'لحوم', emoji: '🥩', bgImage: 'https://i.ibb.co/1tn52HjX/1.jpg', categories: ['meat'] },
@@ -1506,11 +1499,9 @@
             { id: 'coffee', name: 'بن', emoji: '☕', bgImage: 'https://i.ibb.co/My5KmmTB/1.jpg', categories: ['coffee'] },
             { id: 'roastery', name: 'محمصات', emoji: '🥜', bgImage: 'https://i.ibb.co/Qj3zfG96/1.jpg', categories: ['snacks'] },
             { id: 'spices', name: 'عطارة', emoji: '🌿', bgImage: 'https://i.ibb.co/GfxfwGp3/1.jpg', categories: ['spices'] },
-            // قسم المطاعم الرئيسي
             { id: 'restaurants_main', name: 'مطاعم', emoji: '🍽️', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', categories: ['restaurant_main'] }
         ];
 
-        // المطاعم الفرعية (تظهر كأيقونات عند النقر على مطاعم)
         const restaurantCategories = [
             { id: 'koshari_hend', name: 'كشري هند', emoji: '🍛', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
             { id: 'mahi', name: 'الماحي للمشويات', emoji: '🥩', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' },
@@ -1522,9 +1513,7 @@
             { id: 'marakbia', name: 'اسماك المراكبية', emoji: '🐟', bgImage: 'https://i.ibb.co/DDwqJCZ4/1.jpg', catId: 'restaurant_main' }
         ];
 
-        // المنتجات - إضافة منتجات لكل مطعم (سيتم إضافتها لاحقاً)
         const products = [
-            // المنتجات الأصلية
             { id: 14, name: 'بيض بلدي', emoji: '🥚', weight: '12 بيضة', price: 130.00, cat: 'dairy' },
             { id: 15, name: 'جبنة رومي', emoji: '🧀', weight: '1000 جم', price: 299.99, cat: 'dairy' },
             { id: 17, name: 'زبدة', emoji: '🧈', weight: '250 جم', price: 140.00, cat: 'dairy' },
@@ -1555,36 +1544,26 @@
             { id: 151, name: 'فول سوداني', emoji: '🥜', weight: '250 جم', price: 30.00, cat: 'snacks' },
             { id: 160, name: 'كمون', emoji: '🌿', weight: '100 جم', price: 15.00, cat: 'spices' },
             { id: 161, name: 'كزبرة', emoji: '🌿', weight: '100 جم', price: 12.00, cat: 'spices' },
-            
-            // منتجات المطاعم - سيتم إضافتها لاحقاً
-            // كشري هند
             { id: 1001, name: 'كشري', emoji: '🍛', weight: 'طبق', price: 25.00, cat: 'koshari_hend' },
             { id: 1002, name: 'كشري باللحمة', emoji: '🍛', weight: 'طبق', price: 45.00, cat: 'koshari_hend' },
-            // الماحي للمشويات
             { id: 2001, name: 'شيش طاووق', emoji: '🍗', weight: 'وجبة', price: 60.00, cat: 'mahi' },
             { id: 2002, name: 'كفتة مشوية', emoji: '🥩', weight: 'وجبة', price: 70.00, cat: 'mahi' },
-            // احلبي للشاورمه
             { id: 3001, name: 'شاورما دجاج', emoji: '🌯', weight: 'ساندوتش', price: 35.00, cat: 'halabi_shawarma' },
             { id: 3002, name: 'شاورما لحم', emoji: '🥙', weight: 'ساندوتش', price: 40.00, cat: 'halabi_shawarma' },
-            // حلويات تسيبس
             { id: 4001, name: 'كنافة', emoji: '🍰', weight: 'قطعة', price: 20.00, cat: 'tseebs' },
             { id: 4002, name: 'بسبوسة', emoji: '🍮', weight: 'قطعة', price: 15.00, cat: 'tseebs' },
-            // حلوي ابو لبن
             { id: 5001, name: 'مهلبية', emoji: '🍮', weight: 'كوب', price: 12.00, cat: 'abo_laban' },
             { id: 5002, name: 'أرز بلبن', emoji: '🍚', weight: 'كوب', price: 15.00, cat: 'abo_laban' },
-            // شاورمه الحلبي
             { id: 6001, name: 'شاورما سوري', emoji: '🌯', weight: 'ساندوتش', price: 38.00, cat: 'halabi_shawarma2' },
             { id: 6002, name: 'شاورما عربي', emoji: '🥙', weight: 'ساندوتش', price: 42.00, cat: 'halabi_shawarma2' },
-            // شاورما ارض الاحلام
             { id: 7001, name: 'شاورما مميزة', emoji: '🌯', weight: 'ساندوتش', price: 40.00, cat: 'ard_alahlam' },
             { id: 7002, name: 'وجبة شاورما', emoji: '🍱', weight: 'مع مشروب', price: 70.00, cat: 'ard_alahlam' },
-            // اسماك المراكبية
             { id: 8001, name: 'سمك مقلي', emoji: '🐟', weight: 'وجبة', price: 55.00, cat: 'marakbia' },
             { id: 8002, name: 'سمك مشوي', emoji: '🐟', weight: 'وجبة', price: 60.00, cat: 'marakbia' }
         ];
 
         // ============================================================
-        // الإعدادات - نظام التوصيل حسب المنطقة
+        // الإعدادات
         // ============================================================
         const GOOGLE_SHEET_WEBHOOK = 'https://script.google.com/macros/s/AKfycbz8PL-xRUeZ67lcg_NuydzF3o6Ds20L-6E-VItxnLCsRXUWRV7lVUjya7zmWi6qHws/exec';
         const YOUR_WHATSAPP = "201002811810";
@@ -1960,14 +1939,13 @@
         }
 
         // ============================================================
-        // شاشة المنتجات - مع دعم المطاعم الفرعية
+        // شاشة المنتجات
         // ============================================================
         function selectCategory(categoryId) {
             currentCategoryId = categoryId;
             currentRestaurantId = null;
             
             if (categoryId === 'restaurants_main') {
-                // عرض المطاعم الفرعية
                 renderRestaurants();
                 return;
             }
@@ -2048,7 +2026,6 @@
             updateUI();
             updateCartStatus();
             updateCartSectionsSummary();
-            // تحديث العرض
             const qtyEl = document.getElementById('qty_' + productId);
             if (qtyEl) qtyEl.textContent = newQty;
             const badge = document.querySelector(`.product-card[data-product-id="${productId}"] .qty-badge`);
