@@ -2199,7 +2199,7 @@
         }
 
         // ============================================================
-        // دوال PDF (تعمل مباشرة على عنصر المعاينة)
+        // دوال PDF - إعادة بناء كاملة لضمان ظهور جميع البيانات
         // ============================================================
         function generatePDF(orderData) {
             currentPdfData = orderData;
@@ -2207,7 +2207,7 @@
             // الحصول على عنصر المعاينة
             const preview = document.getElementById('pdfPreview');
             
-            // بناء محتوى الفاتورة يدوياً داخل المعاينة
+            // بناء HTML كامل للفاتورة
             let html = `
                 <div class="invoice-header">
                     <img src="https://i.ibb.co/cXSf6txM/icon-512.png" alt="شعار جولف كرافت" class="pdf-logo">
@@ -2239,17 +2239,25 @@
                     <tbody>
             `;
             
-            orderData.items.forEach((item, index) => {
+            if (orderData.items && orderData.items.length > 0) {
+                orderData.items.forEach((item, index) => {
+                    html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.product}</td>
+                            <td>${item.quantity}</td>
+                            <td>${fPrice(item.unitPrice)}</td>
+                            <td>${fPrice(item.lineTotal)}</td>
+                        </tr>
+                    `;
+                });
+            } else {
                 html += `
                     <tr>
-                        <td>${index + 1}</td>
-                        <td>${item.product}</td>
-                        <td>${item.quantity}</td>
-                        <td>${fPrice(item.unitPrice)}</td>
-                        <td>${fPrice(item.lineTotal)}</td>
+                        <td colspan="5" style="text-align:center;color:#888;">لا توجد منتجات</td>
                     </tr>
                 `;
-            });
+            }
             
             html += `
                     </tbody>
@@ -2269,11 +2277,14 @@
                 </div>
             `;
             
+            // تحديث عنصر المعاينة
             preview.innerHTML = html;
+            
+            // فتح المودال
             document.getElementById('pdfModal').classList.add('open');
         }
 
-        // تحميل PDF باستخدام عنصر المعاينة
+        // تحميل PDF - استخدام عنصر المعاينة مع تأخير لضمان التحميل الكامل
         function downloadPDF() {
             const element = document.getElementById('pdfPreview');
             if (!element || !element.innerHTML.trim()) {
@@ -2281,20 +2292,31 @@
                 return;
             }
 
-            const opt = {
-                margin: 10,
-                filename: `فاتورة_جولف_كرافت_${currentPdfData.orderNumber}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
+            // إظهار رسالة انتظار
+            showToast('⏳ جاري تحميل الفاتورة...');
             
-            html2pdf().set(opt).from(element).save().then(() => {
-                showToast('✅ تم تحميل الفاتورة');
-            }).catch(err => {
-                console.error('PDF Error:', err);
-                showToast('❌ حدث خطأ في تحميل الفاتورة');
-            });
+            // استخدام setTimeout للتأكد من تحميل جميع الصور
+            setTimeout(function() {
+                const opt = {
+                    margin: 10,
+                    filename: `فاتورة_جولف_كرافت_${currentPdfData.orderNumber}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { 
+                        scale: 2, 
+                        useCORS: true, 
+                        letterRendering: true,
+                        logging: false
+                    },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                
+                html2pdf().set(opt).from(element).save().then(() => {
+                    showToast('✅ تم تحميل الفاتورة');
+                }).catch(err => {
+                    console.error('PDF Error:', err);
+                    showToast('❌ حدث خطأ في تحميل الفاتورة');
+                });
+            }, 500);
         }
 
         // ============================================================
